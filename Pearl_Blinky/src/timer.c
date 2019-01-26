@@ -11,8 +11,6 @@ void letimer_init(void){
 	uint32_t on_time = 1;
 	LETIMER_CompareSet(LETIMER0, 0, period); 							//set COMP0 to be period of LED PWM
 	LETIMER_CompareSet(LETIMER0, 1, on_time); 							// set COMP1 to be the time the LED is on
-//test
-//test21
 
 
 	//initialize timer: no top buff, top is COMP0 = period, stops for
