@@ -67,7 +67,7 @@ int main(void){
     /* Switch HFCLK to HFXO and disable HFRCO */
 	CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
     CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);
-
+    //Testing Github add
     /* Initialize clocks */
     cmu_init();
 
