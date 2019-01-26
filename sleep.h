@@ -2,6 +2,7 @@
 // Include files
 //***********************************************************************************
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include "gpio.h"
 
@@ -21,4 +22,6 @@
 //*******************************************************
 // function prototypes
 //***********************************************************************************
-void letimer_init(void);
+void Sleep_Block_Mode(unsigned int EM);
+void Sleep_UnBlock_Mode(unsigned int EM);
+void Enter_Sleep(void);

@@ -53,15 +53,7 @@ int main(void)
 
   letimer_init();
   /* Infinite blink loop */
-  while (1) {/*
-		for (int i = 0; i < 1500000; i++);
-		GPIO_PinOutClear(LED0_port, LED0_pin);
-
-		for (int i = 0; i < 1500000; i++);
-		GPIO_PinOutClear(LED1_port, LED1_pin);
-
-		for (int i = 0; i < 2500000; i++);
-		GPIO_PinOutSet(LED0_port, LED0_pin);
-		//GPIO_PinOutSet(LED1_port, LED1_pin);*/
+  while (1) {
+	  //Enter_Sleep();
   }
 }
