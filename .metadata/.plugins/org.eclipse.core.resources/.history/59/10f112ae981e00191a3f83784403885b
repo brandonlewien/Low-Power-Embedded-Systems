@@ -1,0 +1,13 @@
+//***********************************************************************************
+// defines
+//***********************************************************************************
+#include "timer.h"
+#include "em_letimer.h"
+//***********************************************************************************
+// functions
+//***********************************************************************************
+void letimer_init(void){
+	LETIMER_Init_TypeDef LETIMER_init_struct = LETIMER_INIT_DEFAULT; //no top buff, top is 0xFFFF(default), stops for debug halt
+																	 //start timer *after init completes*, free-running mode
+	LETIMER_Init(LETIMER0, LETIMER_init_struct); //pass timer address and init struct
+}

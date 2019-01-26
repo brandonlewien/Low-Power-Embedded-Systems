@@ -1,0 +1,14 @@
+
+LETIMER_Init_TypeDef LETIMER_init_struct;
+//***********************************************************************************
+// functions
+//***********************************************************************************
+void letimer_init(void){
+	LETIMER_init_struct->bufTop = 0; //no buffer
+	LETIMER_init_struct->comp0Top = 0; //top is 0xFFFF
+	LETIMER_init_struct->debugRun = 0; //timer stops during debug halt
+	LETIMER_init_struct->enable =
+	LETIMER_init_struct->out0Pol =
+	LETIMER_Init(LETIMER0, LETIMER_init_struct);
+
+}

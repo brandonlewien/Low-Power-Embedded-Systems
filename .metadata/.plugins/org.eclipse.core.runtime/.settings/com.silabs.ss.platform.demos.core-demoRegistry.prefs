@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+knownPackageIds=
+knownParentDescs_com.silabs.ss.platform.sdk.core-protocolRegistry=com.silabs.sdk.stack.super\:2.5.0._310455071.com.silabs.sdk.exx32\:5.7.0.0_-122903795\u0000com.silabs.sdk.stack.super\:2.5.0._310455071.com.silabs.sdk.micrium\:5.6.0._-730119116\u0000com.silabs.sdk.stack.super\:2.5.0._310455071.com.silabs.sdk.stack.bootloader\:1.8.0._2142304532
+knownParentDescs_com.silabs.ss.platform.sdk.core-sdkManager=com.silabs.sdk.none\:0.0.0\u0000com.silabs.sdk.stack.super\:2.5.0._310455071\u0000com.silabs.stack.external.stackless\:1.0.0._1234321
+lastRefreshDate=1547743898568
+manualDescriptors=<?xml version\="1.0" encoding\="ASCII"?>\r\n<model\:MDescriptors xmlns\:model\="http\://www.silabs.com/ss/Studio.ecore"/>\r\n

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_92" class="java.beans.XMLDecoder">
+ <object class="java.util.HashMap">
+  <void method="put">
+   <string>Schematic and Layout Files</string>
+   <object class="java.util.ArrayList">
+    <void method="add">
+     <object class="com.silabs.ss.platform.internal.launcher.ui.favorites.Favorite">
+      <void property="URI">
+       <object class="java.net.URI">
+        <string>asset://hwtools/boards/BRD2501/BRD2501A_A01_schematic.pdf</string>
+       </object>
+      </void>
+      <void property="category">
+       <string>Schematic and Layout Files</string>
+      </void>
+      <void property="description">
+       <string>Description is unavailable</string>
+      </void>
+      <void property="id">
+       <string>BRD2501A_A01_schematic.pdf</string>
+      </void>
+      <void property="text">
+       <string>EFM32PG12 Starter Kit (STK) Schematic</string>
+      </void>
+      <void property="toolTipText">
+       <string>/hwtools/boards/BRD2501/BRD2501A_A01_schematic.pdf</string>
+      </void>
+     </object>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

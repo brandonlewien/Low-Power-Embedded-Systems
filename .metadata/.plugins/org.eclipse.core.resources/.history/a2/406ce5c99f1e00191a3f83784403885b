@@ -1,0 +1,21 @@
+//***********************************************************************************
+// defines
+//***********************************************************************************
+#include "timer.h"
+#include "em_letimer.h"
+//***********************************************************************************
+// functions
+//***********************************************************************************
+void letimer_init(void){
+	uint32_t period = 2;
+	uint32_t on_time = 1;
+	LETIMER_CompareSet(LETIMER0, 0, period);
+	LETIMER_CompareSet(LETIMER0, 1, on_time);
+
+	//no top buff, top is COMP0 = "period", stops for debug halt, start timer *after init completes*, free-running mode:
+	LETIMER_Init_TypeDef LETIMER_init_struct = LETIMER_INIT_DEFAULT; //(set to default)
+	LETIMER_init_struct->comp0Top = true; //(modify from default)
+	LETIMER_init_struct->topValue = period; //(modify from default)
+
+	LETIMER_Init(LETIMER0, LETIMER_init_struct); //pass timer address and init struct -> timer will start immediately after this fxn
+}

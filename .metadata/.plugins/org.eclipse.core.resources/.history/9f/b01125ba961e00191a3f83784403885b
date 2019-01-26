@@ -1,0 +1,25 @@
+#include "timer.h"
+#include "em_letimer.h"
+
+
+//***********************************************************************************
+// functions
+//***********************************************************************************
+void letimer_init(void){
+	LETIMER_init_struct->bufTop = false; //no top buffer
+	LETIMER_init_struct->comp0Top = false; //top is max counter val (0xFFFF)
+	LETIMER_init_struct->debugRun = false; //timer stops during debug halt
+	LETIMER_init_struct->enable = true; //start counting **when init completes**
+	LETIMER_init_struct->out0Pol = 0; //idle value for output 0 (repeat mode functionality)
+	LETIMER_init_struct->out1Pol = 0; //idle value for output 1 (repeat mode functionality)
+	//LETIMER_init_struct->repMode = //Free-running mode
+	//LETIMER_init_struct->topValue =
+	LETIMER_init_struct->ufoa0 = 0; // underflow output action 0 (repeat mode functionality)
+	LETIMER_init_struct->ufoa1 = 0; //underflow output action 1 (repeat mode functionality)
+
+	LETIMER_Init_TypeDef LETIMER_init_struct = LETIMER_INIT_DEFAULT; //no top buff, top is 0xFFFF, stops for debug halt
+																	 //start timer *after init completes*, free-running mode
+
+	LETIMER_Init(LETIMER0, LETIMER_init_struct);
+
+}

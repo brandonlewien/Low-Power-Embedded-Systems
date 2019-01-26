@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="com.silabs.ss.framework.ide.project.core.cdtMbsProjectType">
+		<item value="LINK" key="importOption"/>
+		<list key="fileLocationHistory">
+		</list>
+	</section>
+</section>
