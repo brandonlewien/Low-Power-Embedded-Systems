@@ -25,7 +25,6 @@ void letimer_init(void){
 	LETIMER_Init(LETIMER0, &LETIMER_init_struct);
 
 
-
 	//interrupt config
 	LETIMER0->IFC = LETIMER_IFC_COMP0 |LETIMER_IFC_COMP1; 				//clear flags
 	LETIMER0->IEN = LETIMER_IEN_COMP0 |LETIMER_IEN_COMP1;				//enable interrupts
