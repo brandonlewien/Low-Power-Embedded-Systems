@@ -8,5 +8,5 @@ void Sleep_UnBlock_Mode(unsigned int EM){
 
 }
 void Enter_Sleep(void){
-	CORE_ENTER_CRITICAL();
+	//CORE_ENTER_CRITICAL();
 }
