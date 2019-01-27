@@ -7,15 +7,17 @@
 //***********************************************************************************
 void letimer_init(void){
 	//set and initialize compare values:
-	LETIMER_CompareSet(LETIMER0, 0, LED_PERIOD); 							//set COMP0 to be period of LED PWM
-	LETIMER_CompareSet(LETIMER0, 1, LED_ON_TIME); 							// set COMP1 to be the time the LED is on
+	uint32_t comp0 = (LED_PERIOD*CLOCK_FREQ)/PRESCALAR-1;
+	uint32_t comp1 = (LED_ON_TIME*CLOCK_FREQ)/PRESCALAR;
+	LETIMER_CompareSet(LETIMER0, 0, comp0); 							//set COMP0 to be period of LED PWM
+	LETIMER_CompareSet(LETIMER0, 1, comp1); 							// set COMP1 to be the time the LED is on
 
 
 	//initialize timer: no top buff, top is COMP0 = period, stops for
 	//debug halt, DON'T start timer after init completes, free-running mode:
 	LETIMER_Init_TypeDef LETIMER_init_struct = LETIMER_INIT_DEFAULT; 	//(set to default)
 	LETIMER_init_struct.comp0Top = true; 								//(modify from default)
-	LETIMER_init_struct.topValue = LED_PERIOD; 								//(modify from default)
+	LETIMER_init_struct.topValue = comp0; 								//(modify from default)
 	LETIMER_init_struct.enable = false;	 								//(modify from default)
 
 	LETIMER_Init(LETIMER0, &LETIMER_init_struct);

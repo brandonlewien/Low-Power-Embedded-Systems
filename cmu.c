@@ -40,5 +40,7 @@ void cmu_init(void){
 		CMU_ClockEnable(cmuClock_GPIO, true);
 		CMU_ClockEnable(cmuClock_LETIMER0, true); 			// connect clock source to LETIMER clock tree
 
+		CMU_ClockPrescSet(cmuClock_LETIMER0, cmuClkDiv_2);
+
 }
 
