@@ -1,25 +1,45 @@
 #include "sleep.h"
 #include <em_core.h>
+#include "em_emu.h"
 
-typedef enum{
-	EnergyMode0 = 0,
-	EnergyMode1 = 1,
-	EnergyMode2 = 2,
-	EnergyMode3 = 3,
-	EnergyMode4 = 4
-} EM;
 
-void Sleep_Block_Mode(unsigned int EM){
-	//CORE_ENTER_CRITICAL();
-
-}
-void Sleep_UnBlock_Mode(unsigned int EM){
-
-}
-void Enter_Sleep(void){
+void Sleep_Block_Mode(unsigned int EM) {
 	CORE_DECLARE_IRQ_STATE;
-	//SLEEP_EnergyMode_t allowedEM;
+	//EM IfAllowed;
+	//EM CurrentMode = EnergyMode0;
 	CORE_ENTER_CRITICAL();
-	//Need to check if we can get to the energy mode state
+
 
 }
+void Sleep_UnBlock_Mode(unsigned int EM) {
+
+}
+void Enter_Sleep(void) {
+	EM tmpLowestEM = EnergyMode0;
+	if (SLEEP_LOWEST_ENERGY_MODE_DEFAULT < tmpLowestEM) {
+		tmpLowestEM = SLEEP_LOWEST_ENERGY_MODE_DEFAULT;
+	}
+
+}
+
+static EM EnterEM(EM EnergyModeWanted) {
+	switch(EnergyModeWanted) {
+		case(EnergyMode1):
+			EMU_EnterEM1();
+			break;
+		case(EnergyMode2):
+			EMU_EnterEM2(false);
+			break;
+		case(EnergyMode3):
+			EMU_EnterEM3(false);
+			break;
+		case(EnergyMode4):
+			EMU_EnterEM4();
+			break;
+		default:
+			break;
+	}
+	return EnergyModeWanted;
+}
+
+
