@@ -9,7 +9,7 @@
 //***********************************************************************************
 // defines
 //***********************************************************************************
-#define LED_ON_TIME 2	//.4//(in seconds)
+#define LED_ON_TIME 1	//.4//(in seconds)
 #define LED_PERIOD 4	//1.75	//(in seconds)
 #define PRESCALAR 2
 #define CLOCK_FREQ 32768
