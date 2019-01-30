@@ -35,7 +35,10 @@ typedef struct {
 //*******************************************************
 // function prototypes
 //***********************************************************************************
+
 void Sleep_Block_Mode(unsigned int EM);
 void Sleep_UnBlock_Mode(unsigned int EM);
+void Sleep_Init();
 void Enter_Sleep(void);
-static EM EnterEM(EM EnergyModeWanted);
+EM Enter_Lowest_EM_Mode(void);
+
