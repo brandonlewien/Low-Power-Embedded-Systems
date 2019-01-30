@@ -20,6 +20,7 @@ void Sleep_UnBlock_Mode(unsigned int EM) {
 			sleepBlockEnable[EM - 1]--; //subtract block nesting to energy mode EM
 		}
 	}
+	//why EM2unblock function????
 }
 
 void Sleep_Init() {

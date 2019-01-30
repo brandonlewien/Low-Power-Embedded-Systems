@@ -4,7 +4,7 @@
 #include "cmu.h"
 
 //***********************************************************************************
-// defined files
+// defines
 //***********************************************************************************
 
 
@@ -29,7 +29,7 @@ void cmu_init(void){
 		// Route LF clock to the LF clock tree
 
 		CMU_OscillatorEnable(cmuOsc_ULFRCO, false, false);
-		CMU_OscillatorEnable(cmuOsc_LFXO, true, true);		// Disable LFXO
+		CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
 		CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_LFXO);	// routing clock to LFA
 
 
@@ -39,8 +39,4 @@ void cmu_init(void){
 		// Peripheral clocks enabled
 		CMU_ClockEnable(cmuClock_GPIO, true);
 		CMU_ClockEnable(cmuClock_LETIMER0, true); 			// connect clock source to LETIMER clock tree
-
-		CMU_ClockPrescSet(cmuClock_LETIMER0, cmuClkDiv_2);
-
 }
-

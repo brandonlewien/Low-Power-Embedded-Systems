@@ -5,17 +5,16 @@
 #include <stdbool.h>
 #include "em_letimer.h"
 #include "gpio.h"
+#include "cmu.h"
 
 //***********************************************************************************
 // defines
 //***********************************************************************************
-#define LED_ON_TIME 1	//.4//(in seconds)
-#define LED_PERIOD 4	//1.75	//(in seconds)
-#define PRESCALAR 2
-#define CLOCK_FREQ 32768
+#define TIMER_MAX_COUNT 65535 //(2^16)-1
+#define LFXO_FREQ 32768 //(2^15)
 
-
-
+#define LED_ON_TIME .5 //(in seconds)  .4 <-ok
+#define LED_PERIOD 1.99 //(in seconds)  1.99 and anything below <-bad
 
 //***********************************************************************************
 // defined files
