@@ -17,6 +17,9 @@
 // global variables
 //***********************************************************************************
 
+
+
+/*
 typedef enum{
 	EnergyMode0 = 0,
 	EnergyMode1 = 1,
@@ -42,3 +45,4 @@ void Sleep_Init();
 void Enter_Sleep(void);
 EM Enter_Lowest_EM_Mode(void);
 
+*/

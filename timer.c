@@ -22,9 +22,8 @@ void letimer_init(void) {
 
 	comp1 = (LED_ON_TIME*LFXO_FREQ)/prescalar;
 
-	//CMU_ClockPrescSet(cmuClock_LETIMER0, 8); //<- this function is evil and has a bug in it for prescalar = 1
-	//while(CMU_SYNCBUSY_LFAPRESC0);
-	CMU->LFAPRESC0 = presc_power;
+	CMU_ClockPrescSet(cmuClock_LETIMER0, 1); //<- this function is evil and has a bug in it for prescalar = 1 (the presc = CMU_PrescToLog2(presc); line in this function should set presc equal to 0 when a 1 is input, but it keeps it equal to a 1 instead)
+	//CMU->LFAPRESC0 = presc_power;
 
 	LETIMER_CompareSet(LETIMER0, 0, comp0); 							//set COMP0 to be period of LED PWM
 	LETIMER_CompareSet(LETIMER0, 1, comp1); 							// set COMP1 to be the time the LED is on
