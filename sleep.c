@@ -1,3 +1,5 @@
+
+
 #include "sleep.h"
 #include <em_core.h>
 #include "em_emu.h"
@@ -33,6 +35,7 @@ void Sleep_Init(void) {
 		}
 	}
 }
+
 void Enter_Sleep(void) {
 	EM AllowedEM;
 	EM CurrentMode = EnergyMode0;
