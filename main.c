@@ -23,6 +23,7 @@
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "bsp.h"
+#include "sleep.h"
 #include "main.h"
 #include "gpio.h"
 #include "timer.h"
@@ -45,16 +46,11 @@ int main(void)
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
   CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);
 
-  /* Initialize clocks */
   cmu_init();
-
-  /* Initialize GPIO */
   gpio_init();
-
   letimer_init();
-  /* Infinite blink loop */
   while (1) {
-		//Enter_Sleep();
+		Enter_Sleep();
 	  	//heart beat LED
 		for (int i = 0; i < 1500000; i++);
 		GPIO_PinOutClear(LED1_port, LED1_pin);
