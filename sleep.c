@@ -2,37 +2,36 @@
 #include <em_core.h>
 #include "em_emu.h"
 
-/*
+
 //sleepBlockEnable[0] is for EM1, sleepBlockEnable[1] is for EM2, sleepBlockEnable[2] is for EM3
 //max number of nested blocks is (2^8)-1 = 255
 #define MAX_EM_Element 3
 static uint8_t sleepBlockEnable[MAX_EM_Element];
 
 void Sleep_Block_Mode(unsigned int EM) {
-	if((EM == EnergyMode1) || (EM == EnergyMode2) || (EM = EnergyMode3)){
-		sleepBlockEnable[EM - 1]++; //add block nesting to energy mode EM
+	if(sleepBlockEnable[EM] < 255){
+		sleepBlockEnable[EM]++; //add block nesting to energy mode EM
 	}
-	//why EM2block function????
-
 }
 void Sleep_UnBlock_Mode(unsigned int EM) {
-	if((EM == EnergyMode1) || (EM == EnergyMode2) || (EM = EnergyMode3)){
-		if(sleepBlockEnable[EM - 1] > 0){ //check that energy mode is blocked
-			sleepBlockEnable[EM - 1]--; //subtract block nesting to energy mode EM
-		}
+	if(sleepBlockEnable[EM] > 0){ //check that energy mode is blocked
+		sleepBlockEnable[EM]--; //subtract block nesting to energy mode EM
 	}
-	//why EM2unblock function????
 }
 
 void Sleep_Init(void) {
-	sleepBlockEnable[0] = 0;
-	sleepBlockEnable[1] = 0;/*
+	sleepBlockEnable[EnergyMode0] = 0;
+	sleepBlockEnable[EnergyMode1] = 0;
+	sleepBlockEnable[EnergyMode2] = 0;
+	sleepBlockEnable[EnergyMode3] = 0;
+	sleepBlockEnable[EnergyMode4] = 0;
+
 	if(RMU_ResetCauseGet() & EM4_RESET_FLAG) {
 		RMU_ResetCauseClear();
 		if (NULL != sleepContext.wakeupCallback) {
 			sleepContext.wakeupCallback(sleepEM4);
 		}
-	}*/
+	}
 }
 void Enter_Sleep(void) {
 	EM AllowedEM;

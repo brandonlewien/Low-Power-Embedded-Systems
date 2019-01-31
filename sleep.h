@@ -21,7 +21,7 @@
 
 
 
-/*
+
 typedef enum{
 	EnergyMode0 = 0,
 	EnergyMode1 = 1,
@@ -34,7 +34,7 @@ typedef struct {
 	bool (*sleepCallback)(EM emode);
 	void (*wakeupCallback)(EM emode);
 	uint32_t (*restoreCallback)(EM emode);
-} Sleeper;
+} Sleep_Init;
 
 //****************************
 //*******************************************************
@@ -43,9 +43,8 @@ typedef struct {
 
 void Sleep_Block_Mode(unsigned int EM);
 void Sleep_UnBlock_Mode(unsigned int EM);
-void Sleep_Init(void);
+void Sleep_Init();
 void Enter_Sleep(void);
-void EnterEM(EM EnergyModeWanted);
 EM Enter_Lowest_EM_Mode(void);
 
-*/
+
