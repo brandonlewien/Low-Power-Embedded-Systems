@@ -37,7 +37,7 @@ typedef struct {
 	bool (*sleepCallback)(EM emode);
 	void (*wakeupCallback)(EM emode);
 	uint32_t (*restoreCallback)(EM emode);
-} Sleep_Init;
+} Sleeper;
 
 //****************************
 //*******************************************************
