@@ -5,7 +5,8 @@
 /*
 //sleepBlockEnable[0] is for EM1, sleepBlockEnable[1] is for EM2, sleepBlockEnable[2] is for EM3
 //max number of nested blocks is (2^8)-1 = 255
-static uint8_t sleepBlockEnable[3];
+#define MAX_EM_Element 3
+static uint8_t sleepBlockEnable[MAX_EM_Element];
 
 void Sleep_Block_Mode(unsigned int EM) {
 	if((EM == EnergyMode1) || (EM == EnergyMode2) || (EM = EnergyMode3)){
@@ -23,7 +24,7 @@ void Sleep_UnBlock_Mode(unsigned int EM) {
 	//why EM2unblock function????
 }
 
-void Sleep_Init() {
+void Sleep_Init(void) {
 	sleepBlockEnable[0] = 0;
 	sleepBlockEnable[1] = 0;/*
 	if(RMU_ResetCauseGet() & EM4_RESET_FLAG) {
@@ -35,7 +36,7 @@ void Sleep_Init() {
 }
 void Enter_Sleep(void) {
 	EM AllowedEM;
-	//EM CurrentMode = EnergyMode0;
+	EM CurrentMode = EnergyMode0;
 	uint32_t flags = 0;
 	CORE_DECLARE_IRQ_STATE;
 
@@ -50,21 +51,29 @@ void Enter_Sleep(void) {
 			Enter_Lowest_EM_Mode();
 		}
 	} while ((flags & SLEEP_FLAG_NO_CLOCK_RESTORE) > 0u);
+	if (CurrentMode == EnergyMode2 || CurrentMode == EnergyMode3) {
+		EMU_Restore();
+	}
+	CORE_EXIT_CRITICAL();
 }
 
 EM Enter_Lowest_EM_Mode(void) {
 
 	EM EMTemp = EnergyMode1;
-	//if (True == )
-
-	EM tmpLowestEM = EnergyMode0;
-	if (SLEEP_LOWEST_ENERGY_MODE_DEFAULT < tmpLowestEM) {
-		tmpLowestEM = SLEEP_LOWEST_ENERGY_MODE_DEFAULT;
+	if (sleepBlockEnable[EnergyMode2 - 2] == 0) {
+		EMTemp = EnergyMode2;
+		if (sleepBlockEnable[EnergyMode3 - 2] == 0) {
+			EMTemp = EnergyMode3;
+		}
+	}
+	if (SLEEP_LOWEST_ENERGY_MODE_DEFAULT < EMTemp) {
+		EMTemp = SLEEP_LOWEST_ENERGY_MODE_DEFAULT;
 	}
 
+	return EMTemp;
 }
 
-static void EnterEM(EM EnergyModeWanted) {
+void EnterEM(EM EnergyModeWanted) {
 	switch(EnergyModeWanted) {
 		case(EnergyMode1):
 			EMU_EnterEM1();
@@ -83,4 +92,3 @@ static void EnterEM(EM EnergyModeWanted) {
 	}
 }
 
-*/

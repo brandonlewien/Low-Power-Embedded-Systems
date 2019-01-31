@@ -34,7 +34,7 @@ typedef struct {
 	bool (*sleepCallback)(EM emode);
 	void (*wakeupCallback)(EM emode);
 	uint32_t (*restoreCallback)(EM emode);
-} Sleep_Init;
+} Sleeper;
 
 //****************************
 //*******************************************************
@@ -43,8 +43,9 @@ typedef struct {
 
 void Sleep_Block_Mode(unsigned int EM);
 void Sleep_UnBlock_Mode(unsigned int EM);
-void Sleep_Init();
+void Sleep_Init(void);
 void Enter_Sleep(void);
+void EnterEM(EM EnergyModeWanted);
 EM Enter_Lowest_EM_Mode(void);
 
 */

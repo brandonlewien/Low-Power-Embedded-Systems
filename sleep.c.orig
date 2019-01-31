@@ -2,43 +2,41 @@
 #include <em_core.h>
 #include "em_emu.h"
 
-
+/*
+//sleepBlockEnable[0] is for EM1, sleepBlockEnable[1] is for EM2, sleepBlockEnable[2] is for EM3
 //max number of nested blocks is (2^8)-1 = 255
-static uint8_t sleepBlockEnable[MAX_NUM_SLEEP_MODES];
+#define MAX_EM_Element 3
+static uint8_t sleepBlockEnable[MAX_EM_Element];
 
 void Sleep_Block_Mode(unsigned int EM) {
-	if(sleepBlockEnable[EM] < 255){
-		sleepBlockEnable[EM]++; //add block nesting to energy mode EM
+	if((EM == EnergyMode1) || (EM == EnergyMode2) || (EM = EnergyMode3)){
+		sleepBlockEnable[EM - 1]++; //add block nesting to energy mode EM
 	}
+	//why EM2block function????
+
 }
 void Sleep_UnBlock_Mode(unsigned int EM) {
-	if(sleepBlockEnable[EM] > 0){ //check that energy mode is blocked
-		sleepBlockEnable[EM]--; //subtract block nesting to energy mode EM
+	if((EM == EnergyMode1) || (EM == EnergyMode2) || (EM = EnergyMode3)){
+		if(sleepBlockEnable[EM - 1] > 0){ //check that energy mode is blocked
+			sleepBlockEnable[EM - 1]--; //subtract block nesting to energy mode EM
+		}
 	}
+	//why EM2unblock function????
 }
 
-//if sleepModeBlock[EM0] return;
-//else if sleepModeBlock[EM1] >0 emu_EnterEM1(); return;
-//else if .... emu_EnterEM2();
-//etc
-void Sleep_Init() {
+void Sleep_Init(void) {
 	sleepBlockEnable[0] = 0;
-<<<<<<< HEAD
-	sleepBlockEnable[1] = 0;
-	sleepBlockEnable[2] = 0;
-=======
 	sleepBlockEnable[1] = 0;/*
 	if(RMU_ResetCauseGet() & EM4_RESET_FLAG) {
 		RMU_ResetCauseClear();
 		if (NULL != sleepContext.wakeupCallback) {
 			sleepContext.wakeupCallback(sleepEM4);
 		}
-	}
->>>>>>> 707e3c80743596b39d0836f6b5af0e668e176b6c
+	}*/
 }
 void Enter_Sleep(void) {
 	EM AllowedEM;
-	//EM CurrentMode = EnergyMode0;
+	EM CurrentMode = EnergyMode0;
 	uint32_t flags = 0;
 	CORE_DECLARE_IRQ_STATE;
 
@@ -53,21 +51,29 @@ void Enter_Sleep(void) {
 			Enter_Lowest_EM_Mode();
 		}
 	} while ((flags & SLEEP_FLAG_NO_CLOCK_RESTORE) > 0u);
+	if (CurrentMode == EnergyMode2 || CurrentMode == EnergyMode3) {
+		EMU_Restore();
+	}
+	CORE_EXIT_CRITICAL();
 }
 
 EM Enter_Lowest_EM_Mode(void) {
 
 	EM EMTemp = EnergyMode1;
-	//if (True == )
-
-	EM tmpLowestEM = EnergyMode0;
-	if (SLEEP_LOWEST_ENERGY_MODE_DEFAULT < tmpLowestEM) {
-		tmpLowestEM = SLEEP_LOWEST_ENERGY_MODE_DEFAULT;
+	if (sleepBlockEnable[EnergyMode2 - 2] == 0) {
+		EMTemp = EnergyMode2;
+		if (sleepBlockEnable[EnergyMode3 - 2] == 0) {
+			EMTemp = EnergyMode3;
+		}
+	}
+	if (SLEEP_LOWEST_ENERGY_MODE_DEFAULT < EMTemp) {
+		EMTemp = SLEEP_LOWEST_ENERGY_MODE_DEFAULT;
 	}
 
+	return EMTemp;
 }
 
-static void EnterEM(EM EnergyModeWanted) {
+void EnterEM(EM EnergyModeWanted) {
 	switch(EnergyModeWanted) {
 		case(EnergyMode1):
 			EMU_EnterEM1();
@@ -86,4 +92,7 @@ static void EnterEM(EM EnergyModeWanted) {
 	}
 }
 
-
+<<<<<<< HEAD
+*/
+=======
+>>>>>>> 9f9bd65b28eacd0e820848d76ef7debf703ac8dc
