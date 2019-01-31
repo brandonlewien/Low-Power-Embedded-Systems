@@ -7,14 +7,19 @@
 static uint8_t sleepBlockEnable[MAX_NUM_SLEEP_MODES];
 
 void Sleep_Block_Mode(unsigned int EM) {
-	if(sleepBlockEnable[EM] < 255){
-		sleepBlockEnable[EM]++; //add block nesting to energy mode EM
+	if((EM == EnergyMode1) || (EM == EnergyMode2) || (EM = EnergyMode3)){
+		sleepBlockEnable[EM - 1]++; //add block nesting to energy mode EM
 	}
+	//why EM2block function????
+
 }
 void Sleep_UnBlock_Mode(unsigned int EM) {
-	if(sleepBlockEnable[EM] > 0){ //check that energy mode is blocked
-		sleepBlockEnable[EM]--; //subtract block nesting to energy mode EM
+	if((EM == EnergyMode1) || (EM == EnergyMode2) || (EM = EnergyMode3)){
+		if(sleepBlockEnable[EM - 1] > 0){ //check that energy mode is blocked
+			sleepBlockEnable[EM - 1]--; //subtract block nesting to energy mode EM
+		}
 	}
+	//why EM2unblock function????
 }
 
 //if sleepModeBlock[EM0] return;
