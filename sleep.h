@@ -12,6 +12,7 @@
 //***********************************************************************************
 
 #define SLEEP_LOWEST_ENERGY_MODE_DEFAULT EnergyMode3
+#define SLEEP_FLAG_NO_CLOCK_RESTORE      0x1u
 
 //***********************************************************************************
 // global variables

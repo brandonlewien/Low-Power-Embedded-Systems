@@ -26,7 +26,7 @@ void letimer_init(void) {
 	//while(CMU_SYNCBUSY_LFAPRESC0);
 	CMU->LFAPRESC0 = presc_power;
 
-	LETIMER_CompareSet(LETIMER0, 0, comp0); 							//set COMP0 to be period of LED PWM
+	LETIMER_CompareSet(LETIMER0, 0, comp0); 							// set COMP0 to be period of LED PWM
 	LETIMER_CompareSet(LETIMER0, 1, comp1); 							// set COMP1 to be the time the LED is on
 
 	/*initialize timer: no top buff, top is COMP0 = period, stops for

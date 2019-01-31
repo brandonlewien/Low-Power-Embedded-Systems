@@ -24,11 +24,18 @@ void Sleep_UnBlock_Mode(unsigned int EM) {
 }
 
 void Sleep_Init() {
-
+	sleepBlockEnable[0] = 0;
+	sleepBlockEnable[1] = 0;/*
+	if(RMU_ResetCauseGet() & EM4_RESET_FLAG) {
+		RMU_ResetCauseClear();
+		if (NULL != sleepContext.wakeupCallback) {
+			sleepContext.wakeupCallback(sleepEM4);
+		}
+	}*/
 }
 void Enter_Sleep(void) {
 	EM AllowedEM;
-	EM CurrentMode = EnergyMode0;
+	//EM CurrentMode = EnergyMode0;
 	uint32_t flags = 0;
 	CORE_DECLARE_IRQ_STATE;
 
@@ -42,7 +49,7 @@ void Enter_Sleep(void) {
 		if ((AllowedEM >= EnergyMode1) && (AllowedEM <= EnergyMode3)) {
 			Enter_Lowest_EM_Mode();
 		}
-	} while ((flags & SLEEP_FLAG-NO_CLOCK_RESTORE) > 0u);
+	} while ((flags & SLEEP_FLAG_NO_CLOCK_RESTORE) > 0u);
 }
 
 EM Enter_Lowest_EM_Mode(void) {
