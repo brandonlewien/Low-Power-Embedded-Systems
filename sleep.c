@@ -9,14 +9,18 @@
 static uint8_t sleepBlockEnable[MAX_EM_Element];
 
 void Sleep_Block_Mode(unsigned int EM) {
+	CORE_ATOMIC_IRQ_DISABLE();
 	if(sleepBlockEnable[EM] < 255){
 		sleepBlockEnable[EM]++; //add block nesting to energy mode EM
 	}
+	CORE_ATOMIC_IRQ_ENABLE();
 }
 void Sleep_UnBlock_Mode(unsigned int EM) {
+	CORE_ATOMIC_IRQ_DISABLE();
 	if(sleepBlockEnable[EM] > 0){ //check that energy mode is blocked
 		sleepBlockEnable[EM]--; //subtract block nesting to energy mode EM
 	}
+	CORE_ATOMIC_IRQ_ENABLE();
 }
 
 void Sleep_Init(void) {
@@ -26,37 +30,27 @@ void Sleep_Init(void) {
 	sleepBlockEnable[EnergyMode3] = 0;
 	sleepBlockEnable[EnergyMode4] = 0;
 
-	if(RMU_ResetCauseGet() & EM4_RESET_FLAG) {
-		RMU_ResetCauseClear();
-		if (NULL != sleepContext.wakeupCallback) {
-			sleepContext.wakeupCallback(sleepEM4);
-		}
-	}
 }
 void Enter_Sleep(void) {
-	EM AllowedEM;
-	EM CurrentMode = EnergyMode0;
-	uint32_t flags = 0;
-	CORE_DECLARE_IRQ_STATE;
-
-	CORE_ENTER_CRITICAL();
-	AllowedEM = Enter_Lowest_EM_Mode();
-	if (AllowedEM == EnergyMode2 || AllowedEM == EnergyMode3) {
-		EMU_Save();
+	if (sleepBlockEnable[0] > 0) {
+		return;
 	}
-	do {
-		AllowedEM = Enter_Lowest_EM_Mode();
-		if ((AllowedEM >= EnergyMode1) && (AllowedEM <= EnergyMode3)) {
-			Enter_Lowest_EM_Mode();
-		}
-	} while ((flags & SLEEP_FLAG_NO_CLOCK_RESTORE) > 0u);
-	if (CurrentMode == EnergyMode2 || CurrentMode == EnergyMode3) {
-		EMU_Restore();
+	else if (sleepBlockEnable[1] > 0) {
+		return;
 	}
-	CORE_EXIT_CRITICAL();
+	else if (sleepBlockEnable[2] > 0) {
+		EMU_EnterEM1();
+	}
+	else if (sleepBlockEnable[3] > 0) {
+		EMU_EnterEM2(true);
+	}
+	else {
+		EMU_EnterEM3(true);
+	}
+	return;
 }
 
-EM Enter_Lowest_EM_Mode(void) {
+/*EM Enter_Lowest_EM_Mode(void) {
 
 	EM EMTemp = EnergyMode1;
 	if (sleepBlockEnable[EnergyMode2 - 2] == 0) {
@@ -91,3 +85,4 @@ void EnterEM(EM EnergyModeWanted) {
 	}
 }
 
+*/
