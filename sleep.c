@@ -1,5 +1,3 @@
-
-
 #include "sleep.h"
 #include <em_core.h>
 #include "em_emu.h"
@@ -13,14 +11,14 @@ static uint8_t sleepBlockEnable[MAX_EM_Element];
 void Sleep_Block_Mode(unsigned int EM) {
 	CORE_ATOMIC_IRQ_DISABLE();
 	if(sleepBlockEnable[EM] < 255){
-		sleepBlockEnable[EM]++; //add block nesting to energy mode EM
+		sleepBlockEnable[EM]++; 				    //add block nesting to energy mode EM
 	}
 	CORE_ATOMIC_IRQ_ENABLE();
 }
 void Sleep_UnBlock_Mode(unsigned int EM) {
 	CORE_ATOMIC_IRQ_DISABLE();
-	if(sleepBlockEnable[EM] > 0){ //check that energy mode is blocked
-		sleepBlockEnable[EM]--; //subtract block nesting to energy mode EM
+	if(sleepBlockEnable[EM] > 0){ 					//check that energy mode is blocked
+		sleepBlockEnable[EM]--; 					//subtract block nesting to energy mode EM
 	}
 	CORE_ATOMIC_IRQ_ENABLE();
 }

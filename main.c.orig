@@ -23,6 +23,7 @@
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "bsp.h"
+#include "sleep.h"
 #include "main.h"
 #include "gpio.h"
 #include "timer.h"
@@ -34,35 +35,35 @@ int main(void)
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
 
-  /* Chip errata */
-  CHIP_Init();
 
-  /* Init DCDC regulator and HFXO with kit specific parameters */
+  CHIP_Init(); 											  // Chip errata
+
+                                                          // Init DCDC regulator and HFXO with kit specific parameters
   EMU_DCDCInit(&dcdcInit);
   CMU_HFXOInit(&hfxoInit);
 
-  /* Switch HFCLK to HFXO and disable HFRCO */
+                                                          // Switch HFCLK to HFXO and disable HFRCO
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
   CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);
 
-  /* Initialize clocks */
   cmu_init();
-
-  /* Initialize GPIO */
   gpio_init();
-
   letimer_init();
-  /* Infinite blink loop */
-  while (1) {
 <<<<<<< HEAD
-	  //Enter_Sleep();
-=======
 
+  while (1) {
+	  	Enter_Sleep();
+=======
+  Sleep_Block_Mode(EnergyMode2);
+
+  while (1) {
+	  	Enter_Sleep();
 	  	//heart beat LED
-		for (int i = 0; i < 1500000; i++);
+		/*for (int i = 0; i < 1500000; i++);
 		GPIO_PinOutClear(LED1_port, LED1_pin);
 		for (int i = 0; i < 2500000; i++);
-		GPIO_PinOutSet(LED1_port, LED1_pin);
->>>>>>> dae2e06085161fdd1eb9ec4c5f7dd26fcbf18dcc
+		GPIO_PinOutSet(LED1_port, LED1_pin);*/
+
+>>>>>>> fe4aa442c658f95e3c9865a2c889e6333682eb89
   }
 }

@@ -35,14 +35,14 @@ int main(void)
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
 
-  /* Chip errata */
-  CHIP_Init();
 
-  /* Init DCDC regulator and HFXO with kit specific parameters */
+  CHIP_Init(); 											  // Chip errata
+
+                                                          // Init DCDC regulator and HFXO with kit specific parameters
   EMU_DCDCInit(&dcdcInit);
   CMU_HFXOInit(&hfxoInit);
 
-  /* Switch HFCLK to HFXO and disable HFRCO */
+                                                          // Switch HFCLK to HFXO and disable HFRCO
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
   CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);
 
@@ -52,5 +52,11 @@ int main(void)
 
   while (1) {
 	  	Enter_Sleep();
+	  	//heart beat LED
+		/*for (int i = 0; i < 1500000; i++);
+		GPIO_PinOutClear(LED1_port, LED1_pin);
+		for (int i = 0; i < 2500000; i++);
+		GPIO_PinOutSet(LED1_port, LED1_pin);*/
+
   }
 }
