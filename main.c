@@ -49,15 +49,8 @@ int main(void)
   cmu_init();
   gpio_init();
   letimer_init();
-  Sleep_Block_Mode(EnergyMode3);
 
   while (1) {
 	  	Enter_Sleep();
-	  	//heart beat LED
-		for (int i = 0; i < 1500000; i++);
-		GPIO_PinOutClear(LED1_port, LED1_pin);
-		for (int i = 0; i < 2500000; i++);
-		GPIO_PinOutSet(LED1_port, LED1_pin);
-
   }
 }

@@ -14,7 +14,7 @@ void letimer_init(void) {
 	do{
 		comp0 = (LED_PERIOD*LFXO_FREQ)/prescalar;
 		if((comp0 > TIMER_MAX_COUNT) && (prescalar <= cmuClkDiv_16384)){ //if comp0 is too big and if hardware supports larger prescalar
-			prescalar *= 2; //prescalar << 2; //prescalars are powers of 2 (shift instead of multiply to reduce clock cycles and energy <3)
+			prescalar = prescalar << 1; //prescalar *= 2; //prescalar = prescalar << 2; //prescalars are powers of 2 (shift instead of multiply to reduce clock cycles and energy <3)
 			presc_power++;
 		}
 	}
@@ -38,14 +38,12 @@ void letimer_init(void) {
 
 	LETIMER_Init(LETIMER0, &LETIMER_init_struct);
 
-
 	//interrupt config
 	LETIMER0->IFC = LETIMER_IFC_COMP0 |LETIMER_IFC_COMP1; 				//clear flags
 	LETIMER0->IEN = LETIMER_IEN_COMP0 |LETIMER_IEN_COMP1;				//enable interrupts
 	NVIC_EnableIRQ(LETIMER0_IRQn);										//enable interrupts for TIMER0 into the CORTEX-M3/4 CPU core
 
-	//Sleep_Block_Mode(Letimer0_EM);		//FIGURE THIS OUT			//lowest sleep mode setting for LETIMER
-
+	Sleep_Block_Mode(LETIMER_EM_BLOCK);								 	//lowest sleep mode setting for LETIMER
 
 	LETIMER_Enable(LETIMER0, true);										//START TIMER
 }
