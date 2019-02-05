@@ -34,4 +34,5 @@
 #include "main.h"
 #include "em_cmu.h"
 
-void cmu_init(void);
+void cmu_letimer_init(void);
+void cmu_i2c_init(void);
