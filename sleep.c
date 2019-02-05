@@ -3,9 +3,9 @@
 #include "em_emu.h"
 
 
-//sleepBlockEnable[0] is for EM1, sleepBlockEnable[1] is for EM2, sleepBlockEnable[2] is for EM3
+
 //max number of nested blocks is (2^8)-1 = 255
-#define MAX_EM_Element 3
+#define MAX_EM_Element 5
 static uint8_t sleepBlockEnable[MAX_EM_Element];
 
 void Sleep_Block_Mode(unsigned int EM) {
