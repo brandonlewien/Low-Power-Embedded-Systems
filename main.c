@@ -35,14 +35,14 @@ int main(void)
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
 
-  /* Chip errata */
-  CHIP_Init();
 
-  /* Init DCDC regulator and HFXO with kit specific parameters */
+  CHIP_Init(); 											  // Chip errata
+
+                                                          // Init DCDC regulator and HFXO with kit specific parameters
   EMU_DCDCInit(&dcdcInit);
   CMU_HFXOInit(&hfxoInit);
 
-  /* Switch HFCLK to HFXO and disable HFRCO */
+                                                          // Switch HFCLK to HFXO and disable HFRCO
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
   CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);
 

@@ -1,5 +1,3 @@
-
-
 #include "sleep.h"
 #include <em_core.h>
 #include "em_emu.h"
@@ -13,14 +11,14 @@ static uint8_t sleepBlockEnable[MAX_EM_Element];
 void Sleep_Block_Mode(unsigned int EM) {
 	CORE_ATOMIC_IRQ_DISABLE();
 	if(sleepBlockEnable[EM] < 255){
-		sleepBlockEnable[EM]++; //add block nesting to energy mode EM
+		sleepBlockEnable[EM]++; 				    //add block nesting to energy mode EM
 	}
 	CORE_ATOMIC_IRQ_ENABLE();
 }
 void Sleep_UnBlock_Mode(unsigned int EM) {
 	CORE_ATOMIC_IRQ_DISABLE();
-	if(sleepBlockEnable[EM] > 0){ //check that energy mode is blocked
-		sleepBlockEnable[EM]--; //subtract block nesting to energy mode EM
+	if(sleepBlockEnable[EM] > 0){ 					//check that energy mode is blocked
+		sleepBlockEnable[EM]--; 					//subtract block nesting to energy mode EM
 	}
 	CORE_ATOMIC_IRQ_ENABLE();
 }
@@ -52,40 +50,3 @@ void Enter_Sleep(void) {
 	}
 	return;
 }
-
-/*EM Enter_Lowest_EM_Mode(void) {
-
-	EM EMTemp = EnergyMode1;
-	if (sleepBlockEnable[EnergyMode2 - 2] == 0) {
-		EMTemp = EnergyMode2;
-		if (sleepBlockEnable[EnergyMode3 - 2] == 0) {
-			EMTemp = EnergyMode3;
-		}
-	}
-	if (SLEEP_LOWEST_ENERGY_MODE_DEFAULT < EMTemp) {
-		EMTemp = SLEEP_LOWEST_ENERGY_MODE_DEFAULT;
-	}
-
-	return EMTemp;
-}
-
-void EnterEM(EM EnergyModeWanted) {
-	switch(EnergyModeWanted) {
-		case(EnergyMode1):
-			EMU_EnterEM1();
-			break;
-		case(EnergyMode2):
-			EMU_EnterEM2(false);
-			break;
-		case(EnergyMode3):
-			EMU_EnterEM3(false);
-			break;
-		case(EnergyMode4):
-			EMU_EnterEM4();
-			break;
-		default:
-			break;
-	}
-}
-
-*/

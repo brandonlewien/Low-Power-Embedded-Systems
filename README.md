@@ -1,1 +1,1 @@
-# ECEN3360
+# ECEN3360 Digital Design Lab: Sonya Schuppan and Brandon Lewien
