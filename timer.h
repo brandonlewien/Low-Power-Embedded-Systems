@@ -44,4 +44,6 @@
 #define LED_PERIOD 1.75 //(in seconds)
 
 #define LETIMER_EM_BLOCK 2
+
+
 void letimer_init(void);
