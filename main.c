@@ -46,7 +46,7 @@ int main(void)
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
   CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);
 
-  cmu_init();
+  cmu_letimer_init();
   gpio_init();
   letimer_init();
 
