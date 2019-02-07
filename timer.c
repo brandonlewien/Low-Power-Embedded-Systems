@@ -1,5 +1,4 @@
 #include "timer.h"
-#include "sleep.h"
 
 void letimer_init(void) {
 	uint32_t comp0;

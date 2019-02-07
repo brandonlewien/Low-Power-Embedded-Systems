@@ -31,6 +31,9 @@
  *
  ******************************************************************************/
 
+#ifndef GPIO_H_
+#define GPIO_H_
+
 #include "main.h"
 #include "em_gpio.h"
 
@@ -43,4 +46,6 @@
 #define LED1_default	false		// off
 
 void gpio_init(void);
+
+#endif /* GPIO_H_ */
 

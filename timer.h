@@ -30,12 +30,15 @@
  * arising from your use of this Software.
  *
  ******************************************************************************/
+#ifndef TIMER_H_
+#define TIMER_H_
 
 #include <stdint.h>
 #include <stdbool.h>
 #include "em_letimer.h"
 #include "gpio.h"
 #include "cmu.h"
+#include "sleep.h"
 
 #define TIMER_MAX_COUNT 65535 		//(2^16)-1
 #define LFXO_FREQ 32768 			//(2^15)
@@ -43,7 +46,9 @@
 #define LED_ON_TIME .4  //(in seconds)
 #define LED_PERIOD 1.75 //(in seconds)
 
-#define LETIMER_EM_BLOCK 2
+#define LETIMER_EM_BLOCK 3
 
 
 void letimer_init(void);
+
+#endif /* TIMER_H_ */

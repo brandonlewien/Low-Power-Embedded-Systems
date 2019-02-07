@@ -31,9 +31,15 @@
  *
  ******************************************************************************/
 
-#ifndef SRC_I2C_H_
-#define SRC_I2C_H_
+#ifndef I2C_H_
+#define I2C_H_
+
+#include "em_cmu.h"
+#include "em_emu.h"
+#include "em_gpio.h"
+#include "em_i2c.h"
+#include "bsp.h"
 
 void i2c_init(void);
 
-#endif /* SRC_I2C_H_ */
+#endif /* I2C_H_ */
