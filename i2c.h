@@ -39,7 +39,22 @@
 #include "em_gpio.h"
 #include "em_i2c.h"
 #include "bsp.h"
+/*
+#define CORE_FREQUENCY              14000000
+#define RTC_MIN_TIMEOUT                32000
+#define I2C_ADDRESS                     0xE2
+#define I2C_RXBUFFER_SIZE                 10
+
+uint8_t i2c_txBuffer[] = "Gecko";
+uint8_t i2c_txBufferSize = sizeof(i2c_txBuffer);
+uint8_t i2c_rxBuffer[I2C_RXBUFFER_SIZE];
+uint8_t i2c_rxBufferIndex;
+
+volatile bool i2c_rxInProgress;
+volatile bool i2c_startTx;
+*/
 
 void i2c_init(void);
+void I2C_ISR_Enable(void);
 
 #endif /* I2C_H_ */
