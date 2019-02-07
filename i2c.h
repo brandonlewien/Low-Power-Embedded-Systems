@@ -56,5 +56,6 @@ volatile bool i2c_startTx;
 
 void i2c_init(void);
 void I2C_ISR_Enable(void);
+void I2C_Encode_Buffer(void);
 
 #endif /* I2C_H_ */
