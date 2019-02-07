@@ -14,7 +14,7 @@ void i2c_init(void) {
 void I2C_Encode_Buffer(void) {
 	I2C_ISR_Disable();
 	I2C_TransferSeq_TypeDef Buffer;
-	//GPIO_PinOutSet(gpioPortC, 0);
+	GPIO_PinOutSet(gpioPortC, 0);
 
 	 // Buffer.addr          = I2C_ADDRESS;
 	 // Buffer.flags         = I2C_FLAG_WRITE;
@@ -24,7 +24,7 @@ void I2C_Encode_Buffer(void) {
 	 // Buffer.buf[1].len    = I2C_RXBUFFER_SIZE;
 	 // I2C_TransferInit(I2C0, &i2cTransfer);
 
-	 while (I2C_Transfer(I2C0) == i2cTransferInProgress){;}
+	 while(I2C_Transfer(I2C0));
 
 	 /* Clearing pin to indicate end of transfer */
 	 GPIO_PinOutClear(gpioPortC, 0);
