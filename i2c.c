@@ -33,15 +33,15 @@ void I2C_Encode_Buffer(void) {
 
 void I2C_ISR_Enable(void) {
 	I2C0->IEN = 0;                   // Clear IEN
-	I2C0->IEN |=  I2C_IEN_ADDR    |
-			      I2C_IEN_RXDATAV |
-				  I2C_IEN_SSTOP;
+	I2C0->IEN |= I2C_IEN_ADDR    |
+			     I2C_IEN_RXDATAV |
+				 I2C_IEN_SSTOP;
 	NVIC_EnableIRQ(I2C0_IRQn);
 }
 
 void I2C_ISR_Disable(void) {
-	I2C0->IEN &= ~I2C_IEN_ADDR    &
-			     ~I2C_IEN_RXDATAV &
+	I2C0->IEN &= ~I2C_IEN_ADDR    |
+			     ~I2C_IEN_RXDATAV |
 				 ~I2C_IEN_SSTOP;
 	NVIC_DisableIRQ(I2C0_IRQn);
 }

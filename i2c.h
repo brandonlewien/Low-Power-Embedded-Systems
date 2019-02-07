@@ -43,7 +43,7 @@
 #define CORE_FREQUENCY              14000000
 #define RTC_MIN_TIMEOUT                32000
 #define I2C_ADDRESS                     0xE2
-#define I2C_RXBUFFER_SIZE                 10
+#define I2C_RXBUFFER_SIZE                 20
 
 uint8_t i2c_txBuffer[] = "Gecko";
 uint8_t i2c_txBufferSize = sizeof(i2c_txBuffer);
