@@ -30,7 +30,8 @@
  * arising from your use of this Software.
  *
  ******************************************************************************/
-
+#ifndef SLEEP_H_
+#define SLEEP_H_
 
 //***********************************************************************************
 // Include files
@@ -79,3 +80,6 @@ void Sleep_Init();
 void Enter_Sleep(void);
 EM Enter_Lowest_EM_Mode(void);
 
+
+
+#endif /* SLEEP_H_ */

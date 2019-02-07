@@ -20,7 +20,7 @@ void cmu_letimer_init(void){
 
 
 void cmu_i2c_init(void){
-	CMU_OscillatorEnable(cmuOsc_HFXO, true);				// enables HFXO clock
+	CMU_OscillatorEnable(cmuOsc_HFXO, true, true);				// enables HFXO clock
 	CMU_ClockSelectSet(cmuClock_I2C0, cmuSelect_HFXO);      // routes I2C clock with HFXO
 	CMU_ClockEnable(cmuClock_I2C0, true); 					// enable I2C clock
 }
