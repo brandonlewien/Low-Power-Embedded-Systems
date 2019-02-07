@@ -2,8 +2,6 @@
 #include <em_core.h>
 #include "em_emu.h"
 
-
-
 //max number of nested blocks is (2^8)-1 = 255
 #define MAX_EM_Element 5
 static uint8_t sleepBlockEnable[MAX_EM_Element];

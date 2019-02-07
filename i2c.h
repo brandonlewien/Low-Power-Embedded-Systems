@@ -34,6 +34,6 @@
 #ifndef SRC_I2C_H_
 #define SRC_I2C_H_
 
-
+void i2c_init(void);
 
 #endif /* SRC_I2C_H_ */
