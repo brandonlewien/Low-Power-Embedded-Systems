@@ -1,26 +1,23 @@
 #include "cmu.h"
 
-void cmu_letimer_init(void){
+void cmu_init(void){
+															// High freq clock tree:
+	CMU_OscillatorEnable(cmuOsc_HFXO, true, true);			// enables HFXO 									(I2C clock tree 1)
+	CMU_ClockSelectSet(cmuClock_HFPER, cmuSelect_HFXO);		// route HFXO to HFPERCLK(high freq peripheral clk) (I2C clock tree 2)
+	CMU_ClockEnable(cmuClock_HFPER, true);					// enable HFPERCLK									(I2C clock tree 3)
 
-	CMU_ClockSelectSet(cmuClock_HFPER, cmuSelect_HFXO);
-	CMU_ClockEnable(cmuClock_HFPER, true);
-															// By default, LFRCO is enabled
-	CMU_OscillatorEnable(cmuOsc_LFRCO, false, false);		// using LFXO or ULFRCO
-															// Route LF clock to the LF clock tree
-	CMU_OscillatorEnable(cmuOsc_ULFRCO, false, false);
-	CMU_OscillatorEnable(cmuOsc_LFXO, true, true);
-	CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_LFXO);		// routing clock to LFA
+															// By default, LFRCO is enabled:
+	CMU_OscillatorEnable(cmuOsc_LFRCO, false, false);		// DISABLE LFRCO
+	CMU_OscillatorEnable(cmuOsc_ULFRCO, false, false);		// DISABLE ULFRCO
 
-	CMU_ClockEnable(cmuClock_LFA, true);
+															// Low freq clock tree:
+	CMU_OscillatorEnable(cmuOsc_LFXO, true, true);			// enable LFXO										(LETIMER clock tree 1)
+	CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_LFXO);		// route LFXO to LFA								(LETIMER clock tree 2)
+	CMU_ClockEnable(cmuClock_LFA, true);					// enable LFA										(LETIMER clock tree 3)
 	CMU_ClockEnable(cmuClock_CORELE, true);
-															// Peripheral clocks enabled
-	CMU_ClockEnable(cmuClock_GPIO, true);
-	CMU_ClockEnable(cmuClock_LETIMER0, true); 				// connect clock source to LETIMER clock tree
-}
 
-
-void cmu_i2c_init(void){
-	CMU_OscillatorEnable(cmuOsc_HFXO, true, true);				// enables HFXO clock
-	CMU_ClockSelectSet(cmuClock_I2C0, cmuSelect_HFXO);      // routes I2C clock with HFXO
-	CMU_ClockEnable(cmuClock_I2C0, true); 					// enable I2C clock
+															// Enable peripheral clocks:
+	CMU_ClockEnable(cmuClock_GPIO, true);					// connect clock source to GPIO clock
+	CMU_ClockEnable(cmuClock_LETIMER0, true); 				// connect clock source(LFA) to LETIMER clock tree	(LETIMER clock tree 4)
+	CMU_ClockEnable(cmuClock_I2C0, true); 					// connect clock source (HFPER) to I2C clock tree	(I2C clock tree 4)
 }
