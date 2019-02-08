@@ -12,26 +12,25 @@ void i2c_init(void) {
 }
 
 void I2C_Encode_Buffer(void) {
-	I2C_ISR_Disable();
+	I2C_Interrupt_Disable();
 	I2C_TransferSeq_TypeDef Buffer;
 	GPIO_PinOutSet(gpioPortC, 0);
 
-	 // Buffer.addr          = I2C_ADDRESS;
-	 // Buffer.flags         = I2C_FLAG_WRITE;
-	 // Buffer.buf[0].data   = i2c_txBuffer;
-	 // Buffer.buf[0].len    = i2c_txBufferSize;
-	 // Buffer.buf[1].data   = i2c_rxBuffer;
-	 // Buffer.buf[1].len    = I2C_RXBUFFER_SIZE;
-	 // I2C_TransferInit(I2C0, &i2cTransfer);
+    Buffer.addr          = I2C_ADDRESS;
+	Buffer.flags         = I2C_FLAG_WRITE;
+	Buffer.buf[0].data   = i2c_txBuffer;
+	Buffer.buf[0].len    = i2c_txBufferSize;
+	Buffer.buf[1].data   = i2c_rxBuffer;
+	Buffer.buf[1].len    = I2C_RXBUFFER_SIZE;
+	I2C_TransferInit(I2C0, &Buffer);
 
 	 while(I2C_Transfer(I2C0));
 
-	 /* Clearing pin to indicate end of transfer */
 	 GPIO_PinOutClear(gpioPortC, 0);
-	 I2C_ISR_Enable();
+	 I2C_Interrupt_Enable();
 }
 
-void I2C_ISR_Enable(void) {
+void I2C_Interrupt_Enable(void) {
 	I2C0->IEN = 0;                   // Clear IEN
 	I2C0->IEN |= I2C_IEN_ADDR    |
 			     I2C_IEN_RXDATAV |
@@ -39,7 +38,7 @@ void I2C_ISR_Enable(void) {
 	NVIC_EnableIRQ(I2C0_IRQn);
 }
 
-void I2C_ISR_Disable(void) {
+void I2C_Interrupt_Disable(void) {
 	I2C0->IEN &= ~I2C_IEN_ADDR    |
 			     ~I2C_IEN_RXDATAV |
 				 ~I2C_IEN_SSTOP;
@@ -49,5 +48,4 @@ void I2C_ISR_Disable(void) {
 void I2C0_IRQHandler(void) {
 	int status;
 	status = I2C0->IF;
-
 }

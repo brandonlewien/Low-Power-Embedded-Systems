@@ -50,8 +50,6 @@ int main(void)
   gpio_init();
   letimer_init();
 
-  I2C_ISR_Enable();
-
   while (1) {
 	  	Enter_Sleep();
 	  	//heart beat LED
