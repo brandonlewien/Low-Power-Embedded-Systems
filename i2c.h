@@ -47,25 +47,17 @@
 #define SDA_PORT gpioPortC
 #define SENS_EN_PORT gpioPortB
 #define ENABLE_SENSOR 1
-#define SCL_AND_SDA_DOUT 0
-
-#define I2C_FLAG_WRITE  1
-#define I2C_FLAG_READ   0
+#define SCL_AND_SDA_DOUT 1
 
 #define CORE_FREQUENCY              14000000
 #define RTC_MIN_TIMEOUT                32000
 #define I2C_ADDRESS                     0xE2
 #define I2C_RXBUFFER_SIZE                 20
 
-uint8_t i2c_txBuffer[] = "Gecko";
-uint8_t i2c_txBufferSize = sizeof(i2c_txBuffer);
-uint8_t i2c_rxBuffer[I2C_RXBUFFER_SIZE];
-uint8_t i2c_rxBufferIndex;
-
-
-void i2c_init(void);
-void I2C_ISR_Enable(void);
-void I2C_ISR_Disable(void);
+void I2C_Setup(void);
+void I2C_Reset_Bus(void);
+void I2C_Interrupt_Enable(void);
+void I2C_Interrupt_Disable(void);
 void I2C_Encode_Buffer(void);
 
 #endif /* I2C_H_ */

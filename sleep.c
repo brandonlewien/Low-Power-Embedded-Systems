@@ -5,7 +5,6 @@
 
 #define MAX_EM_Element 5
 
-
 static uint8_t sleepBlockEnable[MAX_EM_Element]; 	//max number of nested blocks is (2^8)-1 = 255
 
 void Sleep_Block_Mode(unsigned int EM) {
@@ -29,7 +28,6 @@ void Sleep_Init(void) {
 	sleepBlockEnable[EnergyMode2] = 0;
 	sleepBlockEnable[EnergyMode3] = 0;
 	sleepBlockEnable[EnergyMode4] = 0;
-
 }
 
 void Enter_Sleep(void) {
