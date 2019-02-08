@@ -34,17 +34,18 @@ int main(void)
 {
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
-
+  EMU_EM23Init_TypeDef em23Init = EMU_EM23INIT_DEFAULT;
 
   CHIP_Init(); 											  	// Chip errata
 
-  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	// Init DCDC regulator and HFXO with kit specific parameters
-  EMU_DCDCInit(&dcdcInit);
-  CMU_HFXOInit(&hfxoInit);
+  EMU_DCDCInit(&dcdcInit);									// init DCDC regulator
+  em23Init.vScaleEM23Voltage = emuVScaleEM23_LowPower;		// always start in low noise mode
+  EMU_EM23Init(&em23Init);									// init DCDC
+  CMU_HFXOInit(&hfxoInit);									// init HFXO with kit specific parameters
 
-
-  CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);			// Switch HFCLK to HFXO
-  CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);			// disable HFRCO
+  //These 2 lines are now in cmu_init (I'm just keeping them commented here for now so that we can go back to this if needed)
+  //CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);			// Switch HFCLK to HFXO
+  //CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);			// disable HFRCO
 
   cmu_init();
   gpio_init();
