@@ -8,7 +8,7 @@ uint8_t i2c_rxBufferIndex;
 void I2C_Setup(void) {
 	I2C_Init_TypeDef I2C_Init_Struct;
 	I2C_Init_Struct.clhr = _I2C_CTRL_CLHR_ASYMMETRIC;			// set clock duty cycle to 6:3 (low:high) ratio (33%) <- don't know for sure if this is right
-	I2C_Init_Struct.enable = false;								// don't enable I2C after initialization
+	I2C_Init_Struct.enable = false;								// don't enable I2C after I2C_Init()
 	I2C_Init_Struct.freq = I2C_FREQ_FAST_MAX;					// max SCL freq of Si7021 temp sensor is 400 kHz
 	I2C_Init_Struct.master = true;								// set pearl gecko as master
 	I2C_Init_Struct.refFreq = 0;								// select correct freq based on current processor freq (currently configured ref clock)
