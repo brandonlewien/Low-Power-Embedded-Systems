@@ -14,8 +14,14 @@ void i2c_init(void) {
 	I2C_Enable(I2C0, true);								// enable I2C
 }
 
+void I2C_Reset_Bus(void) {
+	if(I2C0->STATE & I2C_STATE_BUSY) {
+		I2C0->CMD = I2C_CMD_ABORT;
+	}
+}
+
 void I2C_Encode_Buffer(void) {
-	I2C_Interrupt_Disable();
+	//I2C_Interrupt_Disable();
 	I2C_TransferSeq_TypeDef Buffer;
 	GPIO_PinOutSet(gpioPortC, 0);
 
@@ -30,7 +36,7 @@ void I2C_Encode_Buffer(void) {
 	 while(I2C_Transfer(I2C0));
 
 	 GPIO_PinOutClear(gpioPortC, 0);
-	 I2C_Interrupt_Enable();
+	 //I2C_Interrupt_Enable();
 }
 
 void I2C_Interrupt_Enable(void) {
