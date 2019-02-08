@@ -40,16 +40,21 @@
 #include "em_i2c.h"
 #include "bsp.h"
 
+#define SCL_PIN 11
+#define SDA_PIN 10
+#define SENS_EN_PIN 10
+#define SCL_PORT gpioPortC
+#define SDA_PORT gpioPortC
+#define SENS_EN_PORT gpioPortB
+#define ENABLE_SENSOR 1
+#define SCL_AND_SDA_DOUT 1
+
+#define CORE_FREQUENCY              14000000
 #define RTC_MIN_TIMEOUT                32000
 #define I2C_ADDRESS                     0xE2
 #define I2C_RXBUFFER_SIZE                 20
 
-uint8_t i2c_txBuffer[] = "Gecko";
-uint8_t i2c_txBufferSize = sizeof(i2c_txBuffer);
-uint8_t i2c_rxBuffer[I2C_RXBUFFER_SIZE];
-uint8_t i2c_rxBufferIndex;
-
-void i2c_init(void);
+void I2C_Setup(void);
 void I2C_Reset_Bus(void);
 void I2C_Interrupt_Enable(void);
 void I2C_Interrupt_Disable(void);

@@ -23,15 +23,16 @@
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "bsp.h"
+
 #include "sleep.h"
 #include "main.h"
 #include "gpio.h"
 #include "timer.h"
 #include "cmu.h"
+#include "i2c.h"
 
 
-int main(void)
-{
+int main(void){
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
   EMU_EM23Init_TypeDef em23Init = EMU_EM23INIT_DEFAULT;
@@ -48,11 +49,17 @@ int main(void)
   //CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);			// disable HFRCO
 
   cmu_init();
-  gpio_init();
-  letimer_init();
+  //gpio_init();
+  //letimer_init();
+  I2C_Setup();
+  I2C_Reset_Bus();
 
   while (1) {
-	  	Enter_Sleep();
+	  for(int i = 0; i < 100000; i++);
+	  I2C_Encode_Buffer();
+
+
+	  //Enter_Sleep();
 	  	//heart beat LED
 		/*for (int i = 0; i < 1500000; i++);
 		GPIO_PinOutClear(LED1_port, LED1_pin);
