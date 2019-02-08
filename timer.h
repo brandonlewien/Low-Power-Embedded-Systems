@@ -44,9 +44,9 @@
 #define LFXO_FREQ 32768 			//(2^15)
 
 #define LED_ON_TIME .4  //(in seconds)
-#define LED_PERIOD 1.75 //(in seconds)
+#define LED_PERIOD .5 //(in seconds) -> set to .5 for lab 3
 
-#define LETIMER_EM_BLOCK 3
+#define LETIMER_EM_BLOCK 1 //set lowest EM to 1 for Lab 3
 
 
 void letimer_init(void);

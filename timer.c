@@ -50,12 +50,12 @@ void LETIMER0_IRQHandler(void){
 	uint32_t int_flags = LETIMER0->IF;
 	if(int_flags & LETIMER_IFC_COMP0){ 									// if COMP0 flag is set,
 		//GPIO_PinOutClear(LED0_port, LED0_pin);					    // turn LED off
-		GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);
+		GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);					// ->use LED0 for Lab 3
 		LETIMER0->IFC = LETIMER_IFC_COMP0; 								// clear flag (by writing 1 to inter. clear reg)
 	}
 	else if(int_flags & LETIMER_IFC_COMP1){ 							// if COMP1 flag is set,
 		//GPIO_PinOutSet(LED0_port, LED0_pin);							// turn LED on
-		GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);
+		GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);						// ->use LED0 for Lab 3
 		LETIMER0->IFC = LETIMER_IFC_COMP1; 								// clear flag
 	}
 }
