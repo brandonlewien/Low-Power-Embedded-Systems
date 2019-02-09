@@ -43,19 +43,48 @@
 #define SCL_PIN 11
 #define SDA_PIN 10
 #define SENS_EN_PIN 10
+
 #define SCL_PORT gpioPortC
 #define SDA_PORT gpioPortC
 #define SENS_EN_PORT gpioPortB
+
 #define ENABLE_SENSOR 1
 #define SCL_AND_SDA_DOUT 1
 
+#define I2C_WRITE 0
+#define I2C_READ 1
+
+/* temp sensor commands */
+#define MEAS_REL_HUM_HOLD 			0xE5
+#define MEAS_REL_HUM_NO_HOLD		0xF5
+#define	MEAS_TEMP_HOLD				0xE3
+#define	MEAS_TEMP_NO_HOLD			0xF3
+#define	READ_PREV_TEMP				0xE0
+#define RESET						0xFE
+#define USER_REG_1_W				0xE6
+#define USER_REG_1_R				0xE7
+#define	HEAT_CTL_REG_W				0x51
+#define HEAT_CTL_REG_R				0x11
+//#define	READ_ID_B1
+//#define READ_ID_B1
+//#define READ_FIRM_REV
+
+
 #define CORE_FREQUENCY              14000000
-#define RTC_MIN_TIMEOUT                32000
-#define I2C_ADDRESS                     0xE2
-#define I2C_RXBUFFER_SIZE                 20
+//#define RTC_MIN_TIMEOUT           32000
+#define I2C_SLAVE_ADDRESS           0x40
+#define I2C_RXBUFFER_SIZE           20
+
+
+
 
 void I2C_Setup(void);
 void I2C_Reset_Bus(void);
+
+uint8_t I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd);
+void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data);
+uint16_t I2C_Read_Measurement(uint8_t slave_addr_rw, uint8_t cmd);
+
 void I2C_Interrupt_Enable(void);
 void I2C_Interrupt_Disable(void);
 void I2C_Encode_Buffer(void);
