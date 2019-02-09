@@ -40,17 +40,6 @@
 #include "em_i2c.h"
 #include "bsp.h"
 
-#define SCL_PIN 11
-#define SDA_PIN 10
-#define SENS_EN_PIN 10
-
-#define SCL_PORT gpioPortC
-#define SDA_PORT gpioPortC
-#define SENS_EN_PORT gpioPortB
-
-#define ENABLE_SENSOR 1
-#define SCL_AND_SDA_DOUT 1
-
 #define I2C_WRITE 0
 #define I2C_READ 1
 

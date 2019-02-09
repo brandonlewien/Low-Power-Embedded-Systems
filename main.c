@@ -36,7 +36,7 @@ int main(void){
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
   EMU_EM23Init_TypeDef em23Init = EMU_EM23INIT_DEFAULT;
-  uint8_t data;
+  uint8_t data_before, data_after;
   uint8_t i;
 
   CHIP_Init(); 											  	// Chip errata
@@ -51,12 +51,15 @@ int main(void){
   //CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);			// disable HFRCO
 
   cmu_init();
-  gpio_init();
+  gpio_init();												// sets up LED, I2C, and temp sensor enable pins
   letimer_init();
   I2C_Setup();
   I2C_Reset_Bus();
 
-  data = I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);
+  data_before = 1;
+  data_before = I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);
+  I2C_Write_to_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_W, 0x3A);
+  data_after = I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);
 
   i++;
 
