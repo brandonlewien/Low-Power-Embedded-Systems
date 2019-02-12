@@ -47,8 +47,8 @@ int main(void){
   CMU_HFXOInit(&hfxoInit);									// init HFXO with kit specific parameters
 
   //These 2 lines are now in cmu_init (I'm just keeping them commented here for now so that we can go back to this if needed)
-  //CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);			// Switch HFCLK to HFXO
-  //CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);			// disable HFRCO
+  //CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);	    // Switch HFCLK to HFXO
+  //CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);		// disable HFRCO
 
   cmu_init();
   gpio_init();												// sets up LED, I2C, and temp sensor enable pins
@@ -57,16 +57,15 @@ int main(void){
   I2C_Reset_Bus();
 
   data_before = 1;
-  data_before = I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);
+  //data_before = I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);
+  for(int i = 0; i < 1000000; i++);
   I2C_Write_to_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_W, 0x3A);
+  for(int i = 0; i < 500; i++);
   data_after = I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);
 
   i++;
-
-
-
   while (1) {
-	  //for(int i = 0; i < 100000; i++);
+
 	  //I2C_Encode_Buffer();
 
 
