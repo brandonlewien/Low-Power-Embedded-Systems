@@ -18,9 +18,9 @@ void I2C_Setup(void) {
 	I2C_Init(I2C0, &I2C_Init_Struct);
 
 	I2C0->SADDR = I2C_SLAVE_ADDRESS;											// specifies address of temp sensor (with last bit already as the R/W bit)
-	//I2C0->CTRL |= I2C_CTRL_SLAVE | I2C_CTRL_AUTOACK | I2C_CTRL_AUTOSN;												// Auto ACK
+	//I2C0->CTRL |= I2C_CTRL_SLAVE | I2C_CTRL_AUTOACK | I2C_CTRL_AUTOSN;		// Auto ACK
 
-	I2C0->ROUTELOC0 = I2C_ROUTELOC0_SDALOC_LOC15 | I2C_ROUTELOC0_SCLLOC_LOC15;												// route SDA and SCL lines from peripheral to external pins (PC11 for SCL (routing #15) and PC10 for SDA (routing #15))
+	I2C0->ROUTELOC0 = I2C_ROUTELOC0_SDALOC_LOC15 | I2C_ROUTELOC0_SCLLOC_LOC15;	// route SDA and SCL lines from peripheral to external pins (PC11 for SCL (routing #15) and PC10 for SDA (routing #15))
 	I2C0->ROUTEPEN = I2C_ROUTEPEN_SCLPEN | I2C_ROUTEPEN_SDAPEN; 				// enable SDA and SCL pins
 
 	//Sleep_Block_Mode(I2C_EM_BLOCK);											// lowest sleep mode setting for I2C
@@ -39,7 +39,6 @@ void I2C_Setup(void) {
 
 uint8_t I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd){
 	uint8_t data;
-	//uint8_t slave_addr_r = slave_addr_rw | I2C_READ;
 
 	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
 	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading

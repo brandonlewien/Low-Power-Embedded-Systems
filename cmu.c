@@ -3,12 +3,11 @@
 void cmu_init(void){
 															// High freq clock tree:
 	CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);		// route HFXO to HFCLK branch						(I2C clock tree 1)
-	CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);		// disable HFRCO (moving this line below the above line should fix the crash)
+	CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);		// disable HFRCO
 	CMU_OscillatorEnable(cmuOsc_HFXO, true, true);			// enable HFXO 										(I2C clock tree 2)
 	CMU_ClockSelectSet(cmuClock_HFPER, cmuSelect_HFCLK);	// route HFCLK to HFPERCLK(high freq periph clk) 	(I2C clock tree 4)
 	CMU_ClockEnable(cmuClock_HF, true);						// enable HFCLK										(I2C clock tree 3)
 	CMU_ClockEnable(cmuClock_HFPER, true);					// enable HFPERCLK									(I2C clock tree 5)
-	//^I don't think we technically need these enables bc the CMU_ClockSelectSet() should enable it too but I will test that later
 
 															// By default, LFRCO is enabled:
 	CMU_OscillatorEnable(cmuOsc_LFRCO, false, false);		// DISABLE LFRCO
