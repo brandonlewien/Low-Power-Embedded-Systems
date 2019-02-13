@@ -75,6 +75,9 @@ void I2C_Reset_Bus(void);
 
 void I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd);
 void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data);
+
+void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data);
+uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd);
 //uint16_t I2C_Read_Measurement(uint8_t slave_addr_rw, uint8_t cmd);
 
 void I2C_Interrupt_Enable(void);
