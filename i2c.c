@@ -6,6 +6,16 @@ uint8_t i2c_txBuffer[] = "Gecko";
 uint8_t i2c_txBufferSize = sizeof(i2c_txBuffer);
 uint8_t i2c_rxBuffer[I2C_RXBUFFER_SIZE];
 uint8_t i2c_rxBufferIndex;
+volatile uint8_t WRITE_DATA;
+volatile uint8_t READ_DATA;
+volatile uint8_t LOCALWCMD;
+volatile uint8_t LOCALRCMD;
+volatile uint8_t LOCAL_R_SLAVE_ADDR;
+volatile uint8_t WRITE_STATE_FLAG;
+volatile uint8_t READ_STATE_FLAG;
+volatile bool RWFLAG; // True if write
+volatile bool READ_DONE;
+
 
 
 void I2C_Setup(void) {
@@ -37,47 +47,34 @@ void I2C_Setup(void) {
 
 
 
-uint8_t I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd){
-	uint8_t data;
+void I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd){
 	//uint8_t slave_addr_r = slave_addr_rw | I2C_READ;
+	RWFLAG = false;
+	READ_STATE_FLAG = 1;
+	LOCAL_R_SLAVE_ADDR = slave_addr_rw;
+	LOCALRCMD = cmd;
+	READ_DONE = 0;
 
 	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
 	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	I2C0->TXDATA = cmd;															// send command to temp sensor
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	I2C0->CMD = I2C_CMD_START;													// send REPEATED START to slave
-	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_READ;								// send slave addr and READ bit
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	while(!(I2C0->IF & I2C_IF_RXDATAV));										// wait for entire byte to be transmitted and available in RX buffer
-	data = I2C0->RXDATA; 														// read data from RX buffer (automatically clears RXDATAV flag)
-
-	I2C0->CMD = I2C_CMD_NACK;													// send NACK to slave
-	I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
-
-	return data;
+	// ACK 1
+	// ACK 2
+	// ACK 3
+ 	while(!READ_DONE);
+	//return READ_DATA;
 }
 
+
 void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data){
+	LOCALWCMD = cmd;
+	RWFLAG = true;
+	WRITE_STATE_FLAG = 1;
+	WRITE_DATA = data;
+
 	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
 	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	I2C0->TXDATA = cmd;															// send command to temp sensor
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	I2C0->TXDATA = data;														// send data to temp sensor
-
-	I2C0->CMD = I2C_CMD_ACK;													// send ACK to slave
-	I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
+// First ACK
+// Second ACK
 }
 
 /*
@@ -91,63 +88,65 @@ void I2C_Reset_Bus(void) {
 	}
 }
 
-
-void I2C_Encode_Buffer(void) {
-	//I2C_Interrupt_Disable();
-	I2C_TransferSeq_TypeDef Buffer;
-	GPIO_PinOutSet(gpioPortC, 0);
-
-    Buffer.addr          = I2C_SLAVE_ADDRESS;
-	Buffer.flags         = I2C_FLAG_WRITE;
-	Buffer.buf[0].data   = i2c_txBuffer;
-	Buffer.buf[0].len    = i2c_txBufferSize;
-	Buffer.buf[1].data   = i2c_rxBuffer;
-	Buffer.buf[1].len    = I2C_RXBUFFER_SIZE;
-	I2C_TransferInit(I2C0, &Buffer);
-
-	 while(I2C_Transfer(I2C0) == 1);
-
-	 GPIO_PinOutClear(gpioPortC, 0);
-	I2C_Interrupt_Enable();
-}
-
 void I2C_Interrupt_Enable(void) {
 	I2C0->IEN = 0;                   // Clear IEN
-	I2C0->IEN |= I2C_IEN_ADDR    |
-			     I2C_IEN_RXDATAV |
-				 I2C_IEN_SSTOP;
+	I2C0->IEN |= //I2C_IEN_RXDATAV |
+				 I2C_IEN_ACK;
 	NVIC_EnableIRQ(I2C0_IRQn);
 }
 
 void I2C_Interrupt_Disable(void) {
-	I2C0->IEN &= ~I2C_IEN_ADDR    |
-			     ~I2C_IEN_RXDATAV |
-				 ~I2C_IEN_SSTOP;
+	I2C0->IEN &= ~(//I2C_IEN_RXDATAV |
+				   I2C_IEN_ACK);
 	NVIC_DisableIRQ(I2C0_IRQn);
 }
 
 void I2C0_IRQHandler(void)
-{
-  int status;
+ {
+	int status;
+	status = I2C0->IF;
+	if (RWFLAG == true) {
+	  if (status & I2C_IF_ACK) {
+		  if (WRITE_STATE_FLAG == 1) {
+			  I2C0->IFC |= I2C_IFC_ACK;
+			  I2C0->TXDATA = LOCALWCMD;
+			  WRITE_STATE_FLAG = 2;
+		  }
+		  else if (WRITE_STATE_FLAG == 2) {
+			  I2C0->IFC |= I2C_IFC_ACK;
+			  I2C0->TXDATA = WRITE_DATA;
+			  I2C0->CMD = I2C_CMD_ACK;													// send ACK to slave
+			  I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
+			  I2C0->IFC |= I2C_IFC_ACK;
+		  }
+	  }
+	}
+	if (RWFLAG == false) {  // Read
+		if (status & I2C_IF_ACK) {
 
-  status = I2C0->IF;
-
-  if (status & I2C_IF_ADDR){
-    // Address Match
-    // Indicating that reception is started
-    I2C0->RXDATA;
-
-    I2C_IntClear(I2C0, I2C_IFC_ADDR);
-
-  } else if (status & I2C_IF_RXDATAV){
-    // Data received
-    i2c_rxBuffer[i2c_rxBufferIndex] = I2C0->RXDATA;
-    i2c_rxBufferIndex++;
-  }
-
-  if(status & I2C_IEN_SSTOP){
-    // Stop received, reception is ended
-    I2C_IntClear(I2C0, I2C_IEN_SSTOP);
-    i2c_rxBufferIndex = 0;
-  }
+			if (READ_STATE_FLAG == 1) {
+				I2C0->IFC |= I2C_IFC_ACK;
+				READ_STATE_FLAG = 2;
+				I2C0->TXDATA = LOCALRCMD;															// send command to temp sensor
+			}
+			else if (READ_STATE_FLAG == 2) {
+				I2C0->IFC |= I2C_IFC_ACK;
+				I2C0->CMD = I2C_CMD_START;													// send REPEATED START to slave
+				I2C0->TXDATA = (LOCAL_R_SLAVE_ADDR << 1) | I2C_READ;
+				READ_STATE_FLAG = 3;
+			}
+			else if (READ_STATE_FLAG == 3) {
+				I2C0->IFC |= I2C_IFC_ACK;
+				if (status & I2C_IF_RXDATAV) {
+					//GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);
+					READ_DATA = I2C0->RXDATA; 														// read data from RX buffer (automatically clears RXDATAV flag)
+					//I2C0->IFC |= I2C_IFC_RXDATAV;
+					I2C0->CMD = I2C_CMD_NACK;													// send NACK to slave
+					I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
+					I2C0->IFC |= I2C_IFC_ACK;
+					READ_DONE = 1;
+				}
+			}
+		}
+	}
 }

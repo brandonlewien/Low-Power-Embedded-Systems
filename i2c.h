@@ -70,7 +70,7 @@
 void I2C_Setup(void);
 void I2C_Reset_Bus(void);
 
-uint8_t I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd);
+void I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd);
 void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data);
 uint16_t I2C_Read_Measurement(uint8_t slave_addr_rw, uint8_t cmd);
 
