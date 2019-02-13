@@ -11,9 +11,8 @@ void gpio_init(void){
 	GPIO_DriveStrengthSet(LED1_port, gpioDriveStrengthWeakAlternateWeak);
 	GPIO_PinModeSet(LED1_port, LED1_pin, gpioModePushPull, LED1_default);
 
-	//GPIO_DriveStrengthSet(SENS_EN_PORT, gpioDriveStrengthWeakAlternateWeak); 		// set drive strength to weak for temp sensor enable
+	GPIO_DriveStrengthSet(SENS_EN_PORT, gpioDriveStrengthWeakAlternateWeak); 		// set drive strength to weak for temp sensor enable
 	GPIO_PinModeSet(SENS_EN_PORT, SENS_EN_PIN, gpioModePushPull, ENABLE_SENSOR); 	// set up GPIO pin PB10 (temp sensor enable) and enable temp sensor by asserting DOUT
-	//GPIO->P[SENS_EN_PORT].DOUT |= (1 << SENS_EN_PIN);								// set sensor enable high
 	GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeWiredAnd, SCL_AND_SDA_DOUT); 	// set up GPIO pin PC11 (SCL)
 	GPIO_PinModeSet(SDA_PORT, SDA_PIN, gpioModeWiredAnd, SCL_AND_SDA_DOUT); 	// set up GPIO pin PC10 (SDA)
 

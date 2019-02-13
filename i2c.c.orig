@@ -47,12 +47,18 @@ void I2C_Setup(void) {
 
 
 
+<<<<<<< HEAD
 void I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd){
+	//uint8_t slave_addr_r = slave_addr_rw | I2C_READ;
 	RWFLAG = false;
 	READ_STATE_FLAG = 1;
 	LOCAL_R_SLAVE_ADDR = slave_addr_rw;
 	LOCALRCMD = cmd;
 	READ_DONE = 0;
+=======
+uint8_t I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd){
+	uint8_t data;
+>>>>>>> 4f60e4e9271ecf4a0fedce90bae150e69b202dce
 
 	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
 	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
@@ -74,49 +80,6 @@ void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data){
 	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
 // First ACK
 // Second ACK
-}
-
-static uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd){
-	uint8_t data;
-	//uint8_t slave_addr_r = slave_addr_rw | I2C_READ;
-
-	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
-	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	I2C0->TXDATA = cmd;															// send command to temp sensor
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	I2C0->CMD = I2C_CMD_START;													// send REPEATED START to slave
-	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_READ;								// send slave addr and READ bit
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	while(!(I2C0->IF & I2C_IF_RXDATAV));										// wait for entire byte to be transmitted and available in RX buffer
-	data = I2C0->RXDATA; 														// read data from RX buffer (automatically clears RXDATAV flag)
-
-	I2C0->CMD = I2C_CMD_NACK;													// send NACK to slave
-	I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
-
-	return data;
-}
-
-static void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data){
-	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
-	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	I2C0->TXDATA = cmd;															// send command to temp sensor
-	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
-	I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
-
-	I2C0->TXDATA = data;														// send data to temp sensor
-
-	I2C0->CMD = I2C_CMD_ACK;													// send ACK to slave
-	I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
 }
 
 /*

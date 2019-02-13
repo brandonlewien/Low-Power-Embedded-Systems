@@ -54,9 +54,12 @@
 #define USER_REG_1_R				0xE7
 #define	HEAT_CTL_REG_W				0x51
 #define HEAT_CTL_REG_R				0x11
-//#define	READ_ID_B1
+//#define READ_ID_B1
 //#define READ_ID_B1
 //#define READ_FIRM_REV
+
+#define USR_REG1_RESET				0x3A
+#define USR_REG1_12BIT_RES			0x3B
 
 
 #define CORE_FREQUENCY              14000000
@@ -72,7 +75,7 @@ void I2C_Reset_Bus(void);
 
 void I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd);
 void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data);
-uint16_t I2C_Read_Measurement(uint8_t slave_addr_rw, uint8_t cmd);
+//uint16_t I2C_Read_Measurement(uint8_t slave_addr_rw, uint8_t cmd);
 
 void I2C_Interrupt_Enable(void);
 void I2C_Interrupt_Disable(void);
