@@ -1,21 +1,6 @@
 #include "i2c.h"
 #include "gpio.h"
 
-
-uint8_t i2c_txBuffer[] = "Gecko";
-uint8_t i2c_txBufferSize = sizeof(i2c_txBuffer);
-uint8_t i2c_rxBuffer[I2C_RXBUFFER_SIZE];
-uint8_t i2c_rxBufferIndex;
-volatile uint8_t WRITE_DATA;
-volatile uint8_t READ_DATA;
-volatile uint8_t LOCALWCMD;
-volatile uint8_t LOCALRCMD;
-volatile uint8_t LOCAL_R_SLAVE_ADDR;
-volatile uint8_t WRITE_STATE_FLAG;
-volatile uint8_t READ_STATE_FLAG;
-volatile bool RWFLAG; // True if write
-volatile bool READ_DONE;
-
 volatile bool ACK_done;
 extern uint16_t read_data;
 
@@ -47,34 +32,6 @@ void I2C_Setup(void) {
 	I2C_Enable(I2C0, true);													// enable I2C
 }
 
-void I2C_Read_from_Reg(uint8_t slave_addr_rw, uint8_t cmd) {
-	RWFLAG             = false;
-	READ_STATE_FLAG    = 1;
-	LOCAL_R_SLAVE_ADDR = slave_addr_rw;
-	LOCALRCMD          = cmd;
-	READ_DONE          = 0;
-
-	I2C0->CMD          = I2C_CMD_START;									    // send START condition to slave
-	I2C0->TXDATA       = (slave_addr_rw << 1) | I2C_WRITE;					// send slave addr in upper 7 bits
-	                                                                        // WRITE bit in LSB to send command before reading
-	// ACK 1
-	// ACK 2
-	// ACK 3
- 	while(!READ_DONE);
-	//return READ_DATA;
-}
-
-void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data){
-	LOCALWCMD        = cmd;
-	RWFLAG           = true;
-	WRITE_STATE_FLAG = 1;
-	WRITE_DATA       = data;
-
-	I2C0->CMD = I2C_CMD_START;												// send START condition to slave
-	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;						// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
-// First ACK
-// Second ACK
-}
 
 uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd){
 	uint8_t data;
