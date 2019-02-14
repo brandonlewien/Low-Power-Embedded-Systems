@@ -79,6 +79,5 @@ void I2C_Read_Interrupts(uint8_t slave_addr, uint8_t cmd);
 
 void I2C_Interrupt_Enable(void);
 void I2C_Interrupt_Disable(void);
-//void I2C_Encode_Buffer(void);
 
 #endif /* I2C_H_ */
