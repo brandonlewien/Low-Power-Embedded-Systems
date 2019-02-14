@@ -51,10 +51,9 @@ int main(void){
   gpio_init();												// sets up LED, I2C, and temp sensor enable pins
   //letimer_init();											// initialize letimer for LED and I2C operation
   I2C_Setup();												// initialize I2C
-  I2C_Interrupt_Enable();
-  I2C_Reset_Bus();
-  I2C0->CMD = I2C_CMD_CLEARPC;
-  int i = 0;
+  I2C_Interrupt_Enable();                                   // Enable Interrupts
+  I2C_Reset_Bus();                                          // Reset I2C Bus
+  I2C0->CMD = I2C_CMD_CLEARPC;                              // Clear Pending Commands for I2C
   uint8_t data_catch = 0;
   read_data = 0;
 
@@ -66,8 +65,8 @@ int main(void){
   I2C_Read_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_R);
   for(int i = 0; i < 1000000; i++);
   data_catch = read_data;
+  for(int i = 0; i < 1000000; i++);
 
-  i++;
   while (1) {
 	  Enter_Sleep();
   }
