@@ -57,10 +57,10 @@ void LETIMER0_IRQHandler(void){
 	if(int_flags & LETIMER_IFC_COMP1){ 											// if COMP1 flag is set,
 		 GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);							// turn LED on ->use LED0 as heart beat for Lab 3
 
-		 I2C_Write_to_Reg_NoInterrupts(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES);	// write to temp sensor User Register 1
+		 I2C_Write_to_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES);	// write to temp sensor User Register 1
 		 for(int i = 0; i < 500; i++);											// wait for temp register to change
 
-		 data = I2C_Read_from_Reg_NoInterrupts(I2C_SLAVE_ADDRESS, USER_REG_1_R);				// read data from register
+		 data = I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);				// read data from register
 		 if(data != USR_REG1_12BIT_RES){										// if data read is not the data that was written
 			 GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);						// turn on LED1
 			 while(1);															// enter inf loop to indicate error
