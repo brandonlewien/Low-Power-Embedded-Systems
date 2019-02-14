@@ -50,6 +50,7 @@ void letimer_init(void) {
 void LETIMER0_IRQHandler(void){
 	uint32_t int_flags = LETIMER0->IF;
 	uint8_t data;
+
 	if(int_flags & LETIMER_IFC_COMP0){ 											// if COMP0 flag is set,
 		GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);							// turn LED off ->use LED0 as heart beat for Lab 3
 		LETIMER0->IFC = LETIMER_IFC_COMP0; 										// clear flag (by writing 1 to inter. clear reg)

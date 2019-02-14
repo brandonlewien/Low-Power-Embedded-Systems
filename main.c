@@ -31,6 +31,7 @@
 #include "cmu.h"
 #include "i2c.h"
 
+uint16_t read_data;
 
 int main(void){
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
@@ -44,12 +45,26 @@ int main(void){
   EMU_EM23Init(&em23Init);									// init DCDC
   CMU_HFXOInit(&hfxoInit);									// init HFXO with kit specific parameters
 
+
+
   cmu_init();												// initialize clock trees
   gpio_init();												// sets up LED, I2C, and temp sensor enable pins
-  letimer_init();											// initialize letimer for LED and I2C operation
+  //letimer_init();											// initialize letimer for LED and I2C operation
   I2C_Setup();												// initialize I2C
   I2C_Interrupt_Enable();
+  I2C_Reset_Bus();
+  I2C0->CMD = I2C_CMD_CLEARPC;
+  int i = 0;
+  read_data = 0;
 
+  for(int i = 0; i < 1000000; i++);
+  I2C_Read_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_R);
+  for(int i = 0; i < 1000000; i++);
+  I2C_Write_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES);
+  for(int i = 0; i < 1000000; i++);
+  I2C_Read_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_R);
+
+  i++;
   while (1) {
 	  Enter_Sleep();
   }

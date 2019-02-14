@@ -63,7 +63,6 @@
 
 
 #define CORE_FREQUENCY              14000000
-//#define RTC_MIN_TIMEOUT           32000
 #define I2C_SLAVE_ADDRESS           0x40
 #define I2C_RXBUFFER_SIZE           20
 
@@ -79,6 +78,9 @@ void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data);
 void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data);
 uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd);
 //uint16_t I2C_Read_Measurement(uint8_t slave_addr_rw, uint8_t cmd);
+
+void I2C_Write_Interrupts_Try2(uint8_t slave_addr, uint8_t cmd, uint8_t data);
+void I2C_Read_Interrupts_Try2(uint8_t slave_addr, uint8_t cmd);
 
 void I2C_Interrupt_Enable(void);
 void I2C_Interrupt_Disable(void);

@@ -16,6 +16,10 @@ volatile uint8_t READ_STATE_FLAG;
 volatile bool RWFLAG; // True if write
 volatile bool READ_DONE;
 
+volatile bool ACK_done;
+//volatile bool RX_data_ready;
+extern uint16_t read_data;
+
 
 
 void I2C_Setup(void) {
@@ -119,6 +123,35 @@ void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t d
 	I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
 }
 
+void I2C_Write_Interrupts_Try2(uint8_t slave_addr, uint8_t cmd, uint8_t data){
+	ACK_done = 0;
+	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
+	I2C0->TXDATA = (slave_addr << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
+	while(!ACK_done);
+	ACK_done = 0;
+	I2C0->TXDATA = cmd;															// send command to temp sensor
+	while(!ACK_done);
+	ACK_done = 0;
+	I2C0->TXDATA = data;														// send data to temp sensor
+	I2C0->CMD = I2C_CMD_ACK;													// send ACK to slave
+	I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
+}
+
+void I2C_Read_Interrupts_Try2(uint8_t slave_addr, uint8_t cmd){
+	ACK_done = 0;
+	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
+	I2C0->TXDATA = (slave_addr << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
+	while(!ACK_done);
+	ACK_done = 0;
+	I2C0->TXDATA = cmd;															// send command to temp sensor
+	while(!ACK_done);
+	ACK_done = 0;
+	I2C0->CMD = I2C_CMD_START;													// send REPEATED START to slave
+	I2C0->TXDATA = (slave_addr << 1) | I2C_READ;								// send slave addr and READ bit
+	while(!ACK_done);
+	ACK_done = 0;
+}
+
 /*
 uint16_t I2C_Read_Measurement(uint8_t slave_addr_rw, uint8_t cmd){ //use RXDOUBLE, returns 2 bytes
 
@@ -132,13 +165,13 @@ void I2C_Reset_Bus(void) {
 
 void I2C_Interrupt_Enable(void) {
 	I2C0->IEN = 0;                   // Clear IEN
-	I2C0->IEN |= //I2C_IEN_RXDATAV |
+	I2C0->IEN |= I2C_IEN_RXDATAV |
 				 I2C_IEN_ACK;
 	NVIC_EnableIRQ(I2C0_IRQn);
 }
 
 void I2C_Interrupt_Disable(void) {
-	I2C0->IEN &= ~(//I2C_IEN_RXDATAV |
+	I2C0->IEN &= ~(I2C_IEN_RXDATAV |
 				   I2C_IEN_ACK);
 	NVIC_DisableIRQ(I2C0_IRQn);
 }
@@ -147,6 +180,18 @@ void I2C0_IRQHandler(void)
  {
 	int status;
 	status = I2C0->IF;
+
+	if (status & I2C_IF_ACK) {
+		I2C0->IFC |= I2C_IFC_ACK;													// clear ACK flag
+		ACK_done = 1;
+	}
+	if (status & I2C_IF_RXDATAV){
+		read_data = I2C0->RXDOUBLE; 														// read data from RX buffer (automatically clears RXDATAV flag)
+		I2C0->CMD = I2C_CMD_NACK;													// send NACK to slave
+		I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
+	}
+
+	/*
 	if (RWFLAG == true) {
 	  if (status & I2C_IF_ACK) {
 		  if (WRITE_STATE_FLAG == 1) {
@@ -191,4 +236,5 @@ void I2C0_IRQHandler(void)
 			}
 		}
 	}
+	*/
 }
