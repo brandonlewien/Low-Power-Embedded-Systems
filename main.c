@@ -49,23 +49,24 @@ int main(void){
 
   cmu_init();												// initialize clock trees
   gpio_init();												// sets up LED, I2C, and temp sensor enable pins
-  //letimer_init();											// initialize letimer for LED and I2C operation
+  letimer_init();											// initialize letimer for LED and I2C operation
   I2C_Setup();												// initialize I2C
   I2C_Interrupt_Enable();                                   // Enable Interrupts
   I2C_Reset_Bus();                                          // Reset I2C Bus
   I2C0->CMD = I2C_CMD_CLEARPC;                              // Clear Pending Commands for I2C
-  uint8_t data_catch = 0;
   read_data = 0;
 
-  for(int i = 0; i < 1000000; i++);
-  I2C_Read_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_R);
-  for(int i = 0; i < 1000000; i++);
-  I2C_Write_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES);
-  for(int i = 0; i < 1000000; i++);
-  I2C_Read_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_R);
-  for(int i = 0; i < 1000000; i++);
-  data_catch = read_data;
-  for(int i = 0; i < 1000000; i++);
+  for(int i = 0; i < 100000; i++);
+  I2C_Read_Interrupts(I2C_SLAVE_ADDRESS, USER_REG_1_R);		// read default value from sensor
+  for(int i = 0; i < 100000; i++);
+  I2C_Write_Interrupts(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES); // write to register to change resolution to 12 bits
+  for(int i = 0; i < 100000; i++);
+  I2C_Read_Interrupts(I2C_SLAVE_ADDRESS, USER_REG_1_R);		// read from register again to verify successful write
+  for(int i = 0; i < 100000; i++);
+  if(read_data != USR_REG1_12BIT_RES){						// if data read is not the data that was written
+	  GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);			// turn on LED1
+	  while(1);												// enter inf loop to indicate error
+ }
 
   while (1) {
 	  Enter_Sleep();

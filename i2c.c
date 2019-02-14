@@ -119,7 +119,7 @@ void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t d
 	I2C0->CMD = I2C_CMD_STOP;												// send STOP to slave
 }
 
-void I2C_Write_Interrupts_Try2(uint8_t slave_addr, uint8_t cmd, uint8_t data){
+void I2C_Write_Interrupts(uint8_t slave_addr, uint8_t cmd, uint8_t data){
 	ACK_done     = 0;
 	I2C0->CMD    = I2C_CMD_START;							    			// send START condition to slave
 	I2C0->TXDATA = (slave_addr << 1) | I2C_WRITE;							// send slave addr in upper 7 bits
@@ -134,7 +134,7 @@ void I2C_Write_Interrupts_Try2(uint8_t slave_addr, uint8_t cmd, uint8_t data){
 	I2C0->CMD    = I2C_CMD_STOP;											// send STOP to slave
 }
 
-void I2C_Read_Interrupts_Try2(uint8_t slave_addr, uint8_t cmd){
+void I2C_Read_Interrupts(uint8_t slave_addr, uint8_t cmd){
 	ACK_done     = 0;
 	I2C0->CMD    = I2C_CMD_START;											// send START condition to slave
 	I2C0->TXDATA = (slave_addr << 1) | I2C_WRITE;							// send slave addr in upper 7 bits
