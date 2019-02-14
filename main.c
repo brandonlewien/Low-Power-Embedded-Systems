@@ -46,19 +46,9 @@ int main(void){
 
   cmu_init();												// initialize clock trees
   gpio_init();												// sets up LED, I2C, and temp sensor enable pins
-  //letimer_init();											// initialize letimer for LED and I2C operation
+  letimer_init();											// initialize letimer for LED and I2C operation
   I2C_Setup();												// initialize I2C
   I2C_Interrupt_Enable();
-
-	//GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);
-
-  for(int i = 0; i < 500; i++);											// wait for temp register to change
-
-	 //I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);				// read data from register
-	 for(int i = 0; i < 500; i++);											// wait for temp register to change
-	 I2C_Write_to_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES);	// write to temp sensor User Register 1
-	 for(int i = 0; i < 500; i++);											// wait for temp register to change
-	 I2C_Read_from_Reg(I2C_SLAVE_ADDRESS, USER_REG_1_R);				// read data from register
 
   while (1) {
 	  Enter_Sleep();

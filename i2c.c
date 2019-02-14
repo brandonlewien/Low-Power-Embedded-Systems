@@ -7,7 +7,7 @@ uint8_t i2c_txBufferSize = sizeof(i2c_txBuffer);
 uint8_t i2c_rxBuffer[I2C_RXBUFFER_SIZE];
 uint8_t i2c_rxBufferIndex;
 volatile uint8_t WRITE_DATA;
-volatile uint16_t READ_DATA;
+volatile uint8_t READ_DATA;
 volatile uint8_t LOCALWCMD;
 volatile uint8_t LOCALRCMD;
 volatile uint8_t LOCAL_R_SLAVE_ADDR;
@@ -132,19 +132,19 @@ void I2C_Reset_Bus(void) {
 
 void I2C_Interrupt_Enable(void) {
 	I2C0->IEN = 0;                   // Clear IEN
-	I2C0->IEN |= I2C_IEN_RXDATAV |
+	I2C0->IEN |= //I2C_IEN_RXDATAV |
 				 I2C_IEN_ACK;
 	NVIC_EnableIRQ(I2C0_IRQn);
 }
 
 void I2C_Interrupt_Disable(void) {
-	I2C0->IEN &= ~(I2C_IEN_RXDATAV |
+	I2C0->IEN &= ~(//I2C_IEN_RXDATAV |
 				   I2C_IEN_ACK);
 	NVIC_DisableIRQ(I2C0_IRQn);
 }
 
 void I2C0_IRQHandler(void)
-  {
+ {
 	int status;
 	status = I2C0->IF;
 	if (RWFLAG == true) {
@@ -168,15 +168,11 @@ void I2C0_IRQHandler(void)
 
 			if (READ_STATE_FLAG == 1) {
 				I2C0->IFC |= I2C_IFC_ACK;
-				GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);
-				GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);
 				READ_STATE_FLAG = 2;
 				I2C0->TXDATA = LOCALRCMD;															// send command to temp sensor
 			}
 			else if (READ_STATE_FLAG == 2) {
 				I2C0->IFC |= I2C_IFC_ACK;
-				GPIO->P[LED1_port].DOUT &= ~(1 << LED1_pin);
-				GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);
 				I2C0->CMD = I2C_CMD_START;													// send REPEATED START to slave
 				I2C0->TXDATA = (LOCAL_R_SLAVE_ADDR << 1) | I2C_READ;
 				READ_STATE_FLAG = 3;
@@ -184,9 +180,8 @@ void I2C0_IRQHandler(void)
 			else if (READ_STATE_FLAG == 3) {
 				I2C0->IFC |= I2C_IFC_ACK;
 				if (status & I2C_IF_RXDATAV) {
-					GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);
-					GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);
-					READ_DATA = I2C0->RXDOUBLE; 														// read data from RX buffer (automatically clears RXDATAV flag)
+					//GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);
+					READ_DATA = I2C0->RXDATA; 														// read data from RX buffer (automatically clears RXDATAV flag)
 					//I2C0->IFC |= I2C_IFC_RXDATAV;
 					I2C0->CMD = I2C_CMD_NACK;													// send NACK to slave
 					I2C0->CMD = I2C_CMD_STOP;													// send STOP to slave
