@@ -76,7 +76,7 @@ void I2C_Write_to_Reg(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data){
 // Second ACK
 }
 
-static uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd){
+uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd){
 	uint8_t data;
 	//uint8_t slave_addr_r = slave_addr_rw | I2C_READ;
 
@@ -103,7 +103,7 @@ static uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd
 	return data;
 }
 
-static void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data){
+void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data){
 	I2C0->CMD = I2C_CMD_START;													// send START condition to slave
 	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;							// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
 	while(!(I2C0->IF & I2C_IF_ACK));											// wait for ACK from slave
