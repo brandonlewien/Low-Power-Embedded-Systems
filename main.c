@@ -55,6 +55,7 @@ int main(void){
   I2C_Reset_Bus();
   I2C0->CMD = I2C_CMD_CLEARPC;
   int i = 0;
+  uint8_t data_catch = 0;
   read_data = 0;
 
   for(int i = 0; i < 1000000; i++);
@@ -63,6 +64,8 @@ int main(void){
   I2C_Write_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES);
   for(int i = 0; i < 1000000; i++);
   I2C_Read_Interrupts_Try2(I2C_SLAVE_ADDRESS, USER_REG_1_R);
+  for(int i = 0; i < 1000000; i++);
+  data_catch = read_data;
 
   i++;
   while (1) {
