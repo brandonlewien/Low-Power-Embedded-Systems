@@ -1,6 +1,6 @@
 /**************************************************************************//**
- * @file timer.h
- * @brief Timer header
+ * @file i2ctemp.h
+ * @brief General I2C read functions for Si7021-A20 temp sensor module header
  * @author Silicon Labs
  * @version 1.00
  ******************************************************************************
@@ -30,29 +30,18 @@
  * arising from your use of this Software.
  *
  ******************************************************************************/
-#ifndef TIMER_H_
-#define TIMER_H_
 
-#include <stdint.h>
-#include <stdbool.h>
-#include "em_letimer.h"
-#include "gpio.h"
-#include "cmu.h"
-#include "sleep.h"
-#include "i2c.h"
+#ifndef SRC_I2CTEMP_H_
+#define SRC_I2CTEMP_H_
 
-#define TIMER_MAX_COUNT 	65535			//(2^16)-1
-#define LFXO_FREQ 			32768			//(2^15)
+#include "em_cmu.h"
+#include "em_emu.h"
+#include "em_gpio.h"
+#include "em_i2c.h"
+#include "bsp.h"
 
-#define LED_ON_TIME 		.5			    //(in seconds) -> set to .5 for lab 3a
-#define LED_PERIOD 			4           	//(in seconds) -> set to 4 for lab 3a
+void I2C_Temperature_Read_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd);
+void I2C_Temperature_Read_Interrupts(uint8_t slave_addr_rw, uint8_t cmd);
+void Temp_Code_To_Celsius(uint8_t MSData, uint8_t LSData, uint16_t * DataRet);
 
-#define SENSOR_PWR_UP	 	.08         	//(in seconds)
-#define TEMP_MEAS_PERIOD 	4             	//(in seconds)
-
-#define LETIMER_EM_BLOCK 	2             	//set lowest EM to 1 for Lab 3
-
-
-void letimer_init(void);
-
-#endif /* TIMER_H_ */
+#endif /* SRC_I2CTEMP_H_ */
