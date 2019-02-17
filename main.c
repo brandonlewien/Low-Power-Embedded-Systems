@@ -72,7 +72,7 @@ int main(void){
 */
 
   while (1) {
-	  //Enter_Sleep();
+	  Enter_Sleep();
 
   }
 }
