@@ -37,24 +37,24 @@
 #include "main.h"
 #include "em_gpio.h"
 
-#define	LED0_port		gpioPortF
-#define LED0_pin		4
+#define	LED0_port	gpioPortF
+#define LED0_pin		    4
 #define LED0_default	false 		// off
 
-#define LED1_port		gpioPortF
-#define LED1_pin		5
-#define LED1_default	false		// off
+#define LED1_port	gpioPortF
+#define LED1_pin		    5
+#define LED1_default    false		// off
 
-#define SCL_PIN 		11
-#define SDA_PIN 		10
-#define SENS_EN_PIN 	10
+#define SCL_PIN      11
+#define SDA_PIN      10
+#define SENS_EN_PIN  10
 
-#define SCL_PORT 		gpioPortC
-#define SDA_PORT 		gpioPortC
-#define SENS_EN_PORT 	gpioPortB
+#define SCL_PORT		gpioPortC
+#define SDA_PORT		gpioPortC
+#define SENS_EN_PORT	gpioPortB
 
-#define ENABLE_SENSOR 	1
-#define DISABLE_SENSOR 	0
+#define ENABLE_SENSOR	 1
+#define DISABLE_SENSOR 	 0
 #define SCL_AND_SDA_DOUT 1
 
 void gpio_init(void);
