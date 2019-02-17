@@ -21,14 +21,16 @@ void I2C_Setup(void) {
 	I2C0->ROUTEPEN  = I2C_ROUTEPEN_SCLPEN
 			        | I2C_ROUTEPEN_SDAPEN; 									// enable SDA and SCL pins
 
-	//Sleep_Block_Mode(I2C_EM_BLOCK);										// lowest sleep mode setting for I2C
-	GPIO_PinModeSet(gpioPortD, 15, gpioModeWiredAnd, 1);
-    GPIO_PinModeSet(gpioPortD, 14, gpioModeWiredAnd, 1);
+
+	GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeDisabled, SCL_AND_SDA_DOUT); // set up GPIO pin PC11 (SCL) to disabled when not in use
+	GPIO_PinModeSet(SDA_PORT, SDA_PIN, gpioModeDisabled, SCL_AND_SDA_DOUT); // set up GPIO pin PC10 (SDA) to disabled when not in use
+	/*
 	for (int i = 0; i < 9; i++) {											// reset slave I2C device state machine
 		GPIO_PinOutClear(SCL_PORT, SCL_PIN);
 		GPIO_PinOutSet  (SCL_PORT, SCL_PIN);
 	}
 	I2C0->CMD = I2C_CMD_ABORT;												// reset pearl gecko I2C state machine
+	*/
 	I2C_Enable(I2C0, true);													// enable I2C
 }
 

@@ -32,6 +32,7 @@
 #include "i2c.h"
 
 uint16_t read_data;
+uint8_t read_reg_data;
 
 int main(void){
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
@@ -56,6 +57,7 @@ int main(void){
   I2C0->CMD = I2C_CMD_CLEARPC;                              // Clear Pending Commands for I2C
   read_data = 0;
 
+  /*
   for(int i = 0; i < 100000; i++);
   I2C_Read_Interrupts(I2C_SLAVE_ADDRESS, USER_REG_1_R);		// read default value from sensor
   for(int i = 0; i < 100000; i++);
@@ -67,8 +69,10 @@ int main(void){
 	  GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);			// turn on LED1
 	  while(1);												// enter inf loop to indicate error
  }
+*/
 
   while (1) {
-	  Enter_Sleep();
+	  //Enter_Sleep();
+
   }
 }
