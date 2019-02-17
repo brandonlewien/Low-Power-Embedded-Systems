@@ -40,7 +40,7 @@
 #include "em_i2c.h"
 #include "bsp.h"
 
-#define I2C_EM_BLOCK 1
+#define I2C_EM_BLOCK 1				// lowest energy mode is 2, so block 3
 
 #define I2C_WRITE 0
 #define I2C_READ 1

@@ -50,7 +50,7 @@
 #define SENSOR_PWR_UP	 	.08         	//(in seconds)
 #define TEMP_MEAS_PERIOD 	4             	//(in seconds)
 
-#define LETIMER_EM_BLOCK 	2             	//set lowest EM to 1 for Lab 3
+#define LETIMER_EM_BLOCK 	3             	//lowest mode for timer is 2, so block 3
 
 
 void letimer_init(void);

@@ -65,13 +65,18 @@ void LETIMER0_IRQHandler(void){ // COMP0 -> desired period for taking temp, COMP
 			GPIO_PinOutSet(SCL_PORT, SCL_PIN);
 		}
 		I2C0->CMD = I2C_CMD_ABORT;													// reset pearl gecko I2C state machine
+		I2C0->IFC |= I2C_IFC_ACK;					    							// clear ACK flag
 
 		/* read/write routine */
 		for(int i = 0; i < 100000; i++);
-		I2C_Write_to_Reg_NoInterrupts(I2C_SLAVE_ADDRESS, USER_REG_1_W, 0xbb);
+		I2C_Write_to_Reg_NoInterrupts(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_RESET);
 		for(int i = 0; i < 100000; i++);
 		read_reg_data = I2C_Read_from_Reg_NoInterrupts(I2C_SLAVE_ADDRESS, USER_REG_1_R); // read data from temp sensor
 		for(int i = 0; i < 100000; i++);
+		if(read_reg_data != USR_REG1_RESET){						// if data read is not the data that was written
+			GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);			// turn on LED1
+			while(1);												// enter inf loop to indicate error
+		}
 
 		/* LPM Disable Routine */
 		GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeDisabled, SCL_AND_SDA_DOUT); 	// disable GPIO pin PC11 (SCL)

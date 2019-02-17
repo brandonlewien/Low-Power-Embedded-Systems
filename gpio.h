@@ -56,6 +56,7 @@
 #define ENABLE_SENSOR	 1
 #define DISABLE_SENSOR 	 0
 #define SCL_AND_SDA_DOUT 1
+#define OFF              0
 
 void gpio_init(void);
 
