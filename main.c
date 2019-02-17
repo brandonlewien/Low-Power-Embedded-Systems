@@ -33,6 +33,7 @@
 #include "i2ctemp.h"
 
 uint16_t read_data;
+uint8_t read_reg_data;
 volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 
