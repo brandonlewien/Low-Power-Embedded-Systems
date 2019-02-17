@@ -1,9 +1,11 @@
 #include "i2c.h"
 #include "gpio.h"
 
-volatile bool ACK_done;
+extern volatile bool ACK_done;
 extern uint16_t read_data;
-
+volatile uint16_t temp_ms_read;
+volatile uint16_t temp_ls_read;
+volatile bool bit_flag = true;
 
 
 void I2C_Setup(void) {
@@ -116,6 +118,8 @@ void I2C_Reset_Bus(void) {
 	if(I2C0->STATE & I2C_STATE_BUSY) {
 		I2C0->CMD = I2C_CMD_ABORT;
 	}
+	I2C0->CMD = I2C_CMD_CLEARPC;                              // Clear Pending Commands for I2C
+
 }
 
 void I2C_Interrupt_Enable(void) {
@@ -133,6 +137,18 @@ void I2C_Interrupt_Disable(void) {
 
 void I2C0_IRQHandler(void)
  {
+//	int status;
+//	status = I2C0->IF;
+//
+//	if (status & I2C_IF_ACK) {
+//		I2C0->IFC |= I2C_IFC_ACK;					    // clear ACK flag
+//		ACK_done = 1;
+//	}
+//	if (status & I2C_IF_RXDATAV){
+//		read_data = I2C0->RXDOUBLE; 					// read data from RX buffer (automatically clears RXDATAV flag)
+//		I2C0->CMD = I2C_CMD_NACK;						// send NACK to slave
+//		I2C0->CMD = I2C_CMD_STOP;						// send STOP to slave
+//	}
 	int status;
 	status = I2C0->IF;
 
@@ -140,8 +156,14 @@ void I2C0_IRQHandler(void)
 		I2C0->IFC |= I2C_IFC_ACK;					    // clear ACK flag
 		ACK_done = 1;
 	}
-	if (status & I2C_IF_RXDATAV){
-		read_data = I2C0->RXDOUBLE; 					// read data from RX buffer (automatically clears RXDATAV flag)
+	if ((status & I2C_IF_RXDATAV) && bit_flag){
+		temp_ms_read = I2C0->RXDOUBLE;
+		I2C0->CMD = I2C_CMD_ACK;
+		bit_flag = false;
+	}
+	else if ((status & I2C_IF_RXDATAV) && !bit_flag){
+		bit_flag = true;
+		temp_ls_read = I2C0->RXDOUBLE;
 		I2C0->CMD = I2C_CMD_NACK;						// send NACK to slave
 		I2C0->CMD = I2C_CMD_STOP;						// send STOP to slave
 	}
