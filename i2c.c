@@ -40,6 +40,8 @@ void I2C_Setup(void) {
 uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd){
 	uint8_t data;
 	//uint8_t slave_addr_r = slave_addr_rw | I2C_READ;
+	I2C0->CMD = I2C_CMD_ABORT;
+	I2C0->CMD = I2C_CMD_CLEARPC;
 
 	I2C0->CMD = I2C_CMD_START;												// send START condition to slave
 	I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;						// send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
