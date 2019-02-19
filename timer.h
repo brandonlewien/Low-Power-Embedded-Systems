@@ -39,6 +39,7 @@
 #include "gpio.h"
 #include "cmu.h"
 #include "sleep.h"
+#include "i2ctemp.h"
 #include "i2c.h"
 
 #define TIMER_MAX_COUNT 	65535			//(2^16)-1

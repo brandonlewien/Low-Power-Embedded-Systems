@@ -32,6 +32,7 @@
 #include "i2c.h"
 #include "i2ctemp.h"
 
+uint16_t celsius;
 uint16_t read_data;
 uint8_t read_reg_data;
 volatile uint16_t temp_ms_read;
