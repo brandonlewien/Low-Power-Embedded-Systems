@@ -1,6 +1,6 @@
 #include "timer.h"
 
-extern uint8_t read_reg_data;
+//extern uint8_t read_reg_data;
 volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 extern uint16_t celsius;
