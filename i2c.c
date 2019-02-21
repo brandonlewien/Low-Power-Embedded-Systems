@@ -114,11 +114,6 @@ void I2C_Read_Interrupts(uint8_t slave_addr, uint8_t cmd){
 	ACK_done = 0;
 }
 
-/*
-uint16_t I2C_Read_Measurement(uint8_t slave_addr_rw, uint8_t cmd){ //use RXDOUBLE, returns 2 bytes
-
-}*/
-
 void I2C_Reset_Bus(void) {
 	if(I2C0->STATE & I2C_STATE_BUSY) {
 		I2C0->CMD = I2C_CMD_ABORT;
