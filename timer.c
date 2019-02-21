@@ -93,14 +93,3 @@ void LETIMER0_IRQHandler(void){ // COMP0 -> desired period for taking temp, COMP
 		LETIMER0->IFC = LETIMER_IFC_COMP1; 											// clear flag
 	}
 }
-
-
-
-/*
- * 1) LPM Low power management -> first test this by reading user reg 1
- * 2) I2c read temp
- * 3) conver temp to deg C to determine if LED should be on
- *
- * COMP0 - energize bus - turn on sensor enable (SCL and SDA off -> protect against ESD diode issues) -> COMP0 is how often take temp (4 seconds), SCL and SDA from diabled to wiredAND, toggle 9 and abort command to reset, then enable interrupts, then read, then reverse order to unset it up(diable interrupts, set to disabled instead of wired ance and clear SEMSOR_ENABLE)
- * COMP1 - time (t) required to charge up bus and alllow parts to reset to do first temp read -> in 721 data sheet -> COMP1 = COMP0 - t
- */
