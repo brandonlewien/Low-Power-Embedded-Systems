@@ -36,6 +36,7 @@
 
 #include "main.h"
 #include "em_cmu.h"
+#include "all.h"
 
 void cmu_init(void);
 

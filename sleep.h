@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "gpio.h"
-
+#include "all.h"
 
 //***********************************************************************************
 // defined files

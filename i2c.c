@@ -2,11 +2,12 @@
 #include "gpio.h"
 
 extern volatile bool ACK_done;
-extern uint16_t read_data;
-volatile uint16_t temp_ms_read;
-volatile uint16_t temp_ls_read;
 volatile bool bit_flag = true;
 
+#ifdef READ_TEMPERATURE
+volatile uint16_t temp_ms_read;
+volatile uint16_t temp_ls_read;
+#endif
 
 void I2C_Setup(void) {
 	I2C_Init_TypeDef I2C_Init_Struct;
@@ -141,6 +142,7 @@ void I2C_Interrupt_Disable(void) {
 
 void I2C0_IRQHandler(void)
  {
+#ifdef RW_FROM_REGISTER
 //	int status;
 //	status = I2C0->IF;
 //
@@ -153,6 +155,8 @@ void I2C0_IRQHandler(void)
 //		I2C0->CMD = I2C_CMD_NACK;						// send NACK to slave
 //		I2C0->CMD = I2C_CMD_STOP;						// send STOP to slave
 //	}
+#endif
+#ifdef READ_TEMPERATURE
 	int status;
 	status = I2C0->IF;
 
@@ -171,4 +175,5 @@ void I2C0_IRQHandler(void)
 		I2C0->CMD = I2C_CMD_NACK;						// send NACK to slave
 		I2C0->CMD = I2C_CMD_STOP;						// send STOP to slave
 	}
+#endif
 }

@@ -39,6 +39,7 @@
 #include "em_gpio.h"
 #include "em_i2c.h"
 #include "bsp.h"
+#include "all.h"
 
 #define I2C_EM_BLOCK 1				// lowest energy mode is 2, so block 3
 

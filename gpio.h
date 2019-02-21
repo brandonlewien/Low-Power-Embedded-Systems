@@ -36,6 +36,7 @@
 
 #include "main.h"
 #include "em_gpio.h"
+#include "all.h"
 
 #define	LED0_port	gpioPortF
 #define LED0_pin		    4
