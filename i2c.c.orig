@@ -2,6 +2,12 @@
 #include "gpio.h"
 
 extern volatile bool ACK_done;
+<<<<<<< HEAD
+//extern uint16_t read_data;
+volatile uint16_t temp_ms_read;
+volatile uint16_t temp_ls_read;
+=======
+>>>>>>> f9aec974aa45ae3cadd1db141f2e645aa3122e6d
 volatile bool bit_flag = true;
 
 #ifdef READ_TEMPERATURE

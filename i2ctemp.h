@@ -39,6 +39,8 @@
 #include "em_gpio.h"
 #include "em_i2c.h"
 #include "bsp.h"
+#include "all.h"
+
 
 void I2C_Temperature_Read_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd);
 void I2C_Temperature_Read_Interrupts(uint8_t slave_addr_rw, uint8_t cmd);

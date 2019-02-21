@@ -5,8 +5,6 @@ volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 extern uint16_t celsius;
 
-
-
 void letimer_init(void) {
 	uint32_t comp0;
 	uint32_t comp1;
@@ -71,19 +69,26 @@ void LETIMER0_IRQHandler(void){ // COMP0 -> desired period for taking temp, COMP
 		}
 		I2C0->CMD = I2C_CMD_ABORT;													// reset pearl gecko I2C state machine
 		I2C0->IFC |= I2C_IFC_ACK;					    							// clear ACK flag
-
+#ifdef RW_FROM_REGISTER
 		/* read/write routine */
-//		for(int i = 0; i < 100000; i++);
-//		I2C_Write_to_Reg_NoInterrupts(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_RESET);
-//		for(int i = 0; i < 100000; i++);
-		I2C_Temperature_Read_NoInterrupts(I2C_SLAVE_ADDRESS, 0xE3); // read data from temp sensor
-		Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
-//		for(int i = 0; i < 100000; i++);
-//		if(read_reg_data != USR_REG1_RESET){						// if data read is not the data that was written
-//			GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);			// turn on LED1
-//			while(1);												// enter inf loop to indicate error
-//		}
+		for(int i = 0; i < 100000; i++);
+		I2C_Write_to_Reg_NoInterrupts(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES);
+		for(int i = 0; i < 100000; i++);
+		I2C_Read_to_Reg_NoInterrupts(I2C_SLAVE_ADDRESS, USER_REG_1_R); 				// read data from temp sensor
+		for(int i = 0; i < 100000; i++);
 
+#endif
+#ifdef READ_TEMPERATURE
+		I2C_Temperature_Read_NoInterrupts(I2C_SLAVE_ADDRESS, 0xE3); 				// read data from temp sensor
+		Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
+
+		if(TEMP_ALERT > celsius) {													// if data read is not the data that was written
+			GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);								// turn on LED0
+		}
+		else {
+			GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);							// turn off LED0
+		}
+#endif
 		/* LPM Disable Routine */
 		GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeDisabled, SCL_AND_SDA_DOUT); 	// disable GPIO pin PC11 (SCL)
 		GPIO_PinModeSet(SDA_PORT, SDA_PIN, gpioModeDisabled, SCL_AND_SDA_DOUT); 	// disable GPIO pin PC10 (SDA)

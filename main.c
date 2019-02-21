@@ -50,33 +50,13 @@ int main(void){
 	EMU_EM23Init(&em23Init);									// init DCDC
 	CMU_HFXOInit(&hfxoInit);									// init HFXO with kit specific parameters
 
-
-
 	cmu_init();													// initialize clock trees
 	gpio_init();												// sets up LED, I2C, and temp sensor enable pins
-	letimer_init();											// initialize letimer for LED and I2C operation
+	letimer_init();												// initialize letimer for LED and I2C operation
 	I2C_Setup();												// initialize I2C
 	//I2C_Interrupt_Enable();                                   // Enable Interrupts
-	I2C_Reset_Bus();                                          // Reset I2C Bus
+	I2C_Reset_Bus();                                          	// Reset I2C Bus
 	read_data = 0;
-
-	/*for(int i = 0; i < 100000; i++);
-	I2C_Read_Interrupts(I2C_SLAVE_ADDRESS, USER_REG_1_R);		// read default value from sensor
-	for(int i = 0; i < 100000; i++);
-    I2C_Write_Interrupts(I2C_SLAVE_ADDRESS, USER_REG_1_W, USR_REG1_12BIT_RES); // write to register to change resolution to 12 bits
-	for(int i = 0; i < 100000; i++);
-	I2C_Read_Interrupts(I2C_SLAVE_ADDRESS, USER_REG_1_R);		// read from register again to verify successful write
-	if(read_data != USR_REG1_12BIT_RES){						// if data read is not the data that was written
-	  GPIO->P[LED1_port].DOUT |= (1 << LED1_pin);			// turn on LED1
-	  while(1);												// enter inf loop to indicate error
-	}
-	*/
-
-//	uint16_t convertedC = 0;
-//	for(int i = 0; i < 1000000; i++);
-//	I2C_Temperature_Read_Interrupts(I2C_SLAVE_ADDRESS, 0xE3);
-//	for(int i = 0; i < 1000000; i++);
-//	Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &convertedC);
 
 	while (1) {
 		Enter_Sleep();
