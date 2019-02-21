@@ -21,7 +21,7 @@ void letimer_init(void) {
 	}
 	while (comp0 > TIMER_MAX_COUNT);
 
-	comp1 = (SENSOR_PWR_UP*LFXO_FREQ)/prescalar;
+	comp1 = comp0 - (SENSOR_PWR_UP*LFXO_FREQ)/prescalar;
 
 
 	while(LETIMER0->SYNCBUSY);													// wait for any previous writes to complete or be synchronized
