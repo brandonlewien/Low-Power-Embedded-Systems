@@ -17,7 +17,7 @@ void letimer_init(void) {
 		comp0 = (TEMP_MEAS_PERIOD*LFXO_FREQ)/prescalar;
 		if((comp0 > TIMER_MAX_COUNT) && (prescalar <= cmuClkDiv_16384)){ 		// if comp0 is too big and if hardware supports larger prescalar
 			prescalar = prescalar << 1;             					 		// prescalars are powers of 2
-																		 	 	 // (shift instead of multiply to reduce clock cycles and energy <3)
+																		 	 	// (shift instead of multiply to reduce clock cycles and energy <3)
 			presc_power++;
 		}
 	}

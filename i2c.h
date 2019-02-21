@@ -56,9 +56,6 @@
 #define USER_REG_1_R				0xE7
 #define	HEAT_CTL_REG_W				0x51
 #define HEAT_CTL_REG_R				0x11
-//#define READ_ID_B1
-//#define READ_ID_B1
-//#define READ_FIRM_REV
 
 #define USR_REG1_RESET				0x3A
 #define USR_REG1_12BIT_RES			0x3B

@@ -2,7 +2,7 @@
 #include "gpio.h"
 
 extern volatile bool ACK_done;
-extern uint16_t read_data;
+//extern uint16_t read_data;
 volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 volatile bool bit_flag = true;
