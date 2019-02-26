@@ -11,4 +11,7 @@
 class uart {
 };
 
+void UART_send_byte(uint8_t data);
+void LEUART0_Interrupt_Enable(void);
+
 #endif /* SRC_UART_H_ */
