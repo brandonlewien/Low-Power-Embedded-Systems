@@ -37,6 +37,7 @@
 #include <em_leuart.h>
 #include <em_gpio.h>
 
+#define LEUART_EM_BLOCK	3
 
 #define UART_BAUD_RATE  9600
 #define UART_DATA_BITS  leuartDatabits8
@@ -46,6 +47,7 @@
 #define UART_REF_FREQ   0
 #define UART_STOP_BITS  leuartStopbits1
 #define UART_OFF        0
+#define UART_ON			1
 
 #define TX_PORT         gpioPortD
 #define TX_PIN          10

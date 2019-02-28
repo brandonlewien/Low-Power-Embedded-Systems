@@ -56,17 +56,12 @@ int main(void){
 	gpio_init();												// sets up LED, I2C, and temp sensor enable pins
 	letimer_init();												// initialize letimer for LED and I2C operation
 	I2C_Setup();												// initialize I2C
-	     //I2C_Interrupt_Enable();                                   // Enable Interrupts
+	//I2C_Interrupt_Enable();                                   // Enable Interrupts
 	I2C_Reset_Bus();                                          	// Reset I2C Bus
 	read_data = 0;
 	LEUART0_Interrupt_Enable();
-	char * sending = "AT";
-	char * sending = "jkhlkhjkhkljhkjlhjkhjkhkjlhkhjkuioglhojohiuolgoglhouglojhugkyiohhjklhjlkhjkhjklhlkjhjkhljkhljkhkjhjhkjlhkhjklhjklhjklhkjhjlkhjkhlkh\r\n";
-	UART_send_n(sending, 100);
-	sending = "AT";
-	UART_send_n(sending, 2);
-	sending = "AT+NAMEbrle\r\n";
-	UART_send_n(sending, 13);
+	char* sending = "AT+NAMEsosc\n\r";
+	UART_send_n(sending, 15);
 
 
 	while (1) {

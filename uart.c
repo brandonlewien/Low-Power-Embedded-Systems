@@ -19,8 +19,10 @@ void uart_init(void) {
 	LEUART0->ROUTEPEN  = LEUART_ROUTEPEN_RXPEN
 					   | LEUART_ROUTEPEN_TXPEN;
 
-	GPIO_PinModeSet(TX_PORT, TX_PIN, gpioModePushPull, 1);
-	GPIO_PinModeSet(RX_PORT, RX_PIN, gpioModePushPull, 1);
+	GPIO_PinModeSet(TX_PORT, TX_PIN, gpioModePushPull, UART_ON);
+	GPIO_PinModeSet(RX_PORT, RX_PIN, gpioModePushPull, UART_ON);
+
+	Sleep_Block_Mode(LEUART_EM_BLOCK);								 			// lowest sleep mode setting for LEUART
 
 	LEUART_Enable(LEUART0, leuartEnable);
 }
