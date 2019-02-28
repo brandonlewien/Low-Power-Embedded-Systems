@@ -41,6 +41,7 @@
 #include "sleep.h"
 #include "i2ctemp.h"
 #include "i2c.h"
+#include "uart.h"
 #include "all.h"
 
 #define TIMER_MAX_COUNT 	65535			//(2^16)-1

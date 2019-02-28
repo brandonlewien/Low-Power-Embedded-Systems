@@ -39,7 +39,6 @@ uint8_t read_reg_data;
 volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 uint8_t UART_data;
-
 int main(void){
 	EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
 	CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
@@ -55,13 +54,21 @@ int main(void){
 	cmu_init();													// initialize clock trees
 	uart_init();
 	gpio_init();												// sets up LED, I2C, and temp sensor enable pins
-	//letimer_init();												// initialize letimer for LED and I2C operation
-	//I2C_Setup();												// initialize I2C
+	letimer_init();												// initialize letimer for LED and I2C operation
+	I2C_Setup();												// initialize I2C
 	     //I2C_Interrupt_Enable();                                   // Enable Interrupts
-	//I2C_Reset_Bus();                                          	// Reset I2C Bus
+	I2C_Reset_Bus();                                          	// Reset I2C Bus
 	read_data = 0;
-	char * sending = "AT-NAMEbrle";
-	UART_send_n(sending, 11);
+	LEUART0_Interrupt_Enable();
+	char * sending = "AT";
+	char * sending = "jkhlkhjkhkljhkjlhjkhjkhkjlhkhjkuioglhojohiuolgoglhouglojhugkyiohhjklhjlkhjkhjklhlkjhjkhljkhljkhkjhjhkjlhkhjklhjklhjklhkjhjlkhjkhlkh\r\n";
+	UART_send_n(sending, 100);
+	sending = "AT";
+	UART_send_n(sending, 2);
+	sending = "AT+NAMEbrle\r\n";
+	UART_send_n(sending, 13);
+
+
 	while (1) {
 		Enter_Sleep();
 	}

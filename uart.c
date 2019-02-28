@@ -11,6 +11,7 @@ void uart_init(void) {
 	UART_Init_Struct.parity   = UART_PARITY;
 	UART_Init_Struct.stopbits = UART_STOP_BITS;
 	LEUART0_Interrupt_Disable();
+	LEUART_Reset(LEUART0);
 	LEUART_Init(LEUART0, &UART_Init_Struct);
 
 	LEUART0->ROUTELOC0 = LEUART_ROUTELOC0_RXLOC_LOC18
@@ -21,14 +22,13 @@ void uart_init(void) {
 	GPIO_PinModeSet(TX_PORT, TX_PIN, gpioModePushPull, 1);
 	GPIO_PinModeSet(RX_PORT, RX_PIN, gpioModePushPull, 1);
 
-	LEUART_Enable(LEUART0, true);
+	LEUART_Enable(LEUART0, leuartEnable);
 }
 
 void UART_send_byte(uint8_t data){
-	//LEUART0_Interrupt_Enable();
 	while(!(LEUART0->IF & LEUART_IF_TXBL));			// wait for space to be avaliable in the transmit buffer
 	LEUART0->TXDATA = data;
-	//LEUART0_Interrupt_Disable();
+	LEUART0_Interrupt_Disable();
 }
 
 void UART_send_n(char * data, uint32_t length){
