@@ -29,6 +29,7 @@
 #include "gpio.h"
 #include "timer.h"
 #include "cmu.h"
+#include "uart.h"
 #include "i2c.h"
 #include "i2ctemp.h"
 
@@ -52,13 +53,15 @@ int main(void){
 	CMU_HFXOInit(&hfxoInit);									// init HFXO with kit specific parameters
 
 	cmu_init();													// initialize clock trees
+	uart_init();
 	gpio_init();												// sets up LED, I2C, and temp sensor enable pins
-	letimer_init();												// initialize letimer for LED and I2C operation
-	I2C_Setup();												// initialize I2C
-	//I2C_Interrupt_Enable();                                   // Enable Interrupts
-	I2C_Reset_Bus();                                          	// Reset I2C Bus
+	//letimer_init();												// initialize letimer for LED and I2C operation
+	//I2C_Setup();												// initialize I2C
+	     //I2C_Interrupt_Enable();                                   // Enable Interrupts
+	//I2C_Reset_Bus();                                          	// Reset I2C Bus
 	read_data = 0;
-
+	char * sending = "AT-NAMEbrle";
+	UART_send_n(sending, 11);
 	while (1) {
 		Enter_Sleep();
 	}

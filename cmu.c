@@ -18,7 +18,7 @@ void cmu_init(void){
 	CMU_OscillatorEnable(cmuOsc_LFXO, true, true);			// enable LFXO									(LETIMER and LEUART clock tree 1)
 	CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_LFXO);		// route LFXO to LFACLK							(LETIMER clock tree 2)
 	CMU_ClockEnable(cmuClock_LFA, true);					// enable LFACLK								(LETIMER clock tree 3)
-	CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_LFXO);		// route LFXO to LFBCLK							(LEUART clock tree 2)
+	CMU_ClockSelectSet(cmuClock_LFB, cmuSelect_LFXO);		// route LFXO to LFBCLK							(LEUART clock tree 2)
 	CMU_ClockEnable(cmuClock_LFB, true);					// enable LFBCLK								(LEUART clock tree 3)
 	CMU_ClockEnable(cmuClock_CORELE, true);
 

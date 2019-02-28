@@ -81,7 +81,7 @@ void LETIMER0_IRQHandler(void){ // COMP0 -> desired period for taking temp, COMP
 #ifdef READ_TEMPERATURE
 		I2C_Temperature_Read_NoInterrupts(I2C_SLAVE_ADDRESS, 0xE3); 				// read data from temp sensor
 		Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
-		//LEUART0->TXDATA =
+		UART_send_byte(celsius);
 		if(TEMP_ALERT > celsius) {													// if data read is not the data that was written
 			GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);								// turn on LED0
 		}

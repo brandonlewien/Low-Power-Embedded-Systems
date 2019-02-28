@@ -47,13 +47,15 @@
 #define UART_STOP_BITS  leuartStopbits1
 #define UART_OFF        0
 
-#define TX_PORT         gpioPortC
-#define TX_PIN          8
-#define RX_PORT         gpioPortC
-#define RX_PIN          8
+#define TX_PORT         gpioPortD
+#define TX_PIN          10
+#define RX_PORT         gpioPortD
+#define RX_PIN          11
 void uart_init(void);
 
 void UART_send_byte(uint8_t data);
+void UART_send_n(char * data, uint32_t length);
 void LEUART0_Interrupt_Enable(void);
+void LEUART0_Interrupt_Disable(void);
 
 #endif /* SRC_UART_H_ */
