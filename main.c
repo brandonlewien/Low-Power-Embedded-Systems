@@ -40,31 +40,31 @@ volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 uint8_t UART_data;
 int main(void){
-	EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
-	CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
-	EMU_EM23Init_TypeDef em23Init = EMU_EM23INIT_DEFAULT;
+    EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
+    CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
+    EMU_EM23Init_TypeDef em23Init = EMU_EM23INIT_DEFAULT;
 
-	CHIP_Init(); 											  	// Chip errata
+    CHIP_Init();                                             // Chip errata
 
-	EMU_DCDCInit(&dcdcInit);									// init DCDC regulator
-	em23Init.vScaleEM23Voltage = emuVScaleEM23_LowPower;		// always start in low noise mode
-	EMU_EM23Init(&em23Init);									// init DCDC
-	CMU_HFXOInit(&hfxoInit);									// init HFXO with kit specific parameters
+    EMU_DCDCInit(&dcdcInit);                                 // init DCDC regulator
+    em23Init.vScaleEM23Voltage = emuVScaleEM23_LowPower;     // always start in low noise mode
+    EMU_EM23Init(&em23Init);                                 // init DCDC
+    CMU_HFXOInit(&hfxoInit);                                 // init HFXO with kit specific parameters
 
-	cmu_init();													// initialize clock trees
-	uart_init();
-	gpio_init();												// sets up LED, I2C, and temp sensor enable pins
-	letimer_init();												// initialize letimer for LED and I2C operation
-	I2C_Setup();												// initialize I2C
-	//I2C_Interrupt_Enable();                                   // Enable Interrupts
-	I2C_Reset_Bus();                                          	// Reset I2C Bus
-	read_data = 0;
-	LEUART0_Interrupt_Enable();
-	char* sending = "AT+NAMEsosc\n\r";
-	UART_send_n(sending, 15);
+    cmu_init();                                              // initialize clock trees
+    uart_init();
+    gpio_init();                                             // sets up LED, I2C, and temp sensor enable pins
+    letimer_init();                                          // initialize letimer for LED and I2C operation
+    I2C_Setup();                                             // initialize I2C
+    //I2C_Interrupt_Enable();                                // Enable Interrupts
+    I2C_Reset_Bus();                                         // Reset I2C Bus
+    read_data = 0;
+    LEUART0_Interrupt_Enable();
+    char* sending = "AT+NAMEsosc\n\r";
+    UART_send_n(sending, 15);
 
 
-	while (1) {
-		Enter_Sleep();
-	}
+    while (1) {
+       Enter_Sleep();
+    }
 }
