@@ -1,6 +1,5 @@
 /***************************************************************************//**
- * @file
- * @brief Simple LED Blink Demo for SLSTK3402A
+ * @main.c
  *******************************************************************************
  * # License
  * <b>Copyright 2018 Silicon Laboratories Inc. www.silabs.com</b>
