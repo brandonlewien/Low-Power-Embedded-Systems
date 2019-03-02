@@ -1,6 +1,10 @@
 #include "uart.h"
 
-extern uint8_t UART_data;
+//extern uint8_t UART_data;
+const char * sending = "AT+NAMEsosc\n\r";
+extern volatile char * receiving;
+extern volatile uint16_t increment;
+volatile uint16_t rincrement = 0;
 
 void uart_init(void) {
     LEUART_Init_TypeDef UART_Init_Struct;
@@ -21,6 +25,7 @@ void uart_init(void) {
     LEUART0->ROUTEPEN  = LEUART_ROUTEPEN_RXPEN
                        | LEUART_ROUTEPEN_TXPEN;
 
+    LEUART0->CTRL |= LEUART_CTRL_LOOPBK;
     GPIO_PinModeSet(TX_PORT, TX_PIN, gpioModePushPull, UART_ON);
     GPIO_PinModeSet(RX_PORT, RX_PIN, gpioModePushPull, UART_ON);
 
@@ -43,20 +48,27 @@ void UART_send_n(char * data, uint32_t length) {
 
 void LEUART0_Interrupt_Enable(void) {
     LEUART0->IEN = 0;
-    LEUART0->IEN = LEUART_IEN_RXDATAV;
+    LEUART0->IEN = LEUART_IEN_RXDATAV | LEUART_IEN_TXBL;
     NVIC_EnableIRQ(LEUART0_IRQn);
 }
 
 void LEUART0_Interrupt_Disable(void) {
-    LEUART0->IEN &= ~LEUART_IEN_RXDATAV;
+    LEUART0->IEN &= ~(LEUART_IEN_RXDATAV | LEUART_IEN_TXBL);
     NVIC_DisableIRQ(LEUART0_IRQn);
 }
 
 void LEUART0_IRQHandler(void) {
     uint32_t status;
     status = LEUART0->IF;
-
+	if(status & LEUART_IF_TXBL) {
+		LEUART0->TXDATA = sending[increment];
+	    increment++;
+	}
+	if(increment == 15) {
+	    LEUART0->IEN &= ~LEUART_IEN_TXBL;
+	}
     if(status & LEUART_IF_RXDATAV) {
-       UART_data = LEUART0->RXDATA;
+       receiving[rincrement] = LEUART0->RXDATA;
+       rincrement++;
     }
- }
+}

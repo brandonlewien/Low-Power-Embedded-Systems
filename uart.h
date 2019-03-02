@@ -36,6 +36,7 @@
 
 #include <em_leuart.h>
 #include <em_gpio.h>
+#include "sleep.h"
 
 #define LEUART_EM_BLOCK 3
 

@@ -3,7 +3,7 @@
 //extern uint8_t read_reg_data;
 volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
-extern uint16_t celsius;
+uint16_t celsius;
 
 void letimer_init(void) {
     uint32_t comp0;
@@ -61,7 +61,7 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
     if(int_flags & LETIMER_IFC_COMP1){                                           // if COMP1 flag is set,
        /* LPM Enable Routine */
        Sleep_Block_Mode(I2C_EM_BLOCK);                                           // set sleep mode block for master I2C operation
-       GPIO_PinModeSet(SCL_PORT, \SCL_PIN, gpioModeWiredAnd, SCL_AND_SDA_DOUT);  // set up GPIO pin PC11 (SCL)
+       GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeWiredAnd, SCL_AND_SDA_DOUT);  // set up GPIO pin PC11 (SCL)
        GPIO_PinModeSet(SDA_PORT, SDA_PIN, gpioModeWiredAnd, SCL_AND_SDA_DOUT);   // set up GPIO pin PC10 (SDA)
        for (int i = 0; i < 9; i++) {                                             // reset slave I2C device state machine
          GPIO_PinOutClear(SCL_PORT, SCL_PIN);

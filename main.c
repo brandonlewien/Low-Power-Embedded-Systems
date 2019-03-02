@@ -32,12 +32,9 @@
 #include "i2c.h"
 #include "i2ctemp.h"
 
-uint16_t celsius;
-uint16_t read_data;
-uint8_t read_reg_data;
-volatile uint16_t temp_ms_read;
-volatile uint16_t temp_ls_read;
-uint8_t UART_data;
+volatile uint16_t increment;
+volatile char * receiving;
+
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
     CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
@@ -57,12 +54,14 @@ int main(void){
     I2C_Setup();                                             // initialize I2C
     //I2C_Interrupt_Enable();                                // Enable Interrupts
     I2C_Reset_Bus();                                         // Reset I2C Bus
-    read_data = 0;
     LEUART0_Interrupt_Enable();
-    char* sending = "AT+NAMEsosc\n\r";
-    UART_send_n(sending, 15);
-
-
+//    char* sending = "AT+NAMEsosc\n\r";
+//    UART_send_n(sending, 15);
+    while (increment < 15){
+    	while(!(LEUART0->IF & LEUART_IF_TXBL)) {
+			Enter_Sleep();
+		}
+    }
     while (1) {
        Enter_Sleep();
     }
