@@ -4,7 +4,7 @@
 
 volatile uint16_t rincrement = 0;
 volatile bool ready_to_TX;
-extern char lookback_buffer[30];
+extern char loopback_buffer[LPBK_BUFFER_SIZE];
 
 void uart_init(void) {
     LEUART_Init_TypeDef UART_Init_Struct;
@@ -72,7 +72,7 @@ void LEUART0_IRQHandler(void) {
 		LEUART0->IEN &= ~LEUART_IEN_TXBL;								// disable TXBL interrupt (only want this enabled when we want to transmit data)
 	}
     if(status & LEUART_IF_RXDATAV) {
-       lookback_buffer[rincrement++] = LEUART0->RXDATA;
-       rincrement %= 30;
+       loopback_buffer[rincrement++] = LEUART0->RXDATA;
+       rincrement %= LPBK_BUFFER_SIZE;
     }
 }

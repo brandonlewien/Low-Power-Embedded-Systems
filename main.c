@@ -35,7 +35,7 @@
 
 volatile uint16_t increment;
 volatile char * receiving;
-char lookback_buffer[LKBK_BUFFER_SIZE];
+char loopback_buffer[LPBK_BUFFER_SIZE];
 
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
