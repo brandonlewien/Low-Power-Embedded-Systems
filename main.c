@@ -35,6 +35,7 @@
 volatile uint16_t increment;
 volatile char * receiving;
 
+
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
     CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
@@ -50,19 +51,18 @@ int main(void){
     cmu_init();                                              // initialize clock trees
     uart_init();
     gpio_init();                                             // sets up LED, I2C, and temp sensor enable pins
-    letimer_init();                                          // initialize letimer for LED and I2C operation
-    I2C_Setup();                                             // initialize I2C
+    //letimer_init();                                          // initialize letimer for LED and I2C operation
+    //I2C_Setup();                                             // initialize I2C
     //I2C_Interrupt_Enable();                                // Enable Interrupts
-    I2C_Reset_Bus();                                         // Reset I2C Bus
+    //I2C_Reset_Bus();                                         // Reset I2C Bus
     LEUART0_Interrupt_Enable();
-//    char* sending = "AT+NAMEsosc\n\r";
-//    UART_send_n(sending, 15);
-    while (increment < 15){
-    	while(!(LEUART0->IF & LEUART_IF_TXBL)) {
-			Enter_Sleep();
-		}
-    }
+
+    char* sending = "AT+NAMElala\n\r";
+    UART_send_n(sending, 15);
+
+
     while (1) {
-       Enter_Sleep();
+    	UART_send_n(sending, 15);							// send many times to view in energy profiler
+    	for(int i = 0; i <1000000; i++); 					// to separate each n-byte transmission for easier view in energy profiler
     }
 }
