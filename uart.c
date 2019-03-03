@@ -1,11 +1,10 @@
 #include "uart.h"
 
-//extern uint8_t UART_data;
-//const char * sending = "AT+NAMEsosc\n\r";
-extern volatile char * receiving;
-//extern volatile uint16_t increment;
+//extern volatile char * receiving;
+
 volatile uint16_t rincrement = 0;
 volatile bool ready_to_TX;
+extern char lookback_buffer[30];
 
 void uart_init(void) {
     LEUART_Init_TypeDef UART_Init_Struct;
@@ -46,9 +45,11 @@ void UART_send_byte(uint8_t data) {
 }
 
 void UART_send_n(char * data, uint32_t length) {
+	//LEUART0->IEN &= ~LEUART_IEN_RXDATAV;							// disable RXDATAV interrupt
 	for(int i = 0; i < length; i++) {
         UART_send_byte(data[i]);                                     // Loop through data and send
     }
+	//LEUART0->IEN |= LEUART_IEN_RXDATAV;								// enable RXDATAV interrupt
 }
 
 
@@ -71,7 +72,7 @@ void LEUART0_IRQHandler(void) {
 		LEUART0->IEN &= ~LEUART_IEN_TXBL;								// disable TXBL interrupt (only want this enabled when we want to transmit data)
 	}
     if(status & LEUART_IF_RXDATAV) {
-       receiving[rincrement] = LEUART0->RXDATA;
-       rincrement++;
+       lookback_buffer[rincrement++] = LEUART0->RXDATA;
+       rincrement %= 30;
     }
 }

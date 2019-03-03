@@ -54,6 +54,9 @@
 #define TX_PIN          10
 #define RX_PORT         gpioPortD
 #define RX_PIN          11
+
+#define LKBK_BUFFER_SIZE 30
+
 void uart_init(void);
 
 void UART_send_byte(uint8_t data);

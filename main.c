@@ -16,6 +16,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include "em_letimer.h"
 #include "em_device.h"
 #include "em_chip.h"
@@ -34,7 +35,7 @@
 
 volatile uint16_t increment;
 volatile char * receiving;
-
+char lookback_buffer[LKBK_BUFFER_SIZE];
 
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
@@ -57,12 +58,15 @@ int main(void){
     //I2C_Reset_Bus();                                         // Reset I2C Bus
     LEUART0_Interrupt_Enable();
 
-    char* sending = "AT+NAMElala\n\r";
-    UART_send_n(sending, 15);
+    //LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;						// receiver gets data from RX pin
+    LEUART0->CTRL |= LEUART_CTRL_LOOPBK;						// receiver gets data from TX pin
 
+    char* sending = "AT+NAMEsosc\r\n";
+    UART_send_n(sending, strlen(sending)+2);					// +2 becuase strlen views '\n' and '\r' as 1 char
 
     while (1) {
-    	UART_send_n(sending, 15);							// send many times to view in energy profiler
-    	for(int i = 0; i <1000000; i++); 					// to separate each n-byte transmission for easier view in energy profiler
+    	Enter_Sleep();
+    	//UART_send_n(sending, 15);							// send many times to view in energy profiler
+    	//for(int i = 0; i <1000000; i++); 					// to separate each n-byte transmission for easier view in energy profiler
     }
 }
