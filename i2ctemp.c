@@ -47,7 +47,7 @@ void I2C_Temperature_Read_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd) {
     I2C0->CMD = I2C_CMD_STOP;
 }
 
-void Temp_Code_To_Celsius(uint8_t MSData, uint8_t LSData, uint16_t * DataRet) {
+void Temp_Code_To_Celsius(uint16_t MSData, uint16_t LSData, float * DataRet) {
     uint16_t Combined_Data1 = 0;
     Combined_Data1 = (MSData << 8) + LSData;
     *DataRet = ((175.72 * Combined_Data1) / 65536) - 46.85;

@@ -63,5 +63,6 @@ void UART_send_byte(uint8_t data);
 void UART_send_n(char * data, uint32_t length);
 void LEUART0_Interrupt_Enable(void);
 void LEUART0_Interrupt_Disable(void);
+void UART_ftoa_send(float number);
 
 #endif /* SRC_UART_H_ */

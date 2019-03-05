@@ -50,19 +50,19 @@ int main(void){
     CMU_HFXOInit(&hfxoInit);                                 // init HFXO with kit specific parameters
 
     cmu_init();                                              // initialize clock trees
-    uart_init();
+    //uart_init();
     gpio_init();                                             // sets up LED, I2C, and temp sensor enable pins
-    //letimer_init();                                          // initialize letimer for LED and I2C operation
-    //I2C_Setup();                                             // initialize I2C
+    letimer_init();                                          // initialize letimer for LED and I2C operation
+    I2C_Setup();                                             // initialize I2C
     //I2C_Interrupt_Enable();                                // Enable Interrupts
-    //I2C_Reset_Bus();                                         // Reset I2C Bus
-    LEUART0_Interrupt_Enable();
+    I2C_Reset_Bus();                                         // Reset I2C Bus
+    //LEUART0_Interrupt_Enable();
 
     //LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;						// receiver gets data from RX pin
-    LEUART0->CTRL |= LEUART_CTRL_LOOPBK;						// receiver gets data from TX pin
+    //LEUART0->CTRL |= LEUART_CTRL_LOOPBK;						// receiver gets data from TX pin
 
-    char* sending = "AT+NAMEsosc\r\n";
-    UART_send_n(sending, strlen(sending)+2);					// +2 becuase strlen views '\n' and '\r' as 1 char
+//    char* sending = "AT+NAMECHARIZARD\r\n";
+//    UART_send_n(sending, strlen(sending)+2);					// +2 becuase strlen views '\n' and '\r' as 1 char
 
     while (1) {
     	Enter_Sleep();
