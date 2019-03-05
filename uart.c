@@ -51,10 +51,23 @@ void UART_send_n(char * data, uint32_t length) {
 }
 
 void UART_ftoa_send(float number) {
-	uint16_t integer = (uint16_t)number;
-	uint16_t decimal = ((number - integer) * 10);
-	if((integer / 100) != 0) {
+	int16_t integer = (int16_t)number;
+	uint16_t decimal;
+
+	if(integer < 0) {
+		UART_send_byte(0x2D);
+		decimal = (((-1) * (number - integer)) * 10);
+		integer = -1 * integer;
+
+	}
+	else {
+		UART_send_byte(0x2B);    // See if it's negative
+		decimal = ((number - integer) * 10);
+	}
+
+	if(((integer % 1000) / 100) != 0) {
 		UART_send_byte((integer / 100) + 48);
+
 	}
 	else {
 		UART_send_byte(0x20);

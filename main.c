@@ -72,6 +72,7 @@ int main(void){
     	if(schedule_event == DO_NOTHING) Enter_Sleep();					// enter EM3
     	if(schedule_event & SEND_TEMP){									// send data to bluetooth
     		UART_ftoa_send(celsius);
+    		UART_send_byte('C');
     		schedule_event &= ~SEND_TEMP;
     	}
 
