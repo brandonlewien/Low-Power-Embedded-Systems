@@ -3,8 +3,11 @@
 //extern uint8_t read_reg_data;
 volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
-extern float celsius;
-extern uint8_t schedule_event;
+<<<<<<< HEAD
+extern uint16_t celsius;
+=======
+float celsius;
+>>>>>>> ee188bb2736edb0f3da5d6adadedad9561559db4
 
 void letimer_init(void) {
     uint32_t comp0;
@@ -79,13 +82,15 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
        for(int i = 0; i < 100000; i++);
 
 #endif
-
 #ifdef READ_TEMPERATURE
        I2C_Temperature_Read_NoInterrupts(I2C_SLAVE_ADDRESS, 0xE3);               // read data from temp sensor
        Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
 
-       schedule_event |= SEND_TEMP;												 // set event flag to send temp to bluetooth module
+<<<<<<< HEAD
+=======
+	   //UART_ftoa_send(celsius);
 
+>>>>>>> ee188bb2736edb0f3da5d6adadedad9561559db4
        if(TEMP_ALERT > celsius) {                                                // if data read is not the data that was written
          GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);                             // turn on LED0
        }
@@ -93,7 +98,6 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
          GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);                            // turn off LED0
        }
 #endif
-
        /* LPM Disable Routine */
        GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeDisabled, SCL_AND_SDA_DOUT);   // disable GPIO pin PC11 (SCL)
        GPIO_PinModeSet(SDA_PORT, SDA_PIN, gpioModeDisabled, SCL_AND_SDA_DOUT);   // disable GPIO pin PC10 (SDA)

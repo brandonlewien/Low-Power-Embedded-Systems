@@ -44,6 +44,6 @@
 
 void I2C_Temperature_Read_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd);
 void I2C_Temperature_Read_Interrupts(uint8_t slave_addr_rw, uint8_t cmd);
-void Temp_Code_To_Celsius(uint8_t MSData, uint8_t LSData, uint16_t * DataRet);
+void Temp_Code_To_Celsius(uint16_t MSData, uint16_t LSData, float * DataRet);
 
 #endif /* SRC_I2CTEMP_H_ */

@@ -1,7 +1,5 @@
 #include "uart.h"
 
-//extern volatile char * receiving;
-
 volatile uint16_t rincrement = 0;
 volatile bool ready_to_TX;
 extern char loopback_buffer[LPBK_BUFFER_SIZE];
@@ -52,6 +50,30 @@ void UART_send_n(char * data, uint32_t length) {
 	//LEUART0->IEN |= LEUART_IEN_RXDATAV;								// enable RXDATAV interrupt
 }
 
+void UART_ftoa_send(float number) {
+	uint16_t integer = (uint16_t)number;
+	uint16_t decimal = ((number - integer) * 10);
+	if((integer / 100) != 0) {
+		UART_send_byte((integer / 100) + 48);
+	}
+	else {
+		UART_send_byte(0x20);
+	}
+	if(((integer % 100) / 10) != 0) {
+		UART_send_byte(((integer % 100) / 10) + 48);
+	}
+	else {
+		UART_send_byte(0x20);
+	}
+	if((integer % 10) != 0) {
+		UART_send_byte((integer % 10) + 48);
+	}
+	else {
+		UART_send_byte(0x20);
+	}
+	UART_send_byte(0x2E);
+    UART_send_byte(decimal + 48);
+}
 
 void LEUART0_Interrupt_Enable(void) {
     LEUART0->IEN = 0;
