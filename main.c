@@ -36,6 +36,8 @@
 volatile uint16_t increment;
 volatile char * receiving;
 char loopback_buffer[LPBK_BUFFER_SIZE];
+uint8_t schedule_event;
+uint16_t celsius;
 
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
@@ -61,12 +63,19 @@ int main(void){
     //LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;						// receiver gets data from RX pin
     LEUART0->CTRL |= LEUART_CTRL_LOOPBK;						// receiver gets data from TX pin
 
-    char* sending = "AT+NAMEsosc\r\n";
-    UART_send_n(sending, strlen(sending)+2);					// +2 becuase strlen views '\n' and '\r' as 1 char
+    //char* sending = "AT+NAMEsosc\r\n";
+    //UART_send_n(sending, strlen(sending)+2);					// +2 because strlen views '\n' and '\r' as 1 char
 
+
+    schedule_event = DO_NOTHING;
     while (1) {
-    	Enter_Sleep();
-    	//UART_send_n(sending, 15);							// send many times to view in energy profiler
+    	if(schedule_event == DO_NOTHING) Enter_Sleep();					// enter EM3
+    	if(schedule_event & SEND_TEMP){									// send data to bluetooth
+    		//ftoa function
+    		schedule_event &= ~SEND_TEMP;
+    	}
+
+    	//UART_send_n(sending, 15);							// send many times to view in energy profiler to test that sleep between byte transmission is working
     	//for(int i = 0; i <1000000; i++); 					// to separate each n-byte transmission for easier view in energy profiler
     }
 }

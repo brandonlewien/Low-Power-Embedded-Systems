@@ -3,7 +3,7 @@
 //extern uint8_t read_reg_data;
 volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
-uint16_t celsius;
+extern uint16_t celsius;
 
 void letimer_init(void) {
     uint32_t comp0;
@@ -81,9 +81,7 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
 #ifdef READ_TEMPERATURE
        I2C_Temperature_Read_NoInterrupts(I2C_SLAVE_ADDRESS, 0xE3);               // read data from temp sensor
        Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
-       //UART_send_byte((char)celsius);
-       //char * celsiusbuffer = &celsius;
-       //UART_send_n()
+
        if(TEMP_ALERT > celsius) {                                                // if data read is not the data that was written
          GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);                             // turn on LED0
        }
