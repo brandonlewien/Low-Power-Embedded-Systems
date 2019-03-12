@@ -86,12 +86,12 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
 
        schedule_event |= SEND_TEMP;												 // set event flag to send temp to bluetooth module
 
-       if(TEMP_ALERT > celsius) {                                                // if data read is not the data that was written
-         GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);                             // turn on LED0
-       }
-       else {
-         GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);                            // turn off LED0
-       }
+//       if(TEMP_ALERT > celsius) {                                                // if data read is not the data that was written
+//         GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);                             // turn on LED0
+//       }
+//       else {
+//         GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);                            // turn off LED0
+//       }
 #endif
 
        /* LPM Disable Routine */
