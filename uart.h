@@ -57,6 +57,12 @@
 
 #define LPBK_BUFFER_SIZE 30
 
+#define DECIMAL_POINT    0x2E
+#define SPACE		     0x20
+#define ASCII_OFFSET	 48
+#define NEGATIVE_SIGN	 0x2D
+#define POSITIVE_SIGN	 0x2B
+
 void uart_init(void);
 
 void UART_send_byte(uint8_t data);

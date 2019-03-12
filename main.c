@@ -60,12 +60,6 @@ int main(void){
     I2C_Reset_Bus();                                         // Reset I2C Bus
     LEUART0_Interrupt_Enable();
 
-    //LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;						// receiver gets data from RX pin
-    //LEUART0->CTRL |= LEUART_CTRL_LOOPBK;						// receiver gets data from TX pin
-
-    //char* sending = "AT+NAMECHARIZARD\r\n";
-    //UART_send_n(sending, strlen(sending)+2);					// +2 because strlen views '\n' and '\r' as 1 char
-
 
     schedule_event = DO_NOTHING;
     while (1) {
@@ -75,8 +69,5 @@ int main(void){
     		UART_send_byte('C');
     		schedule_event &= ~SEND_TEMP;
     	}
-
-    	//UART_send_n(sending, 15);							// send many times to view in energy profiler to test that sleep between byte transmission is working
-    	//for(int i = 0; i <1000000; i++); 					// to separate each n-byte transmission for easier view in energy profiler
     }
 }
