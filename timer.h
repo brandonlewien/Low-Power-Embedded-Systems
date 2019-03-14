@@ -51,7 +51,7 @@
 #define LED_PERIOD             4       //(in seconds) -> set to 4 for lab 3a
 
 #define SENSOR_PWR_UP        .08       //(in seconds)
-#define TEMP_MEAS_PERIOD       5       //(in seconds)
+#define TEMP_MEAS_PERIOD       3       //(in seconds)
 
 #define LETIMER_EM_BLOCK       3       //lowest mode for timer is 2, so block 3
 
