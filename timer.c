@@ -4,6 +4,8 @@
 volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 extern float celsius;
+extern volatile bool isCelsius;
+
 extern uint8_t schedule_event;
 
 void letimer_init(void) {
@@ -82,7 +84,13 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
 
 #ifdef READ_TEMPERATURE
        I2C_Temperature_Read_NoInterrupts(I2C_SLAVE_ADDRESS, 0xE3);               // read data from temp sensor
-       Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
+       if (isCelsius) {
+    	   Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
+       }
+       else {
+    	   Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
+    	   celsius = (celsius * (9/5)) + 32;
+       }
 
        schedule_event |= SEND_TEMP;												 // set event flag to send temp to bluetooth module
 

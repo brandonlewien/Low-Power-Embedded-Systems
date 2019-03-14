@@ -55,13 +55,20 @@
 #define RX_PORT         gpioPortD
 #define RX_PIN          11
 
-#define LPBK_BUFFER_SIZE 30
+#define LPBK_BUFFER_SIZE    30
+#define RECEIVE_BUFFER_SIZE 10
 
 #define DECIMAL_POINT    0x2E
 #define SPACE		     0x20
 #define ASCII_OFFSET	 48
 #define NEGATIVE_SIGN	 0x2D
 #define POSITIVE_SIGN	 0x2B
+#define LOWER_C			 0x63
+#define UPPER_C			 0x43
+#define LOWER_D			 0x64
+#define UPPER_D		     0x44
+#define LOWER_F 		 0x66
+#define UPPER_F	    	 0x46
 
 void uart_init(void);
 

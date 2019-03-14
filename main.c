@@ -35,7 +35,7 @@
 
 volatile uint16_t increment;
 volatile char * receiving;
-char loopback_buffer[LPBK_BUFFER_SIZE];
+char receive_buffer[RECEIVE_BUFFER_SIZE];
 uint8_t schedule_event;
 float celsius;
 

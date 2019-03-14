@@ -2,7 +2,8 @@
 
 volatile uint16_t rincrement = 0;
 volatile bool ready_to_TX;
-extern char loopback_buffer[LPBK_BUFFER_SIZE];
+extern char receive_buffer[LPBK_BUFFER_SIZE];
+volatile bool isCelsius = true;
 
 void uart_init(void) {
     LEUART_Init_TypeDef UART_Init_Struct;
@@ -90,24 +91,50 @@ void UART_ftoa_send(float number) {									// convert float to ascii value and 
 
 void LEUART0_Interrupt_Enable(void) {
     LEUART0->IEN = 0;
-    LEUART0->IEN = LEUART_IEN_RXDATAV;
+    LEUART0->IEN = LEUART_IEN_RXDATAV |
+    			   LEUART_IEN_SIGF    |
+				   LEUART_IEN_STARTF;
     NVIC_EnableIRQ(LEUART0_IRQn);
 }
 
 void LEUART0_Interrupt_Disable(void) {
-    LEUART0->IEN &= ~LEUART_IEN_RXDATAV;
+    LEUART0->IEN &= ~(LEUART_IEN_RXDATAV |
+    				  LEUART_IEN_SIGF    |
+			          LEUART_IEN_STARTF);
     NVIC_DisableIRQ(LEUART0_IRQn);
+}
+
+static void LEUART0_Receiver_Decoder(char * buffer) {
+	if ((buffer[0] == LOWER_D) || (buffer[0] == UPPER_D)) {
+		if ((buffer[1] == LOWER_C) || (buffer[1] == UPPER_C)) {
+			rincrement = 0;
+			isCelsius = true;
+		}
+		else if ((buffer[1] == LOWER_F) || (buffer[1] == UPPER_F)) {
+			rincrement = 0;
+			isCelsius = false;
+		}
+	}
 }
 
 void LEUART0_IRQHandler(void) {
     uint32_t status;
-    status = LEUART0->IF;
+    status = LEUART0->IF & LEUART0->IEN;
     if(status & LEUART_IF_TXBL) {
         ready_to_TX = 1;									// set ready to TX flag
         LEUART0->IEN &= ~LEUART_IEN_TXBL;                    // disable TXBL interrupt (only want this enabled when we want to transmit data)
     }
-    if(status & LEUART_IF_RXDATAV) {
-        loopback_buffer[rincrement++] = LEUART0->RXDATA;	// RX pin gets loopback from TX
-        rincrement %= LPBK_BUFFER_SIZE;
+    if(status & LEUART_IF_STARTF) {
+    	LEUART0->CMD = LEUART_CMD_RXBLOCKDIS;
+    }
+    if (status & LEUART_IF_RXDATAV) {
+        receive_buffer[rincrement] = LEUART0->RXDATA;
+        if (status) {
+        }
+        rincrement++;
+    }
+    if (status & LEUART_IF_SIGF) {
+    	LEUART0->CMD = LEUART_CMD_RXBLOCKEN;
+    	LEUART0_Receiver_Decoder(receive_buffer);
     }
 }
