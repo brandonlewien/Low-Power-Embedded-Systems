@@ -55,7 +55,8 @@
 #define RX_PORT         gpioPortD
 #define RX_PIN          11
 
-#define LPBK_BUFFER_SIZE 30
+#define LPBK_BUFFER_SIZE    30
+#define RECEIVE_BUFFER_SIZE 10
 
 // ASCII defines
 #define DECIMAL_POINT    0x2E
@@ -65,6 +66,12 @@
 #define POSITIVE_SIGN	 0x2B
 #define QUESTION_MARK	 0x3F
 #define HASHTAG			 0x23
+#define LOWER_C			 0x63
+#define UPPER_C			 0x43
+#define LOWER_D			 0x64
+#define UPPER_D		     0x44
+#define LOWER_F 		 0x66
+#define UPPER_F	    	 0x46
 
 void uart_init(void);
 
