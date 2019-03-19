@@ -38,6 +38,7 @@ volatile char * receiving;
 char receive_buffer[RECEIVE_BUFFER_SIZE];
 uint8_t schedule_event;
 float celsius;
+extern volatile bool isCelsius;
 
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
@@ -66,7 +67,12 @@ int main(void){
     	if(schedule_event == DO_NOTHING) Enter_Sleep();					// enter EM3
     	if(schedule_event & SEND_TEMP){									// send data to bluetooth
     		UART_ftoa_send(celsius);
-    		UART_send_byte('C');
+    	    if (isCelsius) {
+    	    	UART_send_byte('C');
+    	    }
+    	    else {
+    	    	UART_send_byte('F');
+    	    }
     		schedule_event &= ~SEND_TEMP;
     	}
     }

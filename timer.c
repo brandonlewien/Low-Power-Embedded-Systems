@@ -89,7 +89,7 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
        }
        else {
     	   Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
-    	   celsius = (celsius * (9/5)) + 32;
+    	   celsius = (celsius * 1.8) + 32;
        }
 
        schedule_event |= SEND_TEMP;												 // set event flag to send temp to bluetooth module
