@@ -24,10 +24,10 @@ void uart_init(void) {
     LEUART0->ROUTEPEN  = LEUART_ROUTEPEN_RXPEN
                        | LEUART_ROUTEPEN_TXPEN;
 
-    LEUART0->CMD = LEUART_CMD_RXBLOCKEN;							// set RX buffer to discard incoming frames (clear it only after '?' has been RXed)
-    //LEUART0->CTRL |= LEUART_CTRL_SFUBRX;	<- don't set this because we will manually unblock the RX buffer in STARTF interrupt so that we dont read the '?'! woohoo // set LEUART0 to unblock RX buffer if start frame is received
-    LEUART0->STARTFRAME = QUESTION_MARK;							// set start frame to ascii question mark
-    LEUART0->SIGFRAME = HASHTAG;									// set signal frame to ascii hashtag
+    //LEUART0->CMD = LEUART_CMD_RXBLOCKEN;							// set RX buffer to discard incoming frames (clear it only after '?' has been RXed)
+//    LEUART0->CTRL |= LEUART_CTRL_SFUBRX;	//<- don't set this because we will manually unblock the RX buffer in STARTF interrupt so that we dont read the '?'! woohoo // set LEUART0 to unblock RX buffer if start frame is received
+//    LEUART0->STARTFRAME = QUESTION_MARK;							// set start frame to ascii question mark
+//    LEUART0->SIGFRAME = HASHTAG;									// set signal frame to ascii hashtag
 
     LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;							// disable loopback
     GPIO_PinModeSet(TX_PORT, TX_PIN, gpioModePushPull, UART_ON);	// enable UART pins
@@ -96,9 +96,9 @@ void UART_ftoa_send(float number) {									// convert float to ascii value and 
 
 void LEUART0_Interrupt_Enable(void) {
     LEUART0->IEN = 0;
-    LEUART0->IEN = LEUART_IEN_RXDATAV |
-    			   LEUART_IEN_SIGF    |
-				   LEUART_IEN_STARTF;
+    LEUART0->IEN = LEUART_IEN_RXDATAV;// |
+    			  // LEUART_IEN_SIGF    |
+				  // LEUART_IEN_STARTF;
     NVIC_EnableIRQ(LEUART0_IRQn);
 }
 
@@ -110,14 +110,16 @@ void LEUART0_Interrupt_Disable(void) {
 }
 
 static void LEUART0_Receiver_Decoder(char * buffer) {
-	if ((buffer[0] == LOWER_D) || (buffer[0] == UPPER_D)) {
-		if ((buffer[1] == LOWER_C) || (buffer[1] == UPPER_C)) {
+	if ((buffer[1] == LOWER_D) || (buffer[1] == UPPER_D)) {
+		if ((buffer[2] == LOWER_C) || (buffer[2] == UPPER_C)) {
 			rincrement = 0;
 			isCelsius = true;
+			buffer = "";
 		}
-		else if ((buffer[1] == LOWER_F) || (buffer[1] == UPPER_F)) {
+		else if ((buffer[2] == LOWER_F) || (buffer[2] == UPPER_F)) {
 			rincrement = 0;
 			isCelsius = false;
+			buffer = "";
 		}
 	}
 }
@@ -131,15 +133,15 @@ void LEUART0_IRQHandler(void) {
     }
     if(status & LEUART_IF_STARTF) {
     	LEUART0->CMD = LEUART_CMD_RXBLOCKDIS;
+    	LEUART0->IFC = LEUART_IFC_STARTF;
     }
     if (status & LEUART_IF_RXDATAV) {
         receive_buffer[rincrement] = LEUART0->RXDATA;
-        if (status) {
-        }
         rincrement++;
     }
     if (status & LEUART_IF_SIGF) {
     	LEUART0->CMD = LEUART_CMD_RXBLOCKEN;
     	LEUART0_Receiver_Decoder(receive_buffer);
+    	LEUART0->IFC = LEUART_IFC_SIGF;
     }
 }
