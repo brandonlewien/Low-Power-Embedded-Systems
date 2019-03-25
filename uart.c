@@ -2,7 +2,7 @@
 
 volatile uint16_t rincrement = 0;
 volatile bool ready_to_TX;
-extern char receive_buffer[LPBK_BUFFER_SIZE];
+extern char receive_buffer[RECEIVE_BUFFER_SIZE];
 volatile bool isCelsius = true;
 
 void uart_init(void) {
@@ -78,18 +78,21 @@ void UART_ftoa_send(float number) {									// convert float to ascii value and 
     else {
         UART_send_byte(0x20);								// if 0 value, send space instead
     }
-    if(((integer % 100) / 10) != 0) {						// tens place
+
+    if((((integer % 100) / 10) != 0) || (((integer % 1000) / 100) != 0)) {	// tens place
         UART_send_byte(((integer % 100) / 10) + ASCII_OFFSET);
     }
     else {
         UART_send_byte(0x20);								// if 0 value, send space instead
     }
-    if((integer % 10) != 0) {								// ones place
+
+    if(((integer % 10) != 0) || (((integer % 1000) / 100) != 0) || (((integer % 100) / 10) != 0)) {		// ones place
         UART_send_byte((integer % 10) + ASCII_OFFSET);
     }
     else {
         UART_send_byte(SPACE);								// if 0 value, send space instead
     }
+
     UART_send_byte(DECIMAL_POINT);							// decimal point
     UART_send_byte(decimal + ASCII_OFFSET);					// tenths place
 }
@@ -110,11 +113,11 @@ void LEUART0_Interrupt_Disable(void) {
 }
 
 static void LEUART0_Receiver_Decoder(char * buffer) {
-	if ((buffer[1] == LOWER_D) || (buffer[1] == UPPER_D)) {
-		if ((buffer[2] == LOWER_C) || (buffer[2] == UPPER_C)) {
+	if ((buffer[D_CMD_IDX] == LOWER_D) || (buffer[D_CMD_IDX] == UPPER_D)) {
+		if ((buffer[CF_CMD_IDX] == LOWER_C) || (buffer[CF_CMD_IDX] == UPPER_C)) {
 			isCelsius = true;
 		}
-		else if ((buffer[2] == LOWER_F) || (buffer[2] == UPPER_F)) {
+		else if ((buffer[CF_CMD_IDX] == LOWER_F) || (buffer[CF_CMD_IDX] == UPPER_F)) {
 			isCelsius = false;
 		}
 	}

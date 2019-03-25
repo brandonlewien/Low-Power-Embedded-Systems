@@ -73,6 +73,9 @@
 #define LOWER_F 		 0x66
 #define UPPER_F	    	 0x46
 
+#define CF_CMD_IDX 2
+#define D_CMD_IDX 1
+
 void uart_init(void);
 
 void UART_send_byte(uint8_t data);
