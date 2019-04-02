@@ -21,6 +21,7 @@ void cmu_init(void){
  CMU_ClockSelectSet(cmuClock_LFB, cmuSelect_LFXO);         // route LFXO to LFBCLK                            (LEUART clock tree 2)
  CMU_ClockEnable(cmuClock_LFB, true);                      // enable LFBCLK                                   (LEUART clock tree 3)
  CMU_ClockEnable(cmuClock_CORELE, true);
+ CMU_ClockEnable(cmuClock_LDMA, true);                     // enable LDMA
 
 // Enable peripheral clocks:
  CMU_ClockEnable(cmuClock_GPIO, true);                     // connect clock source to GPIO clock
