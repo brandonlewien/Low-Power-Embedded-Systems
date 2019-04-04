@@ -13,6 +13,7 @@ void uart_init(void) {
     UART_Init_Struct.databits = UART_DATA_BITS;
     UART_Init_Struct.parity   = UART_PARITY;
     UART_Init_Struct.stopbits = UART_STOP_BITS;
+    LEUART0->CTRL |= LEUART_CTRL_TXDMAWU;                           // DMA Wakeup
 
     LEUART0_Interrupt_Disable();
     LEUART_Reset(LEUART0);
@@ -28,7 +29,6 @@ void uart_init(void) {
     LEUART0->CTRL |= LEUART_CTRL_SFUBRX;	//<- don't set this because we will manually unblock the RX buffer in STARTF interrupt so that we dont read the '?'! woohoo // set LEUART0 to unblock RX buffer if start frame is received
     LEUART0->STARTFRAME = QUESTION_MARK;							// set start frame to ascii question mark
     LEUART0->SIGFRAME = HASHTAG;									// set signal frame to ascii hashtag
-
     LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;							// disable loopback
     GPIO_PinModeSet(TX_PORT, TX_PIN, gpioModePushPull, UART_ON);	// enable UART pins
     GPIO_PinModeSet(RX_PORT, RX_PIN, gpioModePushPull, UART_ON);
@@ -142,7 +142,7 @@ void LEUART0_IRQHandler(void) {
     	LEUART0->CMD = LEUART_CMD_RXBLOCKEN;
     	LEUART0_Receiver_Decoder(receive_buffer);
     	LEUART0->IFC = LEUART_IFC_SIGF;
-    	for (int i = 0; i < LPBK_BUFFER_SIZE; i++) {
+    	for (int i = 0; i < TX_BUFFER_SIZE; i++) {
         	receive_buffer[i] = 0;
     	}
     	rincrement = 0;
