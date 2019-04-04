@@ -38,7 +38,7 @@
 #include <em_gpio.h>
 #include "sleep.h"
 
-#define LEUART_EM_BLOCK 3
+#define LEUART_EM_BLOCK 3   // block EM3 to work down to EM2
 
 #define UART_BAUD_RATE  9600
 #define UART_DATA_BITS  leuartDatabits8

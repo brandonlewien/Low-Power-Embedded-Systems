@@ -47,8 +47,8 @@
 #define TIMER_MAX_COUNT    65535       //(2^16)-1
 #define LFXO_FREQ          32768       //(2^15)
 
-#define LED_ON_TIME           .5       //(in seconds) -> set to .5 for lab 3a
-#define LED_PERIOD             4       //(in seconds) -> set to 4 for lab 3a
+//#define LED_ON_TIME           .5       //(in seconds)
+//#define LED_PERIOD             4       //(in seconds)
 
 #define SENSOR_PWR_UP        .08       //(in seconds)
 #define TEMP_MEAS_PERIOD       3       //(in seconds)
