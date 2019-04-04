@@ -31,6 +31,7 @@
 #include "cmu.h"
 #include "uart.h"
 #include "i2c.h"
+#include "ldma.h"
 #include "i2ctemp.h"
 
 volatile uint16_t increment;
@@ -38,6 +39,7 @@ volatile char * receiving;
 char receive_buffer[RECEIVE_BUFFER_SIZE];
 uint8_t schedule_event;
 float celsius;
+extern int16_t TxBuffer[TX_BUFFER_SIZE];
 extern volatile bool isCelsius;
 
 int main(void){
@@ -59,6 +61,7 @@ int main(void){
     I2C_Setup();                                             // initialize I2C
     //I2C_Interrupt_Enable();                                // Enable Interrupts
     I2C_Reset_Bus();                                         // Reset I2C Bus
+    LDMA_Setup();                                            // initialize DMA
     LEUART0_Interrupt_Enable();
 
 
@@ -66,12 +69,12 @@ int main(void){
     while (1) {
     	if(schedule_event == DO_NOTHING) Enter_Sleep();					// enter EM3
     	if(schedule_event & SEND_TEMP){									// send data to bluetooth
-    		UART_ftoa_send(celsius);
+    		LDMA_ftoa_send(celsius);
     	    if (isCelsius) {
-    	    	UART_send_byte('C');
+    	    	TxBuffer[6] = 0x43;
     	    }
     	    else {
-    	    	UART_send_byte('F');
+    	    	TxBuffer[6] = 0x46;
     	    }
     		schedule_event &= ~SEND_TEMP;
     	}

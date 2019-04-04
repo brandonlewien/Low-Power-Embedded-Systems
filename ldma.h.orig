@@ -10,8 +10,11 @@
 #define LDMA_IF_DONE_CH1 2
 
 void LDMA_Setup(void);
+<<<<<<< HEAD
 void LDMA_Interrupt_Enable(void);
-void LDMA_ftoa_send(float number);
 
+=======
+void LDMA_ftoa_send(float number);
+>>>>>>> f66a9b6babd540a80b198e4604baaa91e7c228a4
 
 #endif /* SRC_LDMA_H_ */
