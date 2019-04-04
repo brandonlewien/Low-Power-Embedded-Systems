@@ -55,7 +55,7 @@
 #define RX_PORT         gpioPortD
 #define RX_PIN          11
 
-#define TX_BUFFER_SIZE    30
+#define TX_BUFFER_SIZE       7
 #define RECEIVE_BUFFER_SIZE 10
 
 // ASCII defines

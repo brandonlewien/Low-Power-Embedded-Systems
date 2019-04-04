@@ -2,6 +2,8 @@
 #include "em_ldma.h"
 #include "uart.h"
 
+int16_t TxBuffer[TX_BUFFER_SIZE];
+
 void LDMA_Setup(void) {
 	LDMA_Init_t ldmaInit = LDMA_INIT_DEFAULT;
 	LDMA_Init(&ldmaInit);
@@ -23,38 +25,38 @@ void LDMA_ftoa_send(float number) {									// convert float to ascii value and 
     uint16_t decimal;
 
     if(integer < 0) {										// test if negative
-        UART_send_byte(NEGATIVE_SIGN);						// send negative sign
+        TxBuffer[0] = NEGATIVE_SIGN;						// send negative sign
         decimal = (((-1) * (number - integer)) * 10);		// find decimal value
         integer = -1 * integer;								// make value positive for all following operations
 
     }
     else {
-        UART_send_byte(POSITIVE_SIGN);						// send positive sign
+        TxBuffer[0] = POSITIVE_SIGN;						// send positive sign
         decimal = ((number - integer) * 10);				// find decimal values
     }
 
     if(((integer % 1000) / 100) != 0) {						// hundreds place
-        UART_send_byte((integer / 100) + ASCII_OFFSET);
+    	TxBuffer[1] = ((integer / 100) + ASCII_OFFSET);
 
     }
     else {
-        UART_send_byte(0x20);								// if 0 value, send space instead
+    	TxBuffer[1] = 0x20;								    // if 0 value, send space instead
     }
 
     if((((integer % 100) / 10) != 0) || (((integer % 1000) / 100) != 0)) {	// tens place
-        UART_send_byte(((integer % 100) / 10) + ASCII_OFFSET);
+    	TxBuffer[2] = (((integer % 100) / 10) + ASCII_OFFSET);
     }
     else {
-        UART_send_byte(0x20);								// if 0 value, send space instead
+    	TxBuffer[2] = 0x20;		    						// if 0 value, send space instead
     }
 
     if(((integer % 10) != 0) || (((integer % 1000) / 100) != 0) || (((integer % 100) / 10) != 0)) {		// ones place
-        UART_send_byte((integer % 10) + ASCII_OFFSET);
+    	TxBuffer[3] = ((integer % 10) + ASCII_OFFSET);
     }
     else {
-        UART_send_byte(SPACE);								// if 0 value, send space instead
+    	TxBuffer[3] = SPACE;								// if 0 value, send space instead
     }
 
-    UART_send_byte(DECIMAL_POINT);							// decimal point
-    UART_send_byte(decimal + ASCII_OFFSET);					// tenths place
+    TxBuffer[4] = DECIMAL_POINT;							// decimal point
+    TxBuffer[5] = decimal + ASCII_OFFSET;					// tenths place
 }

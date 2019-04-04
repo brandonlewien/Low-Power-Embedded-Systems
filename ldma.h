@@ -8,5 +8,6 @@
 #define TX_DMA_CHANNEL  1
 
 void LDMA_Setup(void);
+void LDMA_ftoa_send(float number);
 
 #endif /* SRC_LDMA_H_ */
