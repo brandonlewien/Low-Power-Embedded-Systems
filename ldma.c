@@ -58,3 +58,19 @@ void LDMA_ftoa_send(float number) {									// convert float to ascii value and 
     UART_send_byte(DECIMAL_POINT);							// decimal point
     UART_send_byte(decimal + ASCII_OFFSET);					// tenths place
 }
+
+
+void LDMA_Interrupt_Enable(void) {
+	LDMA->IEN = 0;
+	LDMA->IEN = LDMA_IEN_DONE_CH1;
+}
+
+
+void LDMA_IRQHandler(void){
+	uint32_t status;
+	status = LDMA->IF & LDMA->IEN;
+	if(status & LDMA_IF_DONE_CH1){ 							// when DMA transfer for channel 1 is done
+		LEUART0->IEN |= LEUART_IEN_TXC;						// enable TXC interrupt to signify when last byte tx is complete
+	}
+
+}

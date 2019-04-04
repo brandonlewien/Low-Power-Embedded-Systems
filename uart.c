@@ -128,7 +128,7 @@ void LEUART0_IRQHandler(void) {
     status = LEUART0->IF & LEUART0->IEN;
     if(status & LEUART_IF_TXBL) {
         ready_to_TX = 1;									// set ready to TX flag
-        LEUART0->IEN &= ~LEUART_IEN_TXBL;                    // disable TXBL interrupt (only want this enabled when we want to transmit data)
+        LEUART0->IEN &= ~LEUART_IEN_TXBL;                   // disable TXBL interrupt (only want this enabled when we want to transmit data)
     }
     if(status & LEUART_IF_STARTF) {
     	LEUART0->CMD = LEUART_CMD_RXBLOCKDIS;
@@ -146,5 +146,9 @@ void LEUART0_IRQHandler(void) {
         	receive_buffer[i] = 0;
     	}
     	rincrement = 0;
+    }
+    if (status & LEUART_IF_TXC) {								// if this statement is entered, we know that the last byte of DMA is complete
+    	LEUART0->IEN |= LEUART_IEN_TXC;							// disable TXC after last byte of DMA transfer has been signaled
+    	Enter_Sleep();
     }
 }
