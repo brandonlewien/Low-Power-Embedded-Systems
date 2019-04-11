@@ -39,8 +39,10 @@ volatile char * receiving;
 char receive_buffer[RECEIVE_BUFFER_SIZE];
 uint8_t schedule_event;
 float celsius;
-extern int16_t TxBuffer[TX_BUFFER_SIZE];
+extern int8_t TxBuffer[TX_BUFFER_SIZE];
 extern volatile bool isCelsius;
+extern LDMA_Descriptor_t ldmaTXDescriptor;
+extern LDMA_TransferCfg_t ldmaTXConfig;
 
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
@@ -57,26 +59,29 @@ int main(void){
     cmu_init();                                              // initialize clock trees
     uart_init();
     gpio_init();                                             // sets up LED, I2C, and temp sensor enable pins
+    LDMA_Setup();                                            // initialize DMA
     letimer_init();                                          // initialize letimer for LED and I2C operation
     I2C_Setup();                                             // initialize I2C
     //I2C_Interrupt_Enable();                                // Enable Interrupts
     I2C_Reset_Bus();                                         // Reset I2C Bus
-    LDMA_Setup();                                            // initialize DMA
     LEUART0_Interrupt_Enable();
-
 
     schedule_event = DO_NOTHING;
     while (1) {
-    	if(schedule_event == DO_NOTHING) Enter_Sleep();					// enter EM3
-    	if(schedule_event & SEND_TEMP){									// send data to bluetooth
+    	if(schedule_event == DO_NOTHING) Enter_Sleep();		// enter EM3
+    	if(schedule_event & SEND_TEMP){						// send data to bluetooth
     		LDMA_ftoa_send(celsius);
     	    if (isCelsius) {
-    	    	TxBuffer[6] = 0x43;
+    	    	TxBuffer[TX_BUFFER_SIZE - 1] = 0x43;
     	    }
     	    else {
-    	    	TxBuffer[6] = 0x46;
+    	    	TxBuffer[TX_BUFFER_SIZE - 1] = 0x46;
     	    }
-    		schedule_event &= ~SEND_TEMP;
+
+    	    LEUART0->CTRL |= LEUART_CTRL_TXDMAWU;           // DMA Wakeup
+    	    LDMA_StartTransfer(TX_DMA_CHANNEL, &ldmaTXConfig, &ldmaTXDescriptor);
+
+    	    schedule_event &= ~SEND_TEMP;
     	}
     }
 }

@@ -148,7 +148,8 @@ void LEUART0_IRQHandler(void) {
     	rincrement = 0;
     }
     if (status & LEUART_IF_TXC) {								// if this statement is entered, we know that the last byte of DMA is complete
-    	LEUART0->IEN |= LEUART_IEN_TXC;							// disable TXC after last byte of DMA transfer has been signaled
-    	Enter_Sleep();
+    	LEUART0->IFC = LEUART_IFC_TXC;
+    	LEUART0->IEN &= ~LEUART_IEN_TXC;							// disable TXC after last byte of DMA transfer has been signaled
+	    Sleep_UnBlock_Mode(LEUART_EM_BLOCK);
     }
 }

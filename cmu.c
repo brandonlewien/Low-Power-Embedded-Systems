@@ -2,15 +2,15 @@
 
 void cmu_init(void){
 // High freq clock tree:
- CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);          // route HFXO to HFCLK branch                      (I2C and LDMA clock tree 1)
- CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);         // disable HFRCO
- CMU_OscillatorEnable(cmuOsc_HFXO, true, true);            // enable HFXO                                     (I2C and LDMA clock tree 2)
+ CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);         // route HFRCO to HFCLK branch                     (I2C and LDMA clock tree 1)
+ CMU_OscillatorEnable(cmuOsc_HFXO, false, false);          // disable HFXO
+ CMU_OscillatorEnable(cmuOsc_HFRCO, true, true);           // enable HFRCO                                    (I2C and LDMA clock tree 2)
  CMU_ClockSelectSet(cmuClock_HFPER, cmuSelect_HFCLK);      // route HFCLK to HFPERCLK(high freq periph clk)   (I2C clock tree 3)
  CMU_ClockSelectSet(cmuClock_BUS, cmuSelect_HFCLK);	       // route HFCLK to HFBUSCLK                         (LDMA clock tree 3)
  CMU_ClockEnable(cmuClock_HF, true);                       // enable HFCLK                                    (I2C and LDMA clock tree 4)
  CMU_ClockEnable(cmuClock_HFPER, true);                    // enable HFPERCLK                                 (I2C clock tree 5)
  CMU_ClockEnable(cmuClock_BUS, true);					   // enable HFBUSCLK                                 (LDMA clock tree 5)
- CMU_HFXOAutostartEnable(true, true, true);                // auto start HFXO after wake up from sleep
+ CMU_HFXOAutostartEnable(true, false, false);
 
 // By default, LFRCO is enabled:
  CMU_OscillatorEnable(cmuOsc_LFRCO, false, false);         // DISABLE LFRCO

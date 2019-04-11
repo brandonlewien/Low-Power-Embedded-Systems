@@ -83,7 +83,11 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
 #endif
 
 #ifdef READ_TEMPERATURE
+
+
        I2C_Temperature_Read_NoInterrupts(I2C_SLAVE_ADDRESS, 0xE3);               // read data from temp sensor
+
+
        if (isCelsius) {
     	   Temp_Code_To_Celsius(temp_ms_read, temp_ls_read, &celsius);
        }
