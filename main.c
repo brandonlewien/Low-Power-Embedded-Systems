@@ -78,6 +78,7 @@ int main(void){
     	    	TxBuffer[TX_BUFFER_SIZE - 1] = 0x46;
     	    }
 
+    	    Sleep_Block_Mode(LEUART_EM_BLOCK);
     	    LEUART0->CTRL |= LEUART_CTRL_TXDMAWU;           // DMA Wakeup
     	    LDMA_StartTransfer(TX_DMA_CHANNEL, &ldmaTXConfig, &ldmaTXDescriptor);
 
