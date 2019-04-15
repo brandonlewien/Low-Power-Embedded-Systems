@@ -26,7 +26,7 @@ void uart_init(void) {
                        | LEUART_ROUTEPEN_TXPEN;
 
     LEUART0->CMD = LEUART_CMD_RXBLOCKEN;							// set RX buffer to discard incoming frames (clear it only after '?' has been RXed)
-    LEUART0->CTRL |= LEUART_CTRL_SFUBRX;	//<- don't set this because we will manually unblock the RX buffer in STARTF interrupt so that we dont read the '?'! woohoo // set LEUART0 to unblock RX buffer if start frame is received
+    LEUART0->CTRL |= LEUART_CTRL_SFUBRX;	
     LEUART0->STARTFRAME = QUESTION_MARK;							// set start frame to ascii question mark
     LEUART0->SIGFRAME = HASHTAG;									// set signal frame to ascii hashtag
     LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;							// disable loopback

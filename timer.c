@@ -64,7 +64,7 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
     if(int_flags & LETIMER_IFC_COMP1){                                           // if COMP1 flag is set,
        /* LPM Enable Routine */
        Sleep_Block_Mode(I2C_EM_BLOCK);                                           // set sleep mode block for master I2C operation
-       GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeWiredAnd, SCL_AND_SDA_DOUT);  // set up GPIO pin PC11 (SCL)
+       GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeWiredAnd, SCL_AND_SDA_DOUT);   // set up GPIO pin PC11 (SCL)
        GPIO_PinModeSet(SDA_PORT, SDA_PIN, gpioModeWiredAnd, SCL_AND_SDA_DOUT);   // set up GPIO pin PC10 (SDA)
        for (int i = 0; i < 9; i++) {                                             // reset slave I2C device state machine
          GPIO_PinOutClear(SCL_PORT, SCL_PIN);
@@ -96,13 +96,13 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
     	   celsius = (celsius * 1.8) + 32;
        }
 
-       schedule_event |= SEND_TEMP;												 // set event flag to send temp to bluetooth module
+       schedule_event |= SEND_TEMP;										                      		 // set event flag to send temp to bluetooth module
 
-//       if(TEMP_ALERT > celsius) {                                                // if data read is not the data that was written
-//         GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);                             // turn on LED0
+//       if(TEMP_ALERT > celsius) {                                              // if data read is not the data that was written
+//         GPIO->P[LED0_port].DOUT |= (1 << LED0_pin);                           // turn on LED0
 //       }
 //       else {
-//         GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);                            // turn off LED0
+//         GPIO->P[LED0_port].DOUT &= ~(1 << LED0_pin);                          // turn off LED0
 //       }
 #endif
 

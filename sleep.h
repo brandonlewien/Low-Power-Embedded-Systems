@@ -33,27 +33,15 @@
 #ifndef SLEEP_H_
 #define SLEEP_H_
 
-//***********************************************************************************
-// Include files
-//***********************************************************************************
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "gpio.h"
 #include "all.h"
 
-//***********************************************************************************
-// defined files
-//***********************************************************************************
-
 #define SLEEP_LOWEST_ENERGY_MODE_DEFAULT EnergyMode3
 #define SLEEP_FLAG_NO_CLOCK_RESTORE      0x1u
-#define MAX_NUM_SLEEP_MODES 5
-
-//***********************************************************************************
-// global variables
-//***********************************************************************************
-
+#define MAX_NUM_SLEEP_MODES                 5
 
 typedef enum{
     EnergyMode0 = 0,
@@ -69,17 +57,11 @@ typedef struct {
     uint32_t (*restoreCallback)(EM emode);
 } Sleeper;
 
-//****************************
-//*******************************************************
-// function prototypes
-//***********************************************************************************
-
 void Sleep_Block_Mode(unsigned int EM);
 void Sleep_UnBlock_Mode(unsigned int EM);
 void Sleep_Init();
 void Enter_Sleep(void);
 EM Enter_Lowest_EM_Mode(void);
-
 
 
 #endif /* SLEEP_H_ */

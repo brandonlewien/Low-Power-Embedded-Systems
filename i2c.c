@@ -125,50 +125,50 @@ void I2C_Reset_Bus(void) {
 void I2C_Interrupt_Enable(void) {
     I2C0->IEN = 0;                                              // Clear IEN
     I2C0->IEN |= I2C_IEN_RXDATAV |
-           I2C_IEN_ACK;
+                 I2C_IEN_ACK;
     NVIC_EnableIRQ(I2C0_IRQn);
 }
 
 void I2C_Interrupt_Disable(void) {
-    I2C0->IEN &= ~(I2C_IEN_RXDATAV |
-             I2C_IEN_ACK);
+    I2C0->IEN &= ~(I2C_IEN_RXDATAV |                            // Disable whats enabled above
+                   I2C_IEN_ACK);
     NVIC_DisableIRQ(I2C0_IRQn);
 }
 
 void I2C0_IRQHandler(void)
  {
-#ifdef RW_FROM_REGISTER
-//  int status;
-//  status = I2C0->IF;
-//
-//  if (status & I2C_IF_ACK) {
-//   I2C0->IFC |= I2C_IFC_ACK;                                  // clear ACK flag
-//   ACK_done = 1;
-//  }
-//  if (status & I2C_IF_RXDATAV){
-//   read_data = I2C0->RXDOUBLE;                                // read data from RX buffer (automatically clears RXDATAV flag)
-//   I2C0->CMD = I2C_CMD_NACK;                                  // send NACK to slave
-//   I2C0->CMD = I2C_CMD_STOP;                                  // send STOP to slave
-//  }
+#ifdef RW_FROM_REGISTER                                         // Set in all.h
+    int status;
+    status = I2C0->IF;
+
+    if (status & I2C_IF_ACK) {
+        I2C0->IFC |= I2C_IFC_ACK;                               // clear ACK flag
+        ACK_done = 1;
+    }
+    if (status & I2C_IF_RXDATAV){
+        read_data = I2C0->RXDOUBLE;                             // read data from RX buffer (automatically clears RXDATAV flag)
+        I2C0->CMD = I2C_CMD_NACK;                               // send NACK to slave
+        I2C0->CMD = I2C_CMD_STOP;                               // send STOP to slave
+    }
 #endif
 #ifdef READ_TEMPERATURE
     int status;
     status = I2C0->IF;
 
     if (status & I2C_IF_ACK) {
-       I2C0->IFC |= I2C_IFC_ACK;                                // clear ACK flag
-       ACK_done = 1;    
+        I2C0->IFC |= I2C_IFC_ACK;                               // clear ACK flag
+        ACK_done = 1;    
     }
     if ((status & I2C_IF_RXDATAV) && bit_flag) {
-       temp_ms_read = I2C0->RXDOUBLE;
-       I2C0->CMD = I2C_CMD_ACK;
-       bit_flag = false;
+        temp_ms_read = I2C0->RXDOUBLE;
+        I2C0->CMD = I2C_CMD_ACK;
+        bit_flag = false;
     }
     else if ((status & I2C_IF_RXDATAV) && !bit_flag) {
-       bit_flag = true;
-       temp_ls_read = I2C0->RXDOUBLE;
-       I2C0->CMD = I2C_CMD_NACK;                                // send NACK to slave
-       I2C0->CMD = I2C_CMD_STOP;                                // send STOP to slave
+        bit_flag = true;
+        temp_ls_read = I2C0->RXDOUBLE;
+        I2C0->CMD = I2C_CMD_NACK;                               // send NACK to slave
+        I2C0->CMD = I2C_CMD_STOP;                               // send STOP to slave
     }
 #endif
 }
