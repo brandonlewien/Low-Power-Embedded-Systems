@@ -76,12 +76,41 @@
 #define CF_CMD_IDX 2
 #define D_CMD_IDX 1
 
+
+/* Function: Initialize LEUART peripheral
+ * Inputs: None
+ * Outputs: None
+ */
 void uart_init(void);
 
+/* Function: Send one byte of data via LEUART
+ * Inputs: data = data to send
+ * Outputs: None
+ */
 void UART_send_byte(uint8_t data);
+
+/* Function: Send n bytes of data via LEUART
+ * Inputs: data = string of data to send, length = length of data
+ * Outputs: None
+ */
 void UART_send_n(char * data, uint32_t length);
+
+/* Function: Enable interrupts for LEUART
+ * Inputs: None
+ * Outputs: None
+ */
 void LEUART0_Interrupt_Enable(void);
+
+/* Function: Disable interrupts for LEUART
+ * Inputs: None
+ * Outputs: None
+ */
 void LEUART0_Interrupt_Disable(void);
+
+/* Function: Convert a number from float to ASCII and send over LEUART
+ * Inputs: number = number to convert and send
+ * Outputs: None
+ */
 void UART_ftoa_send(float number);
 
 #endif /* SRC_UART_H_ */

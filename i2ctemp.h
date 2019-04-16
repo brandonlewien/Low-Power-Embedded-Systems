@@ -41,9 +41,22 @@
 #include "bsp.h"
 #include "all.h"
 
-
+/* Function: Read temperature from si7021 slave device without interrupts
+ * Inputs: slave_addr_rw = address of slave device, cmd = command to send to slave
+ * Outputs: None
+ */
 void I2C_Temperature_Read_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd);
+
+/* Function: Read temperature from si7021 slave device with interrupts
+ * Inputs: slave_addr_rw = address of slave device, cmd = command to send to slave
+ * Outputs: None
+ */
 void I2C_Temperature_Read_Interrupts(uint8_t slave_addr_rw, uint8_t cmd);
+
+/* Function: Convert temp code from si7021 temp sensor to celsius
+ * Inputs: MSData = most significant byte of data from temp sensor, LSData = least significant byte of data from temp sensor, DataRet = celcius temp
+ * Outputs: None
+ */
 void Temp_Code_To_Celsius(uint16_t MSData, uint16_t LSData, float * DataRet);
 
 #endif /* SRC_I2CTEMP_H_ */

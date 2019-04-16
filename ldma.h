@@ -41,10 +41,6 @@
 #define LDMA_IF_DONE_CH1  2
 #define LDMA_IFC_DONE_CH1 2
 
-void LDMA_Setup(void);
-void LDMA_Interrupt_Enable(void);
-void LDMA_ftoa_send(float number);
-
 enum TXBufferIdx{
 	Tx0,
 	Tx1,
@@ -54,5 +50,23 @@ enum TXBufferIdx{
 	Tx5,
 	Tx6,
 };
+
+/* Function: initialize LDMA peripheral
+ * Inputs: None
+ * Outputs: None
+ */
+void LDMA_Setup(void);
+
+/* Function: enable LDMA interrupts
+ * Inputs: None
+ * Outputs: None
+ */
+void LDMA_Interrupt_Enable(void);
+
+/* Function: Convert temperature from a float to an ASCII value and put into buffer to prepare for DMA transfer
+ * Inputs: number = number to convert to ASCII
+ * Outputs: None
+ */
+void LDMA_ftoa_send(float number);
 
 #endif /* SRC_LDMA_H_ */
