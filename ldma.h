@@ -36,7 +36,11 @@
 
 #include "em_ldma.h"
 
+#define RX_DMA_CHANNEL    0
 #define TX_DMA_CHANNEL    1
+#define LDMA_IF_DONE_CH0  1
+#define LDMA_IEN_DONE_CH0 1
+#define LDMA_IFC_DONE_CH0 1
 #define LDMA_IEN_DONE_CH1 2
 #define LDMA_IF_DONE_CH1  2
 #define LDMA_IFC_DONE_CH1 2

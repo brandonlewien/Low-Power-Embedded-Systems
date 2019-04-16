@@ -5,6 +5,9 @@
 int8_t TxBuffer[TX_BUFFER_SIZE];
 LDMA_Descriptor_t  ldmaTXDescriptor;
 LDMA_TransferCfg_t ldmaTXConfig;
+LDMA_Descriptor_t  ldmaRXDescriptor;
+LDMA_TransferCfg_t ldmaRXConfig;
+extern char receive_buffer[RECEIVE_BUFFER_SIZE];
 
 void LDMA_Setup(void) {
     LDMA_Init_t ldmaInit = LDMA_INIT_DEFAULT;           // Using Init Default values
@@ -13,6 +16,9 @@ void LDMA_Setup(void) {
     // LDMA descriptor and config for transferring TxBuffer
     ldmaTXDescriptor = (LDMA_Descriptor_t)LDMA_DESCRIPTOR_SINGLE_M2P_BYTE(TxBuffer, &(LEUART0->TXDATA), TX_BUFFER_SIZE); // Source: TxBuffer, Destination: USART1->TXDATA, Bytes to send: 10
     ldmaTXConfig = (LDMA_TransferCfg_t)LDMA_TRANSFER_CFG_PERIPHERAL(ldmaPeripheralSignal_LEUART0_TXBL);                  // or ldmaPeripheralSignal_LEUART0_TXEMPTY?
+
+    ldmaRXDescriptor = (LDMA_Descriptor_t)LDMA_DESCRIPTOR_SINGLE_P2M_BYTE(&(LEUART0->RXDATA), receive_buffer, RECEIVE_BUFFER_SIZE);
+	ldmaRXConfig = (LDMA_TransferCfg_t)LDMA_TRANSFER_CFG_PERIPHERAL(ldmaPeripheralSignal_LEUART0_RXDATAV);
 
     LDMA_Interrupt_Enable();                            // Enable Interrupts for LDMA
 }
@@ -69,10 +75,15 @@ void LDMA_Interrupt_Enable(void) {
 void LDMA_IRQHandler(void){
     uint32_t status;
     status = LDMA->IF & LDMA->IEN;
-    if(status & LDMA_IF_DONE_CH1){                      // when DMA transfer for channel 1 is done
+    if(status & LDMA_IF_DONE_CH0) {						// when DMA transfer for channel 0 is done
+    	LDMA->IFC |= LDMA_IFC_DONE_CH0;                 // Clear Channel 0 IF
+    	LEUART0->CTRL &= ~LEUART_CTRL_RXDMAWU;          // DMA Nighty night
+    }
+    if(status & LDMA_IF_DONE_CH1) {                     // when DMA transfer for channel 1 is done
         LDMA->IFC |= LDMA_IFC_DONE_CH1;                 // Clear Channel 1 IF
         LEUART0->CTRL &= ~LEUART_CTRL_TXDMAWU;          // DMA Nighty night
         LEUART0->IEN |= LEUART_IEN_TXC;                 // enable TXC interrupt to signify when last byte tx is complete
     }
+
 
 }

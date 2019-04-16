@@ -1,9 +1,12 @@
 #include "uart.h"
+#include "ldma.h"
 
 volatile uint16_t rincrement = 0;
 volatile bool ready_to_TX;
 extern char receive_buffer[RECEIVE_BUFFER_SIZE];
 volatile bool isCelsius = true;
+extern LDMA_Descriptor_t  ldmaRXDescriptor;
+extern LDMA_TransferCfg_t ldmaRXConfig;
 
 void uart_init(void) {
     LEUART_Init_TypeDef UART_Init_Struct;
@@ -33,7 +36,7 @@ void uart_init(void) {
     GPIO_PinModeSet(TX_PORT, TX_PIN, gpioModePushPull, UART_ON);	// enable UART pins
     GPIO_PinModeSet(RX_PORT, RX_PIN, gpioModePushPull, UART_ON);
 
-    Sleep_Block_Mode(LEUART_EM_BLOCK);                              // lowest sleep mode setting for LEUART
+    //Sleep_Block_Mode(LEUART_EM_BLOCK);                              // lowest sleep mode setting for LEUART
     ready_to_TX = 0;                                                // initialize transmit ready flag to 0
 
     LEUART_Enable(LEUART0, leuartEnable);
@@ -99,26 +102,30 @@ void UART_ftoa_send(float number) {									// convert float to ascii value and 
 
 void LEUART0_Interrupt_Enable(void) {
     LEUART0->IEN = 0;
-    LEUART0->IEN = LEUART_IEN_RXDATAV |
+    LEUART0->IEN = //LEUART_IEN_RXDATAV |
     			   LEUART_IEN_SIGF    |
 				   LEUART_IEN_STARTF;
     NVIC_EnableIRQ(LEUART0_IRQn);
 }
 
 void LEUART0_Interrupt_Disable(void) {
-    LEUART0->IEN &= ~(LEUART_IEN_RXDATAV |
+    LEUART0->IEN &= ~(//LEUART_IEN_RXDATAV |
     				  LEUART_IEN_SIGF    |
 			          LEUART_IEN_STARTF);
     NVIC_DisableIRQ(LEUART0_IRQn);
 }
 
 static void LEUART0_Receiver_Decoder(char * buffer) {
-	if ((buffer[D_CMD_IDX] == LOWER_D) || (buffer[D_CMD_IDX] == UPPER_D)) {
-		if ((buffer[CF_CMD_IDX] == LOWER_C) || (buffer[CF_CMD_IDX] == UPPER_C)) {
-			isCelsius = true;
-		}
-		else if ((buffer[CF_CMD_IDX] == LOWER_F) || (buffer[CF_CMD_IDX] == UPPER_F)) {
-			isCelsius = false;
+	for(int i = 0; i < RECEIVE_BUFFER_SIZE-1; ++i) {
+		if ((buffer[i] == LOWER_D) || (buffer[i] == UPPER_D)) {
+			if ((buffer[i+1] == LOWER_C) || (buffer[i+1] == UPPER_C)) {
+				isCelsius = true;
+				break;
+			}
+			else if ((buffer[i+1] == LOWER_F) || (buffer[i+1] == UPPER_F)) {
+				isCelsius = false;
+				break;
+			}
 		}
 	}
 }
@@ -131,18 +138,25 @@ void LEUART0_IRQHandler(void) {
         LEUART0->IEN &= ~LEUART_IEN_TXBL;                   // disable TXBL interrupt (only want this enabled when we want to transmit data)
     }
     if(status & LEUART_IF_STARTF) {
+    	Sleep_Block_Mode(LEUART_EM_BLOCK);
     	LEUART0->CMD = LEUART_CMD_RXBLOCKDIS;				// disable block on RX UART buffer
+		LEUART0->CTRL |= LEUART_CTRL_RXDMAWU;           	// DMA Wakeup
+		LDMA_StartTransfer(RX_DMA_CHANNEL, &ldmaRXConfig, &ldmaRXDescriptor);
+
     	LEUART0->IFC = LEUART_IFC_STARTF;
     }
-    if (status & LEUART_IF_RXDATAV) {
-        receive_buffer[rincrement] = LEUART0->RXDATA;		// transfer data from uart buffer to recieve buffer
-        rincrement++;
-    }
+//    if (status & LEUART_IF_RXDATAV) {
+//        receive_buffer[rincrement] = LEUART0->RXDATA;		// transfer data from uart buffer to recieve buffer
+//        rincrement++;
+//    }
     if (status & LEUART_IF_SIGF) {
     	LEUART0->CMD = LEUART_CMD_RXBLOCKEN;				// enable block on RX UART buffer
     	LEUART0_Receiver_Decoder(receive_buffer);			// Process data recieved
     	LEUART0->IFC = LEUART_IFC_SIGF;
-    	for (int i = 0; i < TX_BUFFER_SIZE; i++) {			// clear buffer
+
+    	Sleep_UnBlock_Mode(LEUART_EM_BLOCK);
+
+    	for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {			// clear buffer
         	receive_buffer[i] = 0;
     	}
     	rincrement = 0;
