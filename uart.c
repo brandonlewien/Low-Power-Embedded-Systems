@@ -29,7 +29,7 @@ void uart_init(void) {
                        | LEUART_ROUTEPEN_TXPEN;
 
     LEUART0->CMD = LEUART_CMD_RXBLOCKEN;							// set RX buffer to discard incoming frames (clear it only after '?' has been RXed)
-    LEUART0->CTRL |= LEUART_CTRL_SFUBRX;	
+    LEUART0->CTRL |= LEUART_CTRL_SFUBRX;
     LEUART0->STARTFRAME = QUESTION_MARK;							// set start frame to ascii question mark
     LEUART0->SIGFRAME = HASHTAG;									// set signal frame to ascii hashtag
     LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;							// disable loopback
@@ -103,15 +103,15 @@ void UART_ftoa_send(float number) {									// convert float to ascii value and 
 void LEUART0_Interrupt_Enable(void) {
     LEUART0->IEN = 0;
     LEUART0->IEN = //LEUART_IEN_RXDATAV |
-    			   LEUART_IEN_SIGF    |
-				   LEUART_IEN_STARTF;
+    			   LEUART_IEN_SIGF;//    |
+				   //LEUART_IEN_STARTF;
     NVIC_EnableIRQ(LEUART0_IRQn);
 }
 
 void LEUART0_Interrupt_Disable(void) {
     LEUART0->IEN &= ~(//LEUART_IEN_RXDATAV |
-    				  LEUART_IEN_SIGF    |
-			          LEUART_IEN_STARTF);
+    				  LEUART_IEN_SIGF);//    |
+			          //LEUART_IEN_STARTF);
     NVIC_DisableIRQ(LEUART0_IRQn);
 }
 
@@ -137,14 +137,12 @@ void LEUART0_IRQHandler(void) {
         ready_to_TX = 1;									// set ready to TX flag
         LEUART0->IEN &= ~LEUART_IEN_TXBL;                   // disable TXBL interrupt (only want this enabled when we want to transmit data)
     }
-    if(status & LEUART_IF_STARTF) {
-    	Sleep_Block_Mode(LEUART_EM_BLOCK);
-    	LEUART0->CMD = LEUART_CMD_RXBLOCKDIS;				// disable block on RX UART buffer
-		LEUART0->CTRL |= LEUART_CTRL_RXDMAWU;           	// DMA Wakeup
-		LDMA_StartTransfer(RX_DMA_CHANNEL, &ldmaRXConfig, &ldmaRXDescriptor);
-
-    	LEUART0->IFC = LEUART_IFC_STARTF;
-    }
+//    if(status & LEUART_IF_STARTF) {
+//    	Sleep_Block_Mode(LEUART_EM_BLOCK);
+////    	LEUART0->CMD = LEUART_CMD_RXBLOCKDIS;				// disable block on RX UART buffer
+//
+//    	LEUART0->IFC = LEUART_IFC_STARTF;
+//    }
 //    if (status & LEUART_IF_RXDATAV) {
 //        receive_buffer[rincrement] = LEUART0->RXDATA;		// transfer data from uart buffer to recieve buffer
 //        rincrement++;
@@ -154,9 +152,7 @@ void LEUART0_IRQHandler(void) {
     	LEUART0_Receiver_Decoder(receive_buffer);			// Process data recieved
     	LEUART0->IFC = LEUART_IFC_SIGF;
 
-    	Sleep_UnBlock_Mode(LEUART_EM_BLOCK);
-
-    	for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {			// clear buffer
+    	for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {	    // clear buffer
         	receive_buffer[i] = 0;
     	}
     	rincrement = 0;

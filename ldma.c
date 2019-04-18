@@ -14,6 +14,7 @@ extern char receive_buffer[RECEIVE_BUFFER_SIZE];
 void LDMA_Setup(void) {
     LDMA_Init_t ldmaInit = LDMA_INIT_DEFAULT;           // Using Init Default values
     LDMA_Init(&ldmaInit);                               // Passing above into predefined function
+	Sleep_Block_Mode(LEUART_EM_BLOCK);
 
     // LDMA descriptor and config for transferring TxBuffer
     ldmaTXDescriptor = (LDMA_Descriptor_t)LDMA_DESCRIPTOR_SINGLE_M2P_BYTE(TxBuffer, &(LEUART0->TXDATA), TX_BUFFER_SIZE); // Source: TxBuffer, Destination: USART1->TXDATA, Bytes to send: 10
@@ -22,7 +23,10 @@ void LDMA_Setup(void) {
     ldmaRXDescriptor = (LDMA_Descriptor_t)LDMA_DESCRIPTOR_SINGLE_P2M_BYTE(&(LEUART0->RXDATA), receive_buffer, RECEIVE_BUFFER_SIZE);
 	ldmaRXConfig = (LDMA_TransferCfg_t)LDMA_TRANSFER_CFG_PERIPHERAL(ldmaPeripheralSignal_LEUART0_RXDATAV);
 
+	LEUART0->CTRL |= LEUART_CTRL_RXDMAWU;           	// DMA Wakeup
+
     LDMA_Interrupt_Enable();                            // Enable Interrupts for LDMA
+    LDMA_StartTransfer(RX_DMA_CHANNEL, &ldmaRXConfig, &ldmaRXDescriptor);
 }
 // This function is the same as the UART_ftoa_send()
 void LDMA_ftoa_send(float number) {                     // convert float to ascii value and send via UART
@@ -69,7 +73,8 @@ void LDMA_ftoa_send(float number) {                     // convert float to asci
 
 void LDMA_Interrupt_Enable(void) {
     LDMA->IEN = 0;                                      // Clear LDMA Interrupt Enable
-    LDMA->IEN = LDMA_IEN_DONE_CH1;                      // Set Ch1 LDMA Interrupt Enable
+    LDMA->IEN |= LDMA_IEN_DONE_CH0 |
+    		     LDMA_IEN_DONE_CH1;                     // Set Ch1 LDMA Interrupt Enable
     NVIC_EnableIRQ(LDMA_IRQn);                          // Enable Interrupts
 }
 
