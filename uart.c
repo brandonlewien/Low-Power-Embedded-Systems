@@ -151,12 +151,10 @@ void LEUART0_IRQHandler(void) {
     	LEUART0->CMD = LEUART_CMD_RXBLOCKEN;				// enable block on RX UART buffer
     	LEUART0_Receiver_Decoder(receive_buffer);			// Process data recieved
     	LEUART0->IFC = LEUART_IFC_SIGF;
-
-    	for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {	    // clear buffer
-        	receive_buffer[i] = 0;
-    	}
-    	rincrement = 0;
     }
+	for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {	    // clear buffer
+    	receive_buffer[i] = 0;
+	}
     if (status & LEUART_IF_TXC) {							// if this statement is entered, we know that the last byte of DMA is complete
     	LEUART0->IFC = LEUART_IFC_TXC;						// clear TXC flag
     	LEUART0->IEN &= ~LEUART_IEN_TXC;					// disable TXC after last byte of DMA transfer has been signaled

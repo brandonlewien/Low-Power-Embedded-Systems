@@ -56,7 +56,7 @@
 #define RX_PIN          11
 
 #define TX_BUFFER_SIZE      7
-#define RECEIVE_BUFFER_SIZE 10
+#define RECEIVE_BUFFER_SIZE 1000
 
 // ASCII defines
 #define DECIMAL_POINT    0x2E
