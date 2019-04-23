@@ -18,10 +18,13 @@ void cmu_init(void){
 
 // Low freq clock tree:
  CMU_OscillatorEnable(cmuOsc_LFXO, true, true);       // enable LFXO                                     (LETIMER and LEUART clock tree 1)
+ CMU_OscillatorEnable(cmuOsc_ULFRCO, true, true);     // enable ULFRCO                                   (CRYOTIMER clock tree 1)
  CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_LFXO);    // route LFXO to LFACLK                            (LETIMER clock tree 2)
  CMU_ClockEnable(cmuClock_LFA, true);                 // enable LFACLK                                   (LETIMER clock tree 3)
  CMU_ClockSelectSet(cmuClock_LFB, cmuSelect_LFXO);    // route LFXO to LFBCLK                            (LEUART clock tree 2)
  CMU_ClockEnable(cmuClock_LFB, true);                 // enable LFBCLK                                   (LEUART clock tree 3)
+ CMU_ClockSelectSet(cmuClock_CRYOTIMER, cmuSelect_ULFRCO);// route ULFRCO to CRYOCLK                     (CRYOTIMER clock tree 2)
+ CMU_ClockEnable(cmuClock_CRYOTIMER, true);           // enable CRYOCLK                                  (CRYOTIMER clock tree 3)
  CMU_ClockEnable(cmuClock_CORELE, true);
 
 // Enable peripheral clocks:
@@ -30,4 +33,5 @@ void cmu_init(void){
  CMU_ClockEnable(cmuClock_LEUART0, true);             // connect clock source(LFB) to LEUART clock tree  (LEUART clock tree 4)
  CMU_ClockEnable(cmuClock_I2C0, true);                // connect clock source (HFPER) to I2C clock tree  (I2C clock tree 6)
  CMU_ClockEnable(cmuClock_LDMA, true);                // connect clock source (HFBUS) to LDMA clock tree (LDMA clock tree 6)
+ //CMU_ClockEnable(cmuClock_CRYOTIMER, true);           // connect clock source to CRYOTIMER clock tree (CRYOTIMER clock tree 4)
 }
