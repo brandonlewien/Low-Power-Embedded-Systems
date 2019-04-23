@@ -36,6 +36,11 @@
 
 #include "em_cryotimer.h"
 
+#define CRYO_DISABLE        0
+#define CRYO_ENABLE         1
+#define CRYO_DEBUG_DISABLE  0
+#define CRYO_EM4_WAKEUP     0
+
 void cryotimer_setup(void);
 
 #endif /* SRC_CRYO_H_ */
