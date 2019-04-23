@@ -33,7 +33,7 @@
 #include "i2c.h"
 #include "ldma.h"
 #include "i2ctemp.h"
-#include "capsense.h"
+#include "touch.h"
 
 volatile uint16_t increment;
 volatile char * receiving;
