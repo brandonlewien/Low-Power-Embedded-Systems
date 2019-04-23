@@ -34,4 +34,12 @@
 #ifndef SRC_CAPTOUCH_H_
 #define SRC_CAPTOUCH_H_
 
+#include "em_device.h"
+#include "em_acmp.h"
+#include "em_cmu.h"
+#include "em_emu.h"
+#include <capsenseconfig.h>
+
+void captouch_init(void);
+
 #endif /* SRC_CAPTOUCH_H_ */

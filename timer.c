@@ -113,5 +113,6 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
        Sleep_UnBlock_Mode(I2C_EM_BLOCK);                                         // unblock sleep mode setting for I2C
 
        LETIMER0->IFC = LETIMER_IFC_COMP1;                                        // clear flag
+
     }
 }
