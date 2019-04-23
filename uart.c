@@ -5,8 +5,8 @@ volatile uint16_t rincrement = 0;
 volatile bool ready_to_TX;
 extern char receive_buffer[RECEIVE_BUFFER_SIZE];
 volatile bool isCelsius = true;
-extern LDMA_Descriptor_t  ldmaRXDescriptor;
-extern LDMA_TransferCfg_t ldmaRXConfig;
+//extern LDMA_Descriptor_t  ldmaRXDescriptor;
+//extern LDMA_TransferCfg_t ldmaRXConfig;
 
 void uart_init(void) {
     LEUART_Init_TypeDef UART_Init_Struct;
