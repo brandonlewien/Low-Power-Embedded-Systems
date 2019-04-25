@@ -34,6 +34,7 @@
 #include "ldma.h"
 #include "i2ctemp.h"
 #include "touch.h"
+#include "capsense.h"
 
 volatile uint16_t increment;
 volatile char * receiving;
@@ -65,6 +66,7 @@ int main(void){
     I2C_Setup();                                             // initialize I2C
     //I2C_Interrupt_Enable();                                // Enable Interrupts
     I2C_Reset_Bus();                                         // Reset I2C Bus
+    CAPSENSE_Init();
     LEUART0_Interrupt_Enable();
 
     schedule_event = DO_NOTHING;
