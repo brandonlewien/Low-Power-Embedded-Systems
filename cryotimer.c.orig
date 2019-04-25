@@ -1,7 +1,6 @@
 #include "cryotimer.h"
-#include "main.h"
+<<<<<<< HEAD
 
-extern uint8_t schedule_event;
 
 void cryotimer_setup(void){
 
@@ -30,8 +29,11 @@ void CRYOTIMER_IRQHandler(void) {
 	uint32_t status;
 	status = CRYOTIMER->IF & CRYOTIMER->IEN;
 	if(status & CRYOTIMER_IF_PERIOD) {
-		schedule_event |= READ_TOUCH;
-		CRYOTIMER->IFC = CRYOTIMER_IFC_PERIOD;
+
 	}
 
 }
+=======
+#include "capsense.h"
+
+>>>>>>> 8efd4edfa86f0d85145558533048069d6dc06fa2

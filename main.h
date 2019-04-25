@@ -41,7 +41,10 @@
 // define schedule event states
 #define DO_NOTHING 0
 #define SEND_TEMP 1
+#define READ_TOUCH 2
 //#define READ_TEMP 2
+
+#define TOUCH_CHANNEL0 0
 
 
  #endif /* MAIN_H_ */

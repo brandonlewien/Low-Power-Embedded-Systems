@@ -44,6 +44,7 @@ extern int8_t TxBuffer[TX_BUFFER_SIZE];
 extern volatile bool isCelsius;
 extern LDMA_Descriptor_t ldmaTXDescriptor;
 extern LDMA_TransferCfg_t ldmaTXConfig;
+bool isPressed;
 
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
@@ -84,6 +85,13 @@ int main(void){
     	    LDMA_StartTransfer(TX_DMA_CHANNEL, &ldmaTXConfig, &ldmaTXDescriptor);
 
     	    schedule_event &= ~SEND_TEMP;
+    	}
+    	if(schedule_event & READ_TOUCH){
+
+
+    		//CAPSENSE_Sense();
+    		//isPressed = CAPSENSE_getPressed(TOUCH_CHANNEL0);
+
     	}
     }
 }
