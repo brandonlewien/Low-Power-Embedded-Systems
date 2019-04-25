@@ -41,6 +41,7 @@
 #define CRYO_DEBUG_DISABLE  0
 #define CRYO_EM4_WAKEUP     0
 
-void cryotimer_setup(void);
+void CRYOTIMER_setup(void);
+void CRYOTIMER_Interrupt_Enable(void);
 
 #endif /* SRC_CRYO_H_ */

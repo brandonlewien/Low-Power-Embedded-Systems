@@ -35,6 +35,7 @@
 #include "i2ctemp.h"
 #include "touch.h"
 #include "capsense.h"
+#include "cryotimer.h"
 
 volatile uint16_t increment;
 volatile char * receiving;
@@ -69,6 +70,8 @@ int main(void){
     I2C_Reset_Bus();                                         // Reset I2C Bus
     CAPSENSE_Init();
     LEUART0_Interrupt_Enable();
+    CRYOTIMER_setup();
+    CRYOTIMER_Interrupt_Enable();
 
     schedule_event = DO_NOTHING;
     while (1) {
@@ -89,11 +92,15 @@ int main(void){
     	    schedule_event &= ~SEND_TEMP;
     	}
     	if(schedule_event & READ_TOUCH){
+    		CAPSENSE_Sense();
+    		isPressed = CAPSENSE_getPressed(TOUCH_CHANNEL0);
+    		if(isPressed) {
+    			isPressed = false;
+    		}
+    		else {
 
-
-    		//CAPSENSE_Sense();
-    		//isPressed = CAPSENSE_getPressed(TOUCH_CHANNEL0);
-
+    		}
+    		 schedule_event &= ~READ_TOUCH;
     	}
     }
 }

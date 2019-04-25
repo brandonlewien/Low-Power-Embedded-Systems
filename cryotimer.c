@@ -3,7 +3,7 @@
 
 extern uint8_t schedule_event;
 
-void cryotimer_setup(void){
+void CRYOTIMER_setup(void){
 
 	CRYOTIMER_Init_TypeDef CRYO_Init_Struct;
 
@@ -11,7 +11,7 @@ void cryotimer_setup(void){
 	CRYO_Init_Struct.em4Wakeup = CRYO_EM4_WAKEUP;
 	CRYO_Init_Struct.enable    = CRYO_DISABLE;
 	CRYO_Init_Struct.osc       = cryotimerOscULFRCO;
-	CRYO_Init_Struct.period    = cryotimerPeriod_256;
+	CRYO_Init_Struct.period    = cryotimerPeriod_4;
 	CRYO_Init_Struct.presc     = cryotimerPresc_128;
 	// ^Period of cryotimer wakeup events = ((2^presc)*(2^period))/cryo_freq = ((128)*(256))/32768 = 1sec :)
 
@@ -20,8 +20,8 @@ void cryotimer_setup(void){
 }
 
 void CRYOTIMER_Interrupt_Enable(void){
-	LEUART0->IEN = 0;
-	LEUART0->IEN = CRYOTIMER_IEN_PERIOD;
+	CRYOTIMER->IEN = 0;
+	CRYOTIMER->IEN = CRYOTIMER_IEN_PERIOD;
 	NVIC_EnableIRQ(CRYOTIMER_IRQn);
 }
 
