@@ -75,14 +75,14 @@ int main(void){
     I2C_Setup();                                             // initialize I2C
     //I2C_Interrupt_Enable();                                // enable I2C Interrupts, however we don't use I2C interrupts
     I2C_Reset_Bus();                                         // Reset I2C Bus
-    CAPSENSE_Init();                                         // initialize capsense     
+    CAPSENSE_Init();                                         // initialize capsense
     LEUART0_Interrupt_Enable();                              // enable LEUART Interrupts
     CRYOTIMER_setup();                                       // initialize cryotimer
     CRYOTIMER_Interrupt_Enable();                            // enable cryotimer Interrupts
 
     schedule_event = DO_NOTHING;
     while (1) {
-        (schedule_event == DO_NOTHING) Enter_Sleep();        // enter EM3
+        if(schedule_event == DO_NOTHING) Enter_Sleep();      // enter EM3
         if(schedule_event & SEND_TEMP){                      // send data to bluetooth
             LDMA_ftoa_send(celsius);
             if (isCelsius) {
