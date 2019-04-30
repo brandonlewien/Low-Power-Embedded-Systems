@@ -57,6 +57,19 @@
 
 #define TEMP_ALERT            25
 
+/******************************************************************************
+ * @brief Configure LETIMER with to count down starting at COMP0, and interrupt
+ *        when counter reaches COMP0 and COMP1 values
+ *        - COMP0 interrupt used to start up Si7021 temp sensor by asserting enable
+ *               pin
+ *        - COMP1 interrupt used to retrieve temperature data through I2C from the
+ *               Si7021 temp sensor
+ *        - prescalar set to have highest resolution for given periods of COMP0
+ *               and COMP1
+ * @param TEMP_MEAS_PERIOD: can be modified in timer.h to change period of COMP1,
+ *        SENSOR_PWR_UP can be modified in timer.h to change time between COMP1 and COMP0
+ * @return none
+ *****************************************************************************/
 void letimer_init(void);
 
 #endif /* TIMER_H_ */
