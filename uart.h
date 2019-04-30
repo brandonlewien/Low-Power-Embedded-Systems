@@ -1,6 +1,6 @@
 /**************************************************************************//**
- * @file cmu.h
- * @brief Clock management unit header
+ * @file uart.h
+ * @brief Universal asynchronous receiver/transmitter header
  * @author Silicon Labs
  * @version 1.00
  ******************************************************************************
@@ -38,79 +38,78 @@
 #include <em_gpio.h>
 #include "sleep.h"
 
-#define LEUART_EM_BLOCK 3   // block EM3 to work down to EM2
+#define LEUART_EM_BLOCK    3   // block EM3 to work down to EM2
 
-#define UART_BAUD_RATE  9600
 #define UART_DATA_BITS  leuartDatabits8
-#define UART_ENABLE     leuartEnable
-#define UART_DISABLE    leuartDisable
-#define UART_PARITY     leuartNoParity
-#define UART_REF_FREQ   0
+#define UART_ENABLE        leuartEnable
+#define UART_DISABLE      leuartDisable
+#define UART_PARITY      leuartNoParity
 #define UART_STOP_BITS  leuartStopbits1
-#define UART_OFF        0
-#define UART_ON         1
+#define UART_BAUD_RATE  9600
+#define UART_REF_FREQ      0
+#define UART_OFF           0
+#define UART_ON            1
 
 #define TX_PORT         gpioPortD
-#define TX_PIN          10
+#define TX_PIN                 10
 #define RX_PORT         gpioPortD
-#define RX_PIN          11
+#define RX_PIN                 11
 
-#define TX_BUFFER_SIZE      7
-#define RECEIVE_BUFFER_SIZE 1000
+#define TX_BUFFER_SIZE          7
+#define RECEIVE_BUFFER_SIZE  1000
 
 // ASCII defines
-#define DECIMAL_POINT    0x2E
-#define SPACE		     0x20
-#define ASCII_OFFSET	 48
-#define NEGATIVE_SIGN	 0x2D
-#define POSITIVE_SIGN	 0x2B
-#define QUESTION_MARK	 0x3F
-#define HASHTAG			 0x23
-#define LOWER_C			 0x63
-#define UPPER_C			 0x43
-#define LOWER_D			 0x64
-#define UPPER_D		     0x44
-#define LOWER_F 		 0x66
-#define UPPER_F	    	 0x46
+#define DECIMAL_POINT        0x2E
+#define SPACE                0x20
+#define ASCII_OFFSET           48
+#define NEGATIVE_SIGN        0x2D
+#define POSITIVE_SIGN        0x2B
+#define QUESTION_MARK        0x3F
+#define HASHTAG              0x23
+#define LOWER_C              0x63
+#define UPPER_C              0x43
+#define LOWER_D              0x64
+#define UPPER_D              0x44
+#define LOWER_F              0x66
+#define UPPER_F              0x46
+#define CF_CMD_IDX           0x02
+#define D_CMD_IDX            0x01
 
-#define CF_CMD_IDX 2
-#define D_CMD_IDX 1
-
-
-/* Function: Initialize LEUART peripheral
- * Inputs: None
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Initialize LEUART peripheral
+ * @param none
+ * @return none
+ *****************************************************************************/
 void uart_init(void);
-
-/* Function: Send one byte of data via LEUART
- * Inputs: data = data to send
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Send one byte of data via LEUART
+ * @param data = data to send
+ * @return none
+ *****************************************************************************/
 void UART_send_byte(uint8_t data);
-
-/* Function: Send n bytes of data via LEUART
- * Inputs: data = string of data to send, length = length of data
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Send n bytes of data via LEUART
+ * @param data = string of data to send, length = length of data
+ * @return none
+ *****************************************************************************/
 void UART_send_n(char * data, uint32_t length);
-
-/* Function: Enable interrupts for LEUART
- * Inputs: None
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Enable interrupts for LEUART
+ * @param none
+ * @return none
+ *****************************************************************************/
 void LEUART0_Interrupt_Enable(void);
-
-/* Function: Disable interrupts for LEUART
- * Inputs: None
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Disable interrupts for LEUART
+ * @param none
+ * @return none
+ *****************************************************************************/
 void LEUART0_Interrupt_Disable(void);
-
-/* Function: Convert a number from float to ASCII and send over LEUART
- * Inputs: number = number to convert and send
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Convert a number from float to ASCII and send over LEUART
+ * @param number = number to convert and send
+ * @return none
+ *****************************************************************************/
 void UART_ftoa_send(float number);
 
 #endif /* SRC_UART_H_ */
