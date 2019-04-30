@@ -46,12 +46,14 @@
  * @return temp_ms/ls_read returns most and least significant data chunks
  *****************************************************************************/
 void I2C_Temperature_Read_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd);
+
 /******************************************************************************
  * @brief Read temperature from si7021 slave device with interrupts
  * @param slave_addr_rw = address of slave device, cmd = command to send to slave
  * @return ACK_done = to clear global acknowledgements for I2C with interrupts
  *****************************************************************************/
 void I2C_Temperature_Read_Interrupts(uint8_t slave_addr_rw, uint8_t cmd);
+
 /******************************************************************************
  * @brief Convert temp code from si7021 temp sensor to celsius
  * @param MSData = most significant byte of data from temp sensor,
