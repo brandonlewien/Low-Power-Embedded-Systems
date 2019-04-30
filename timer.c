@@ -5,7 +5,8 @@ volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 extern float celsius;
 extern volatile bool isCelsius;
-
+extern bool disable_letimer;
+extern bool letimer_enabled;
 extern uint8_t schedule_event;
 
 void letimer_init(void) {
@@ -113,6 +114,11 @@ void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COM
        Sleep_UnBlock_Mode(I2C_EM_BLOCK);                                         // unblock sleep mode setting for I2C
 
        LETIMER0->IFC = LETIMER_IFC_COMP1;                                        // clear flag
-
+       if(disable_letimer) {
+    	   letimer_enabled = 0;
+    	   LETIMER0->IEN &= ~(LETIMER_IEN_COMP0 | LETIMER_IEN_COMP1);             // disable interrupts
+    	   NVIC_DisableIRQ(LETIMER0_IRQn);                                       // disable interrupts for TIMER0 into the CORTEX-M3/4 CPU core
+    	   schedule_event &= ~SEND_TEMP;										 // stop sending temp
+       }
     }
 }

@@ -47,6 +47,8 @@ extern volatile bool isCelsius;
 extern LDMA_Descriptor_t ldmaTXDescriptor;
 extern LDMA_TransferCfg_t ldmaTXConfig;
 bool isPressed;
+bool disable_letimer = false;
+bool letimer_enabled = true;
 
 int main(void){
     EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_DEFAULT;
@@ -94,13 +96,25 @@ int main(void){
     	if(schedule_event & READ_TOUCH){
     		CAPSENSE_Sense();
     		isPressed = CAPSENSE_getPressed(TOUCH_CHANNEL0);
-    		if(isPressed) {
-    			isPressed = false;
-    		}
-    		else {
 
+    		static int state = 0;
+    		if(isPressed && state == 0) {
+        		disable_letimer ^= true;
+    			state = 1;
     		}
-    		 schedule_event &= ~READ_TOUCH;
+    		else if (!isPressed && state == 1){
+    			state = 0;
+    		}
+
+		   if(!disable_letimer && !letimer_enabled) {
+			   letimer_enabled = 1;
+			   LETIMER0->CNT = 0;													// reset letimer to count from 0
+			   LETIMER0->IFC = LETIMER_IEN_COMP0 | LETIMER_IEN_COMP1;				// clear flags
+			   LETIMER0->IEN = LETIMER_IEN_COMP0 | LETIMER_IEN_COMP1;             	// enable interrupts
+			   NVIC_EnableIRQ(LETIMER0_IRQn);                                       // enable interrupts for LETIMER0 into the CORTEX-M3/4 CPU core
+		   }
+
+    		schedule_event &= ~READ_TOUCH;
     	}
     }
 }

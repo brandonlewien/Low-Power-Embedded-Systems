@@ -11,7 +11,7 @@ void CRYOTIMER_setup(void){
 	CRYO_Init_Struct.em4Wakeup = CRYO_EM4_WAKEUP;
 	CRYO_Init_Struct.enable    = CRYO_DISABLE;
 	CRYO_Init_Struct.osc       = cryotimerOscULFRCO;
-	CRYO_Init_Struct.period    = cryotimerPeriod_4;
+	CRYO_Init_Struct.period    = cryotimerPeriod_8;
 	CRYO_Init_Struct.presc     = cryotimerPresc_128;
 	// ^Period of cryotimer wakeup events = ((2^presc)*(2^period))/cryo_freq = ((128)*(256))/32768 = 1sec :)
 
