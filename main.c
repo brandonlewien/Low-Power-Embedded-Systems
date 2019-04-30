@@ -37,8 +37,6 @@
 #include "capsense.h"
 #include "cryotimer.h"
 
-volatile uint16_t increment;
-volatile char * receiving;
 char receive_buffer[RECEIVE_BUFFER_SIZE];
 uint8_t schedule_event;
 float celsius;
@@ -73,7 +71,6 @@ int main(void){
     LDMA_Setup();                                            // initialize DMA
     letimer_init();                                          // initialize letimer for LED and I2C operation
     I2C_Setup();                                             // initialize I2C
-    //I2C_Interrupt_Enable();                                // enable I2C Interrupts, however we don't use I2C interrupts
     I2C_Reset_Bus();                                         // Reset I2C Bus
     CAPSENSE_Init();                                         // initialize capsense
     LEUART0_Interrupt_Enable();                              // enable LEUART Interrupts
