@@ -66,55 +66,13 @@
 #define I2C_SLAVE_ADDRESS           0x40
 #define I2C_RXBUFFER_SIZE           20
 
-/* Function: initialize and enable I2C peripheral
- * Inputs: None
- * Outputs: None
- */
 void I2C_Setup(void);
-
-/* Function: Reset master (pearl gecko) I2C bus
- * Inputs: None
- * Outputs: None
- */
 void I2C_Reset_Bus(void);
-
-
-
-/* Function: Write to a register on the slave device without interrupts
- * Inputs: slave_addr_rw = address of slave device, cmd = command to send to slave, data = data to send to slave
- * Outputs: None
- */
 void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data);
-
-/* Function: Read from the slave device without interrupts
- * Inputs: slave_addr_rw = address of slave device, cmd = command to send to slave
- * Outputs: data read from slave
- */
 uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd);
-
-/* Function: Write to a register on the slave device with interrupts
- * Inputs: slave_addr = address of slave device, cmd = command to send to slave, data = data to send to slave
- * Outputs: None
- */
 void I2C_Write_Interrupts(uint8_t slave_addr, uint8_t cmd, uint8_t data);
-
-/* Function: Read from the slave device with interrupts
- * Inputs: slave_addr = address of slave device, cmd = command to send to slave
- * Outputs: None
- */
 void I2C_Read_Interrupts(uint8_t slave_addr, uint8_t cmd);
-
-
-/* Function: Enable interrupts for I2C operation of above functions
- * Inputs: None
- * Outputs: None
- */
 void I2C_Interrupt_Enable(void);
-
-/* Function: Disables interrupts for I2C operation of above functions
- * Inputs: None
- * Outputs: None
- */
 void I2C_Interrupt_Disable(void);
 
 #endif /* I2C_H_ */

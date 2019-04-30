@@ -8,6 +8,20 @@ extern bool disable_letimer;
 extern bool letimer_enabled;
 extern uint8_t schedule_event;
 
+
+/******************************************************************************
+ * @brief Configure LETIMER with to count down starting at COMP0, and interrupt
+ *        when counter reaches COMP0 and COMP1 values
+ *        - COMP0 interrupt used to start up Si7021 temp sensor by asserting enable
+ *               pin
+ *        - COMP1 interrupt used to retrieve temperature data through I2C from the
+ *               Si7021 temp sensor
+ *        - prescalar set to have highest resolution for given periods of COMP0
+ *               and COMP1
+ * @param TEMP_MEAS_PERIOD: can be modified in timer.h to change period of COMP1,
+ *        SENSOR_PWR_UP can be modified in timer.h to change time between COMP1 and COMP0
+ * @return none
+ *****************************************************************************/
 void letimer_init(void) {
     uint32_t comp0;
     uint32_t comp1;
@@ -54,6 +68,21 @@ void letimer_init(void) {
 
 
 
+/******************************************************************************
+ * @brief Handle COMP0 and COMP1 inerrupts to read temperature from Si7021 temp sensor
+ *        - COMP0 interrupt used to start up Si7021 temp sensor by asserting enable
+ *               pin
+ *        - COMP1 interrupt used to retrieve temperature data through I2C from the
+ *               Si7021 temp sensor
+ * @param isCelsius: set to true if user wants to see temperature in celcsius and false
+ *        if user want to see temp in fahrenheit, temp_ls_read: least-significant byte
+ *        of temp code from Si7021, temp_ms_read: most-significant byte
+ *        of temp code from Si7021, disable_letimer: set to true when user wants to disable
+ *        temp transmission through bluetooth, letimer_enabled: set to true when the letimer
+ *        is currently running
+ * @return celsius: temperature value from si7021 after converted to celcius, schedule_event:
+ *        bit set for current event that needs to be serviced
+ *****************************************************************************/
 void LETIMER0_IRQHandler(void) { // COMP0 -> desired period for taking temp, COMP1 -> min time to power up Si7021
     uint32_t int_flags = LETIMER0->IF;
 

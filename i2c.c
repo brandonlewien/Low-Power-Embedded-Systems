@@ -9,6 +9,14 @@ volatile uint16_t temp_ms_read;
 volatile uint16_t temp_ls_read;
 #endif
 
+/******************************************************************************
+ * @brief - Configure I2C peripheral with asymmetric clock duty cycle and max SCL
+ *        frequency as 400kHz
+ *        - route SDA and SCL pins from the Si7021 temp sensor to the SDA and SCL
+ *        gpio pins on processor, and initially disable these pins
+ * @param none
+ * @return none
+ *****************************************************************************/
 void I2C_Setup(void) {
     I2C_Init_TypeDef I2C_Init_Struct;
     I2C_Init_Struct.clhr    = _I2C_CTRL_CLHR_ASYMMETRIC;        // set clock duty cycle to 6:3 (low:high) ratio (33%)
@@ -27,17 +35,17 @@ void I2C_Setup(void) {
 
     GPIO_PinModeSet(SCL_PORT, SCL_PIN, gpioModeDisabled, OFF);  // set up GPIO pin PC11 (SCL) to disabled when not in use
     GPIO_PinModeSet(SDA_PORT, SDA_PIN, gpioModeDisabled, OFF);  // set up GPIO pin PC10 (SDA) to disabled when not in use
-    /*
-    for (int i = 0; i < 9; i++) {                               // reset slave I2C device state machine
-       GPIO_PinOutClear(SCL_PORT, SCL_PIN);
-       GPIO_PinOutSet  (SCL_PORT, SCL_PIN);
-    }
-    I2C0->CMD = I2C_CMD_ABORT;                                  // reset pearl gecko I2C state machine
-    */
+
     I2C_Enable(I2C0, true);                                     // enable I2C
 }
 
 
+/******************************************************************************
+ * @brief Read value of a register on the Si7021 temp sensor without using interrupts
+ * @param slave_addr_rw: address of slave to read or write from, cmd: command to
+ *        send to slave
+ * @return data: data read from temp sensor register
+ *****************************************************************************/
 uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd){
     uint8_t data;
     //uint8_t slave_addr_r = slave_addr_rw | I2C_READ;
@@ -67,6 +75,13 @@ uint8_t I2C_Read_from_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd){
     return data;
 }
 
+
+/******************************************************************************
+ * @brief Write value to a register on the Si7021 temp sensor without using interrupts
+ * @param slave_addr_rw: address of slave to read or write from, cmd: command to
+ *        send to slave, data: data to write to temp sensor register
+ * @return none
+ *****************************************************************************/
 void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t data){
     I2C0->CMD = I2C_CMD_START;                                  // send START condition to slave
     I2C0->TXDATA = (slave_addr_rw << 1) | I2C_WRITE;            // send slave addr in upper 7 bits and WRITE bit in LSB to send command before reading
@@ -83,6 +98,13 @@ void I2C_Write_to_Reg_NoInterrupts(uint8_t slave_addr_rw, uint8_t cmd, uint8_t d
     I2C0->CMD = I2C_CMD_STOP;                                   // send STOP to slave
 }
 
+
+/******************************************************************************
+ * @brief Write value to a register on the Si7021 temp sensor with interrupts
+ * @param slave_addr_rw: address of slave to read or write from, cmd: command to
+ *        send to slave, data: data to write to temp sensor register
+ * @return none
+ *****************************************************************************/
 void I2C_Write_Interrupts(uint8_t slave_addr, uint8_t cmd, uint8_t data){
     ACK_done     = 0;
     I2C0->CMD    = I2C_CMD_START;                               // send START condition to slave
@@ -98,6 +120,14 @@ void I2C_Write_Interrupts(uint8_t slave_addr, uint8_t cmd, uint8_t data){
     I2C0->CMD    = I2C_CMD_STOP;                                // send STOP to slave
 }
 
+
+/******************************************************************************
+ * @brief Read temperature from Si7021 temp sensor with interrupts
+ * @param slave_addr_rw: address of slave to read or write from, cmd: command to
+ *        send to slave
+ * @return temp_ls_read: least significant byte of temperature from temp sensor (set in I2C interrupt handler)
+ *         temp_ms_read: most significant byte of temperature from temp sensor (set in I2C interrupt handler)
+ *****************************************************************************/
 void I2C_Read_Interrupts(uint8_t slave_addr, uint8_t cmd){
     ACK_done     = 0;
     I2C0->CMD    = I2C_CMD_START;                               // send START condition to slave
@@ -114,6 +144,12 @@ void I2C_Read_Interrupts(uint8_t slave_addr, uint8_t cmd){
     ACK_done = 0;
 }
 
+
+/******************************************************************************
+ * @brief Reset master I2C bus
+ * @param none
+ * @return none
+ *****************************************************************************/
 void I2C_Reset_Bus(void) {
     if(I2C0->STATE & I2C_STATE_BUSY) {
        I2C0->CMD = I2C_CMD_ABORT;
@@ -122,6 +158,12 @@ void I2C_Reset_Bus(void) {
 
 }
 
+
+/******************************************************************************
+ * @brief NVIC and register enable of I2C interrupts
+ * @param none
+ * @return none
+ *****************************************************************************/
 void I2C_Interrupt_Enable(void) {
     I2C0->IEN = 0;                                              // Clear IEN
     I2C0->IEN |= I2C_IEN_RXDATAV |
@@ -129,12 +171,27 @@ void I2C_Interrupt_Enable(void) {
     NVIC_EnableIRQ(I2C0_IRQn);
 }
 
+
+/******************************************************************************
+ * @brief NVIC and register disable of I2C interrupts
+ * @param none
+ * @return none
+ *****************************************************************************/
 void I2C_Interrupt_Disable(void) {
     I2C0->IEN &= ~(I2C_IEN_RXDATAV |                            // Disable whats enabled above
                    I2C_IEN_ACK);
     NVIC_DisableIRQ(I2C0_IRQn);
 }
 
+
+/******************************************************************************
+ * @brief I2C interrupt handler to read from a register or the temperature value
+ *        on the Si7021 temp sensor
+ * @param ACK_done: set when ACK has been successfully received and is used in
+ *        I2C_Read_Interrupts() and I2C_Write_Interrupts()
+ * @return temp_ls_read: least significant byte of temperature from temp sensor
+ *         temp_ms_read: most significant byte of temperature from temp sensor
+ *****************************************************************************/
 void I2C0_IRQHandler(void)
  {
 #ifdef RW_FROM_REGISTER                                         // Set in all.h

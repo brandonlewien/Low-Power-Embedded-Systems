@@ -57,11 +57,6 @@
 
 #define TEMP_ALERT            25
 
-
-/* Function: Initialize LETIMER peripheral
- * Inputs: None
- * Outputs: None
- */
 void letimer_init(void);
 
 #endif /* TIMER_H_ */
