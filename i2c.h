@@ -41,25 +41,25 @@
 #include "bsp.h"
 #include "all.h"
 
-#define I2C_EM_BLOCK 3				// lowest energy mode is 2, so block 3
+#define I2C_EM_BLOCK 3          // lowest energy mode is 2, so block 3
 
 #define I2C_WRITE 0
-#define I2C_READ 1
+#define I2C_READ  1
 
 /* temp sensor commands */
-#define MEAS_REL_HUM_HOLD 			0xE5
-#define MEAS_REL_HUM_NO_HOLD		0xF5
-#define	MEAS_TEMP_HOLD				0xE3
-#define	MEAS_TEMP_NO_HOLD			0xF3
-#define	READ_PREV_TEMP				0xE0
-#define RESET						0xFE
-#define USER_REG_1_W				0xE6
-#define USER_REG_1_R				0xE7
-#define	HEAT_CTL_REG_W				0x51
-#define HEAT_CTL_REG_R				0x11
+#define MEAS_REL_HUM_HOLD           0xE5
+#define MEAS_REL_HUM_NO_HOLD        0xF5
+#define MEAS_TEMP_HOLD              0xE3
+#define MEAS_TEMP_NO_HOLD           0xF3
+#define READ_PREV_TEMP              0xE0
+#define RESET                       0xFE
+#define USER_REG_1_W                0xE6
+#define USER_REG_1_R                0xE7
+#define HEAT_CTL_REG_W              0x51
+#define HEAT_CTL_REG_R              0x11
 
-#define USR_REG1_RESET				0x3A
-#define USR_REG1_12BIT_RES			0x3B
+#define USR_REG1_RESET              0x3A
+#define USR_REG1_12BIT_RES          0x3B
 
 
 #define CORE_FREQUENCY              14000000
