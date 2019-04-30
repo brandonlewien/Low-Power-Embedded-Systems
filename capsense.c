@@ -297,7 +297,7 @@ void CAPSENSE_Init(void) {
     CMU_ClockEnable(cmuClock_TIMER0, true);
     CMU_ClockEnable(cmuClock_TIMER1, true);
 #if defined(ACMP_CAPSENSE_CMUCLOCK)
-    CMU_ ClockEnable(ACMP_CAPSENSE_CMUCLOCK, true);
+    CMU_ClockEnable(ACMP_CAPSENSE_CMUCLOCK, true);
 #else
     CMU->HFPERCLKEN0 |= ACMP_CAPSENSE_CLKEN;
 #endif

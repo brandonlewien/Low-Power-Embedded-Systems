@@ -57,32 +57,9 @@ typedef struct {
     uint32_t (*restoreCallback)(EM emode);
 } Sleeper;
 
-
-/* Function: Block energy mode on mode assigned by input EM
- * Inputs: EM = energy mode to block on
- * Outputs: None
- */
 void Sleep_Block_Mode(unsigned int EM);
-
-/* Function: Unblock energy mode of mode assigned by input EM
- * Inputs: EM = energy mode to unblock
- * Outputs: None
- */
 void Sleep_UnBlock_Mode(unsigned int EM);
-
-/* Function: Initialize energy modes
- * Inputs: None
- * Outputs: None
- */
 void Sleep_Init(void);
-
-/* Function: Enter lowest unblocked sleep mode
- * Inputs: None
- * Outputs: None
- */
 void Enter_Sleep(void);
-
-//EM Enter_Lowest_EM_Mode(void);
-
 
 #endif /* SLEEP_H_ */

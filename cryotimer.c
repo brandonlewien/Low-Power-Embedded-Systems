@@ -5,7 +5,11 @@ extern uint8_t schedule_event;
 
 
 
-
+/******************************************************************************
+ * @brief Configure cryotimer to use ULFRCO with a 1 second wakeup event period
+ * @param none
+ * @return none
+ *****************************************************************************/
 void CRYOTIMER_setup(void){
 
 	CRYOTIMER_Init_TypeDef CRYO_Init_Struct;
@@ -22,6 +26,12 @@ void CRYOTIMER_setup(void){
 	CRYOTIMER_Enable(CRYO_ENABLE);                        // enable cryotimer
 }
 
+
+/******************************************************************************
+ * @brief NVIC and register enable for the period interrupt for the cryotimer
+ * @param none
+ * @return none
+ *****************************************************************************/
 void CRYOTIMER_Interrupt_Enable(void){
 	CRYOTIMER->IEN = 0;
 	CRYOTIMER->IEN = CRYOTIMER_IEN_PERIOD;                // enable cryotimer period interrupt
@@ -29,6 +39,11 @@ void CRYOTIMER_Interrupt_Enable(void){
 }
 
 
+/******************************************************************************
+ * @brief Set event to read value of touch sensor on every cryotimer period interrupt
+ * @param schedule_event: bitmap of all events
+ * @return schedule_event: on period interrupt, READ_TOUCH bit of schedule_event will be set
+ *****************************************************************************/
 void CRYOTIMER_IRQHandler(void) {
 	uint32_t status;
 	status = CRYOTIMER->IF & CRYOTIMER->IEN;               // set status to all enabled interrupts

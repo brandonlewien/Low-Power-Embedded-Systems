@@ -40,6 +40,12 @@
 
 static uint8_t sleepBlockEnable[MAX_EM_Element];     // max number of nested blocks is (2^8)-1 = 255
 
+
+/******************************************************************************
+ * @brief Block energy mode on mode assigned by input EM
+ * @param EM: energy mode to block on
+ * @return sleepBlockEnable: global variable modified with new sleep mode block
+ *****************************************************************************/
 void Sleep_Block_Mode(unsigned int EM) {
     CORE_ATOMIC_IRQ_DISABLE();
     if(sleepBlockEnable[EM] < 255){
@@ -47,6 +53,12 @@ void Sleep_Block_Mode(unsigned int EM) {
     }
     CORE_ATOMIC_IRQ_ENABLE();
 }
+
+/******************************************************************************
+ * @brief Unlock energy mode on mode assigned by input EM
+ * @param EM: energy mode to unblock on
+ * @return sleepBlockEnable: global variable modified with new sleep mode unblock
+ *****************************************************************************/
 void Sleep_UnBlock_Mode(unsigned int EM) {
     CORE_ATOMIC_IRQ_DISABLE();
     if(sleepBlockEnable[EM] > 0){                    // check that energy mode is blocked
@@ -55,6 +67,11 @@ void Sleep_UnBlock_Mode(unsigned int EM) {
     CORE_ATOMIC_IRQ_ENABLE();
 }
 
+/******************************************************************************
+ * @brief Initialize energy modes to have no blocks
+ * @param none
+ * @return sleepBlockEnable: set all modes to have no blocks
+ *****************************************************************************/
 void Sleep_Init(void) {
     sleepBlockEnable[EnergyMode0] = 0;
     sleepBlockEnable[EnergyMode1] = 0;
@@ -63,6 +80,12 @@ void Sleep_Init(void) {
     sleepBlockEnable[EnergyMode4] = 0;
 }
 
+/******************************************************************************
+ * @brief Enter lowest unblocked sleep mode
+ * @param sleepBlockEnable: used to determine which energy mode to enter based
+ *        on which modes are currently blocked
+ * @return none
+ *****************************************************************************/
 void Enter_Sleep(void) {
     if (sleepBlockEnable[0] > 0) {
        return;
