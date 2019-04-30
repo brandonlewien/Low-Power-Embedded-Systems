@@ -1,4 +1,4 @@
-/***************************************************************************//**
+/*******************************************************************************
  * @file
  * @brief Capacitive sense driver
  *******************************************************************************
@@ -19,21 +19,21 @@
 
 #include <capsenseconfig.h>
 
-/**************************************************************************//**
+/******************************************************************************
  * @brief Get the current channelValue for a channel
  * @param channel The channel.
  * @return The channelValue.
  *****************************************************************************/
 uint32_t CAPSENSE_getVal(uint8_t channel);
 
-/**************************************************************************//**
+/******************************************************************************
  * @brief Get the current normalized channelValue for a channel
  * @param channel The channel.
  * @return The channel value in range (0-256).
  *****************************************************************************/
 uint32_t CAPSENSE_getNormalizedVal(uint8_t channel);
 
-/**************************************************************************//**
+/******************************************************************************
  * @brief Get the state of the Gecko Button
  * @param channel The channel.
  * @return true if the button is "pressed"
@@ -41,21 +41,21 @@ uint32_t CAPSENSE_getNormalizedVal(uint8_t channel);
  *****************************************************************************/
 bool CAPSENSE_getPressed(uint8_t channel);
 
-/**************************************************************************//**
+/******************************************************************************
  * @brief Get the position of the slider
  * @return The position of the slider if it can be determined,
  *         -1 otherwise.
  *****************************************************************************/
 int32_t CAPSENSE_getSliderPosition(void);
 
-/**************************************************************************//**
+/******************************************************************************
  * @brief
  *   This function iterates through all the capsensors and reads and
  *   initiates a reading. Uses EM1 while waiting for the result from
  *   each sensor.
  *****************************************************************************/
 void CAPSENSE_Sense(void);
-/**************************************************************************//**
+/******************************************************************************
  * @brief
  *   Initializes the capacitive sense system.
  *
