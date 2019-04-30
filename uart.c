@@ -25,16 +25,16 @@ void uart_init(void) {
 
     LEUART_Init(LEUART0, &UART_Init_Struct);
 
-    LEUART0->ROUTELOC0 = LEUART_ROUTELOC0_RXLOC_LOC18          // Route UART pins
+    LEUART0->ROUTELOC0 = LEUART_ROUTELOC0_RXLOC_LOC18               // Route UART pins
                        | LEUART_ROUTELOC0_TXLOC_LOC18;
     LEUART0->ROUTEPEN  = LEUART_ROUTEPEN_RXPEN
                        | LEUART_ROUTEPEN_TXPEN;
 
-    LEUART0->CMD = LEUART_CMD_RXBLOCKEN;                   // set RX buffer to discard incoming frames (clear it only after '?' has been RXed)
+    LEUART0->CMD = LEUART_CMD_RXBLOCKEN;                            // set RX buffer to discard incoming frames (clear it only after '?' has been RXed)
     LEUART0->CTRL |= LEUART_CTRL_SFUBRX;
-    LEUART0->STARTFRAME = QUESTION_MARK;                   // set start frame to ascii question mark
-    LEUART0->SIGFRAME = HASHTAG;                        // set signal frame to ascii hashtag
-    LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;                // disable loopback
+    LEUART0->STARTFRAME = QUESTION_MARK;                            // set start frame to ascii question mark
+    LEUART0->SIGFRAME = HASHTAG;                                    // set signal frame to ascii hashtag
+    LEUART0->CTRL &= ~LEUART_CTRL_LOOPBK;                           // disable loopback
     GPIO_PinModeSet(TX_PORT, TX_PIN, gpioModePushPull, UART_ON);    // enable UART pins
     GPIO_PinModeSet(RX_PORT, RX_PIN, gpioModePushPull, UART_ON);
 
@@ -70,45 +70,40 @@ void UART_send_n(char * data, uint32_t length) {
  * @param A float number to be converted
  * @return none
  *****************************************************************************/
-void UART_ftoa_send(float number) {                     // convert float to ascii value and send via UART
+void UART_ftoa_send(float number) {                                 // convert float to ascii value and send via UART
     int16_t integer = (int16_t)number;
     uint16_t decimal;
 
-    if(integer < 0) {                         // test if negative
-        UART_send_byte(NEGATIVE_SIGN);             // send negative sign
-        decimal = (((-1) * (number - integer)) * 10);     // find decimal value
-        integer = -1 * integer;                    // make value positive for all following operations
-
+    if(integer < 0) {                                               // test if negative
+        UART_send_byte(NEGATIVE_SIGN);                              // send negative sign
+        decimal = (((-1) * (number - integer)) * 10);               // find decimal value
+        integer = -1 * integer;                                     // make value positive for all following operations
     }
     else {
-        UART_send_byte(POSITIVE_SIGN);             // send positive sign
-        decimal = ((number - integer) * 10);          // find decimal values
+        UART_send_byte(POSITIVE_SIGN);                              // send positive sign
+        decimal = ((number - integer) * 10);                        // find decimal values
     }
-
-    if(((integer % 1000) / 100) != 0) {               // hundreds place
+    if(((integer % 1000) / 100) != 0) {                             // hundreds place
         UART_send_byte((integer / 100) + ASCII_OFFSET);
-
     }
     else {
-        UART_send_byte(0x20);                    // if 0 value, send space instead
+        UART_send_byte(0x20);                                       // if 0 value, send space instead
     }
-
     if((((integer % 100) / 10) != 0) || (((integer % 1000) / 100) != 0)) {  // tens place
         UART_send_byte(((integer % 100) / 10) + ASCII_OFFSET);
     }
     else {
-        UART_send_byte(0x20);                    // if 0 value, send space instead
+        UART_send_byte(0x20);                                       // if 0 value, send space instead
     }
-
     if(((integer % 10) != 0) || (((integer % 1000) / 100) != 0) || (((integer % 100) / 10) != 0)) {     // ones place
         UART_send_byte((integer % 10) + ASCII_OFFSET);
     }
     else {
-        UART_send_byte(SPACE);                    // if 0 value, send space instead
+        UART_send_byte(SPACE);                                      // if 0 value, send space instead
     }
 
-    UART_send_byte(DECIMAL_POINT);                 // decimal point
-    UART_send_byte(decimal + ASCII_OFFSET);           // tenths place
+    UART_send_byte(DECIMAL_POINT);                                  // decimal point
+    UART_send_byte(decimal + ASCII_OFFSET);                         // tenths place
 }
 /******************************************************************************
  * @brief Enable LEUART0 Interrupts
@@ -136,16 +131,16 @@ void LEUART0_Interrupt_Disable(void) {
  *****************************************************************************/
 static void LEUART0_Receiver_Decoder(char * buffer) {
     for(int i = 0; i < RECEIVE_BUFFER_SIZE-1; ++i) {
-       if ((buffer[i] == LOWER_D) || (buffer[i] == UPPER_D)) {
-         if ((buffer[i+1] == LOWER_C) || (buffer[i+1] == UPPER_C)) {
-          isCelsius = true;
-          break;
-         }
-         else if ((buffer[i+1] == LOWER_F) || (buffer[i+1] == UPPER_F)) {
-          isCelsius = false;
-          break;
-         }
-       }
+        if ((buffer[i] == LOWER_D) || (buffer[i] == UPPER_D)) {
+            if ((buffer[i+1] == LOWER_C) || (buffer[i+1] == UPPER_C)) {
+                isCelsius = true;
+                break;
+            }
+            else if ((buffer[i+1] == LOWER_F) || (buffer[i+1] == UPPER_F)) {
+                isCelsius = false;
+                break;
+            }
+        }
     }
 }
 /******************************************************************************
@@ -157,20 +152,20 @@ void LEUART0_IRQHandler(void) {
     uint32_t status;
     status = LEUART0->IF & LEUART0->IEN;
     if(status & LEUART_IF_TXBL) {
-        ready_to_TX = 1;                        // set ready to TX flag
-        LEUART0->IEN &= ~LEUART_IEN_TXBL;                   // disable TXBL interrupt (only want this enabled when we want to transmit data)
+        ready_to_TX = 1;                                        // set ready to TX flag
+        LEUART0->IEN &= ~LEUART_IEN_TXBL;                       // disable TXBL interrupt (only want this enabled when we want to transmit data)
     }
     if (status & LEUART_IF_SIGF) {
-        LEUART0->CMD = LEUART_CMD_RXBLOCKEN;          // enable block on RX UART buffer
-        LEUART0_Receiver_Decoder(receive_buffer);       // Process data received
+        LEUART0->CMD = LEUART_CMD_RXBLOCKEN;                    // enable block on RX UART buffer
+        LEUART0_Receiver_Decoder(receive_buffer);               // Process data received
         LEUART0->IFC = LEUART_IFC_SIGF;
     }
-    for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {            // clear buffer
+    for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {             // clear buffer
         receive_buffer[i] = 0;
     }
-    if (status & LEUART_IF_TXC) {                // if this statement is entered, we know that the last byte of DMA is complete
-        LEUART0->IFC = LEUART_IFC_TXC;               // clear TXC flag
-        LEUART0->IEN &= ~LEUART_IEN_TXC;             // disable TXC after last byte of DMA transfer has been signaled
+    if (status & LEUART_IF_TXC) {                               // if this statement is entered, we know that the last byte of DMA is complete
+        LEUART0->IFC = LEUART_IFC_TXC;                          // clear TXC flag
+        LEUART0->IEN &= ~LEUART_IEN_TXC;                        // disable TXC after last byte of DMA transfer has been signaled
         Sleep_UnBlock_Mode(LEUART_EM_BLOCK);
     }
 }
