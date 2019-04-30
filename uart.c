@@ -129,7 +129,13 @@ static void LEUART0_Receiver_Decoder(char * buffer) {
 		}
 	}
 }
-
+/******************************************************************************
+ * @brief
+ *   LEUART0 interrupt handler.
+ *
+ * @details
+ *   Takes in 
+ *****************************************************************************/
 void LEUART0_IRQHandler(void) {
     uint32_t status;
     status = LEUART0->IF & LEUART0->IEN;
@@ -137,22 +143,12 @@ void LEUART0_IRQHandler(void) {
         ready_to_TX = 1;									// set ready to TX flag
         LEUART0->IEN &= ~LEUART_IEN_TXBL;                   // disable TXBL interrupt (only want this enabled when we want to transmit data)
     }
-//    if(status & LEUART_IF_STARTF) {
-//    	Sleep_Block_Mode(LEUART_EM_BLOCK);
-////    	LEUART0->CMD = LEUART_CMD_RXBLOCKDIS;				// disable block on RX UART buffer
-//
-//    	LEUART0->IFC = LEUART_IFC_STARTF;
-//    }
-//    if (status & LEUART_IF_RXDATAV) {
-//        receive_buffer[rincrement] = LEUART0->RXDATA;		// transfer data from uart buffer to recieve buffer
-//        rincrement++;
-//    }
     if (status & LEUART_IF_SIGF) {
     	LEUART0->CMD = LEUART_CMD_RXBLOCKEN;				// enable block on RX UART buffer
-    	LEUART0_Receiver_Decoder(receive_buffer);			// Process data recieved
+    	LEUART0_Receiver_Decoder(receive_buffer);			// Process data received
     	LEUART0->IFC = LEUART_IFC_SIGF;
     }
-	for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {	    // clear buffer
+	for (int i = 0; i < RECEIVE_BUFFER_SIZE; i++) {	        // clear buffer
     	receive_buffer[i] = 0;
 	}
     if (status & LEUART_IF_TXC) {							// if this statement is entered, we know that the last byte of DMA is complete
