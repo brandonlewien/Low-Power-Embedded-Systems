@@ -1,5 +1,10 @@
 #include "gpio.h"
 
+/******************************************************************************
+ * @brief Initialize general input output and drive strength
+ * @param none
+ * @return none
+ *****************************************************************************/
 void gpio_init(void){
 
 	//Set LED ports to be standard output drive with default off (cleared)

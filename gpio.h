@@ -59,12 +59,11 @@
 #define SCL_AND_SDA_DOUT    1
 #define OFF                 0
 
-
-
-/* Function: initialize GPIO pin function and drive strength
- * Inputs: None
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Initialize general input output and drive strength
+ * @param none
+ * @return none
+ *****************************************************************************/
 void gpio_init(void);
 
 #endif /* GPIO_H_ */

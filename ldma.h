@@ -1,6 +1,6 @@
 /**************************************************************************//**
  * @file ldma.h
- * @brief General ldma header
+ * @brief General direct memory access header
  * @author Silicon Labs
  * @version 1.00
  ******************************************************************************
@@ -36,41 +36,46 @@
 
 #include "em_ldma.h"
 
-#define RX_DMA_CHANNEL    0
-#define TX_DMA_CHANNEL    1
-#define LDMA_IF_DONE_CH0  1
-#define LDMA_IEN_DONE_CH0 1
-#define LDMA_IFC_DONE_CH0 1
-#define LDMA_IEN_DONE_CH1 2
-#define LDMA_IF_DONE_CH1  2
-#define LDMA_IFC_DONE_CH1 2
+#define RX_DMA_CHANNEL     0
+#define TX_DMA_CHANNEL     1
+#define LDMA_IF_DONE_CH0   1
+#define LDMA_IEN_DONE_CH0  1
+#define LDMA_IFC_DONE_CH0  1
+#define LDMA_IEN_DONE_CH1  2
+#define LDMA_IF_DONE_CH1   2
+#define LDMA_IFC_DONE_CH1  2
 
-enum TXBufferIdx{
-	Tx0,
-	Tx1,
-	Tx2,
-	Tx3,
-	Tx4,
-	Tx5,
-	Tx6,
+/******************************************************************************
+ * @brief Different array indexes
+ *****************************************************************************/
+enum TXBufferIdx {
+    Tx0,
+    Tx1,
+    Tx2,
+    Tx3,
+    Tx4,
+    Tx5,
+    Tx6,
 };
 
-/* Function: initialize LDMA peripheral
- * Inputs: None
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Initialize LDMA peripheral
+ * @param none
+ * @return global tx and rx descriptor and config for starting transfer
+ *****************************************************************************/
 void LDMA_Setup(void);
-
-/* Function: enable LDMA interrupts
- * Inputs: None
- * Outputs: None
- */
+/******************************************************************************
+ * @brief enable LDMA interrupts
+ * @param none
+ * @return none
+ *****************************************************************************/
 void LDMA_Interrupt_Enable(void);
-
-/* Function: Convert temperature from a float to an ASCII value and put into buffer to prepare for DMA transfer
- * Inputs: number = number to convert to ASCII
- * Outputs: None
- */
+/******************************************************************************
+ * @brief Convert temperature from a float to an ASCII value and put into buffer 
+          to prepare for DMA transfer
+ * @param number = number to convert to ASCII
+ * @return none
+ *****************************************************************************/
 void LDMA_ftoa_send(float number);
 
 #endif /* SRC_LDMA_H_ */
