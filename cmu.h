@@ -38,10 +38,12 @@
 #include "em_cmu.h"
 #include "all.h"
 
-/* Function: initialize clock trees for each peripheral in use (I2C, LDMA, LEUART, and LETIMER)
- * Inputs: None
- * Outputs: None
- */
+/******************************************************************************
+ * @brief initialize clock trees for each peripheral in use 
+          (I2C, LDMA, LEUART, and LETIMER)
+ * @param none
+ * @return none
+ *****************************************************************************/
 void cmu_init(void);
 
 #endif /* CMU_H_ */

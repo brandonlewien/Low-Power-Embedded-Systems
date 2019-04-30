@@ -1,5 +1,11 @@
 #include "cmu.h"
 
+/******************************************************************************
+ * @brief initialize clock trees for each peripheral in use 
+          (I2C, LDMA, LEUART, and LETIMER)
+ * @param none
+ * @return none
+ *****************************************************************************/
 void cmu_init(void){
 // High freq clock tree:
  CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);    // route HFRCO to HFCLK branch                     (I2C and LDMA clock tree 1)
