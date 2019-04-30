@@ -38,24 +38,24 @@
 #include <em_gpio.h>
 #include "sleep.h"
 
-#define LEUART_EM_BLOCK    3   // block EM3 to work down to EM2
+#define LEUART_EM_BLOCK      3   // block EM3 to work down to EM2
 
-#define UART_DATA_BITS  leuartDatabits8
-#define UART_ENABLE        leuartEnable
-#define UART_DISABLE      leuartDisable
-#define UART_PARITY      leuartNoParity
-#define UART_STOP_BITS  leuartStopbits1
-#define UART_BAUD_RATE  9600
-#define UART_REF_FREQ      0
-#define UART_OFF           0
-#define UART_ON            1
+#define UART_DATA_BITS       leuartDatabits8
+#define UART_ENABLE          leuartEnable
+#define UART_DISABLE         leuartDisable
+#define UART_PARITY          leuartNoParity
+#define UART_STOP_BITS       leuartStopbits1
+#define UART_BAUD_RATE       9600
+#define UART_REF_FREQ        0
+#define UART_OFF             0
+#define UART_ON              1
 
-#define TX_PORT         gpioPortD
-#define TX_PIN                 10
-#define RX_PORT         gpioPortD
-#define RX_PIN                 11
+#define TX_PORT              gpioPortD
+#define TX_PIN               10
+#define RX_PORT              gpioPortD
+#define RX_PIN               11
 
-#define TX_BUFFER_SIZE          7
+#define TX_BUFFER_SIZE       7
 #define RECEIVE_BUFFER_SIZE  1000
 
 // ASCII defines
@@ -81,30 +81,35 @@
  * @return none
  *****************************************************************************/
 void uart_init(void);
+
 /******************************************************************************
  * @brief Send one byte of data via LEUART
  * @param data = data to send
  * @return none
  *****************************************************************************/
 void UART_send_byte(uint8_t data);
+
 /******************************************************************************
  * @brief Send n bytes of data via LEUART
  * @param data = string of data to send, length = length of data
  * @return none
  *****************************************************************************/
 void UART_send_n(char * data, uint32_t length);
+
 /******************************************************************************
  * @brief Enable interrupts for LEUART
  * @param none
  * @return none
  *****************************************************************************/
 void LEUART0_Interrupt_Enable(void);
+
 /******************************************************************************
  * @brief Disable interrupts for LEUART
  * @param none
  * @return none
  *****************************************************************************/
 void LEUART0_Interrupt_Disable(void);
+
 /******************************************************************************
  * @brief Convert a number from float to ASCII and send over LEUART
  * @param number = number to convert and send
