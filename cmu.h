@@ -36,7 +36,6 @@
 
 #include "main.h"
 #include "em_cmu.h"
-#include "all.h"
 
 /******************************************************************************
  * @brief initialize clock trees for each peripheral in use 
