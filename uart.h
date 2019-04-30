@@ -81,30 +81,35 @@
  * @return none
  *****************************************************************************/
 void uart_init(void);
+
 /******************************************************************************
  * @brief Send one byte of data via LEUART
  * @param data = data to send
  * @return none
  *****************************************************************************/
 void UART_send_byte(uint8_t data);
+
 /******************************************************************************
  * @brief Send n bytes of data via LEUART
  * @param data = string of data to send, length = length of data
  * @return none
  *****************************************************************************/
 void UART_send_n(char * data, uint32_t length);
+
 /******************************************************************************
  * @brief Enable interrupts for LEUART
  * @param none
  * @return none
  *****************************************************************************/
 void LEUART0_Interrupt_Enable(void);
+
 /******************************************************************************
  * @brief Disable interrupts for LEUART
  * @param none
  * @return none
  *****************************************************************************/
 void LEUART0_Interrupt_Disable(void);
+
 /******************************************************************************
  * @brief Convert a number from float to ASCII and send over LEUART
  * @param number = number to convert and send
