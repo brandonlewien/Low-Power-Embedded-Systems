@@ -29,9 +29,9 @@ void CRYOTIMER_setup(void){
  * @return none
  *****************************************************************************/
 void CRYOTIMER_Interrupt_Enable(void){
-	CRYOTIMER->IEN = 0;
-	CRYOTIMER->IEN = CRYOTIMER_IEN_PERIOD;                // enable cryotimer period interrupt
-	NVIC_EnableIRQ(CRYOTIMER_IRQn);
+    CRYOTIMER->IEN = 0;
+    CRYOTIMER->IEN = CRYOTIMER_IEN_PERIOD;                    // enable cryotimer period interrupt
+    NVIC_EnableIRQ(CRYOTIMER_IRQn);
 }
 /******************************************************************************
  * @brief Set event to read value of touch sensor on every cryotimer period interrupt
@@ -42,8 +42,8 @@ void CRYOTIMER_IRQHandler(void) {
 	uint32_t status;
 	status = CRYOTIMER->IF & CRYOTIMER->IEN;               // set status to all enabled interrupts
 	if(status & CRYOTIMER_IF_PERIOD) {                     // for every PERIOD interrupt:
-		schedule_event |= READ_TOUCH;                      // set the schedule event to read the value of the cap touch sensor
-		CRYOTIMER->IFC = CRYOTIMER_IFC_PERIOD;             // clear flag
+	    schedule_event |= READ_TOUCH;                      // set the schedule event to read the value of the cap touch sensor
+	    CRYOTIMER->IFC = CRYOTIMER_IFC_PERIOD;             // clear flag
 	}
 
 }
