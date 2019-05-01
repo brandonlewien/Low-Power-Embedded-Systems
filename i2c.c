@@ -41,7 +41,7 @@ void I2C_Setup(void) {
 
 
 /******************************************************************************
- * @brief Read value of a register on the Si7021 temp sensor without using interrupts
+ * @brief Read value of a register on the Si7021 temp sensor with using interrupts
  * @param slave_addr_rw: address of slave to read or write from, cmd: command to
  *        send to slave
  * @return data: data read from temp sensor register
