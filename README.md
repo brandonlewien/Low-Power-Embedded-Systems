@@ -1,1 +1,3 @@
-# ECEN3360 Digital Design Lab: Sonya Schuppan and Brandon Lewien
+# Low Power Embedded Systems
+
+Authors: brandonlewien, sonyaschuppan
